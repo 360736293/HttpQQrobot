@@ -1,6 +1,8 @@
 package com.example.function;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.example.entity.FunctionStatus;
 import com.example.service.IFunctionStatusService;
 import com.example.utils.FunctionStatusLoad;
 import com.example.utils.SendGetMessage;
@@ -31,18 +33,16 @@ public class StartOrStopFunction {
                 case "戳一戳":
                     message = "PokeStatus";
                     break;
-                case "达芬奇Ⅲ型聊天机器人":
-                    message = "DavinciChatBotStatus";
-                    break;
                 case "查询群内今日发言排名":
                     message = "TodaySpeakRank";
                     break;
-                case "查询当前服务器信息":
-                    message = "ServerInfoStatus";
-                    break;
             }
-            Integer flag = functionStatusService.changeFunctionStatus(message, status);
-            if (flag == 1) {
+            boolean flag = functionStatusService.update(
+                    Wrappers.lambdaUpdate(FunctionStatus.class)
+                            .set(FunctionStatus::getStatus, status)
+                            .eq(FunctionStatus::getName, message)
+            );
+            if (flag) {
                 answer.put("reply", "[CQ:at,qq=" + qq + "]操作成功!");
                 functionStatusLoad.act();
             } else {

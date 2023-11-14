@@ -1,5 +1,7 @@
 package com.example.utils;
 
+import cn.hutool.core.util.IdUtil;
+import com.example.entity.UserMessage;
 import com.example.service.IUserMessageService;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +14,13 @@ public class AddUserMessage {
     IUserMessageService userMessageService;
 
     public void act(String qqGroup, String qqNumber, String nickName, String content, Date timeStamp) {
-        userMessageService.addUserMessage(qqGroup, qqNumber, nickName, content, timeStamp);
+        UserMessage userMessage = new UserMessage();
+        userMessage.setId(IdUtil.getSnowflakeNextIdStr());
+        userMessage.setQqGroup(qqGroup);
+        userMessage.setQqNumber(qqNumber);
+        userMessage.setQqName(nickName);
+        userMessage.setContent(content);
+        userMessage.setDate(timeStamp);
+        userMessageService.save(userMessage);
     }
 }

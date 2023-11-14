@@ -11,7 +11,7 @@
  Target Server Version : 80034 (8.0.34)
  File Encoding         : 65001
 
- Date: 14/11/2023 22:22:08
+ Date: 14/11/2023 22:46:09
 */
 
 SET NAMES utf8mb4;
@@ -46,7 +46,7 @@ CREATE TABLE `speak_content`  (
   `qq_number` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `qq_name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `time_stamp` datetime NULL DEFAULT NULL,
+  `date` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 

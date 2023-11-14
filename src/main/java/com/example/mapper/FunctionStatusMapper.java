@@ -10,7 +10,4 @@ import java.util.List;
 @Mapper
 public interface FunctionStatusMapper extends BaseMapper<FunctionStatus> {
 
-    List<FunctionStatus> getAllFunctionStatus();
-
-    Integer changeFunctionStatus(@Param("name") String name, @Param("status") String status);
 }

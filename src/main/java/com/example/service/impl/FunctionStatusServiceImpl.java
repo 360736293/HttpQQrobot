@@ -11,16 +11,5 @@ import java.util.List;
 
 @Service
 public class FunctionStatusServiceImpl extends ServiceImpl<FunctionStatusMapper, FunctionStatus> implements IFunctionStatusService {
-    @Resource
-    private FunctionStatusMapper functionStatusMapper;
 
-    @Override
-    public List<FunctionStatus> getAllFunctionStatus() {
-        return functionStatusMapper.getAllFunctionStatus();
-    }
-
-    @Override
-    public Integer changeFunctionStatus(String name, String status) {
-        return functionStatusMapper.changeFunctionStatus(name, status);
-    }
 }

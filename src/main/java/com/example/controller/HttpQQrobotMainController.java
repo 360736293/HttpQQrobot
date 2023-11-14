@@ -112,8 +112,8 @@ public class HttpQQrobotMainController {
     }
 
     //cron 定时属性  秒 分 时 日期 月份 星期几 年份
-    @Scheduled(cron = "* * * * * ?")
-    public void testScheduledTask() {
-
-    }
+//    @Scheduled(cron = "* * * * * ?")
+//    public void testScheduledTask() {
+//
+//    }
 }

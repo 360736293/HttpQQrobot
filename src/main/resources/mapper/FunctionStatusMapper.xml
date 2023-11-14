@@ -4,18 +4,5 @@
 <mapper namespace="com.example.mapper.FunctionStatusMapper">
     <cache eviction="LRU" flushInterval="100000" readOnly="true" size="1024"/>
 
-    <resultMap id="getAllFunctionStatus" type="FunctionStatus">
-        <id column="name" property="name"/>
-        <id column="status" property="status"/>
-    </resultMap>
-    <select id="getAllFunctionStatus" resultMap="getAllFunctionStatus">
-        select * from function_status;
-    </select>
-
-
-    <update id="changeFunctionStatus">
-        update function_status set status = #{status} where name = #{name};
-    </update>
-
 </mapper>
 

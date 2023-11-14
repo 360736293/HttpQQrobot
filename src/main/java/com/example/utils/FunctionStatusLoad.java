@@ -14,7 +14,7 @@ public class FunctionStatusLoad {
     private IFunctionStatusService functionStatusService;
 
     public void act() {
-        List<FunctionStatus> allFunctionStatus = functionStatusService.getAllFunctionStatus();
+        List<FunctionStatus> allFunctionStatus = functionStatusService.list();
         for (FunctionStatus functionStatus : allFunctionStatus) {
             switch (functionStatus.getName()) {
                 case "GroupRecallStatus":
