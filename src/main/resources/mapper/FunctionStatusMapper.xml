@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.mapper.FunctionStatusMapper">
+    <cache eviction="LRU" flushInterval="100000" readOnly="true" size="1024"/>
+
+    <resultMap id="getAllFunctionStatus" type="FunctionStatus">
+        <id column="name" property="name"/>
+        <id column="status" property="status"/>
+    </resultMap>
+    <select id="getAllFunctionStatus" resultMap="getAllFunctionStatus">
+        select * from function_status;
+    </select>
+
+
+    <update id="changeFunctionStatus">
+        update function_status set status = #{status} where name = #{name};
+    </update>
+
+</mapper>
+

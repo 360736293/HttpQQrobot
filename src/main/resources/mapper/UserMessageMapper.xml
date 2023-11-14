@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.example.mapper.UserMessageMapper">
+    <cache eviction="LRU" flushInterval="100000" readOnly="true" size="1024"/>
+
+    <insert id="addUserMessage">
+        insert into speak_content(qq_group, qq_number, qq_name, content, time_stamp)
+        values (#{qqGroup}, #{qqNumber}, #{nickName}, #{content}, #{timeStamp});
+    </insert>
+
+    <resultMap id="getTodayUserSpeakRank" type="UserMessage">
+        <id column="qq_group" property="qqGroup"/>
+        <id column="qq_number" property="qqNumber"/>
+        <id column="qq_name" property="nickName"/>
+        <id column="date" property="date"/>
+        <id column="sum" property="sum"/>
+    </resultMap>
+    <select id="getTodayUserSpeakRank" resultMap="getTodayUserSpeakRank">
+        select qq_group,
+               qq_number,
+               qq_name,
+               SUBSTRING_INDEX(time_stamp, " ", 1) as date,
+               count(1)                            as sum
+        from speak_content
+        group by qq_group,
+                 qq_number,
+                 qq_name,
+                 SUBSTRING_INDEX(time_stamp, " ", 1)
+        having qq_group = #{qqGroup}
+           and date = #{date}
+        order by sum desc
+        limit 5
+    </select>
+
+
+    <select id="getTodayUserSpeakContent" resultType="String">
+        select content
+        from speak_content
+        where qq_group = #{qqGroup}
+          and SUBSTRING_INDEX(time_stamp, " ", 1) = #{date}
+    </select>
+
+</mapper>
+

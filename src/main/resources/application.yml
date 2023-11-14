@@ -1,0 +1,19 @@
+server:
+  port: 7777
+  servlet:
+    context-path: /HttpQQrobot
+Robot:
+  #机器人代理地址
+  proxy: 127.0.0.1:6666
+  #机器人QQ号
+  qq: 2660719653
+spring:
+  #数据源配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/httpqqrobot?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.jdbc.Driver
+mybatis-plus:
+  type-aliases-package: com.example.entity
+  mapper-locations: classpath:mapper/*Mapper.xml

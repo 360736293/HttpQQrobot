@@ -1,0 +1,82 @@
+package com.example.function;
+
+import com.alibaba.fastjson.JSONObject;
+import com.example.constant.AppConstant;
+import com.example.entity.UserMessage;
+import com.example.service.IUserMessageService;
+import com.example.utils.PostGet;
+import com.example.utils.SendGetMessage;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+@Component
+@Slf4j
+public class TodaySpeakRank {
+    @Resource
+    private IUserMessageService userMessageService;
+
+    public void act(String qqGroup, String qqNumber, HttpServletResponse resp) {
+        try {
+            JSONObject answer = new JSONObject();
+            JSONObject answerContent = new JSONObject();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String date = simpleDateFormat.format(new Date());
+            List<UserMessage> todayUserSpeakRank = userMessageService.getTodayUserSpeakRank(qqGroup, date);
+            StringBuilder res = new StringBuilder("[CQ:at,qq=" + qqNumber + "]\n");
+            res.append(date).append("  今日发言前十关键字:\n\n");
+
+            StringBuilder content = new StringBuilder();
+            List<String> todayUserSpeakContent = userMessageService.getTodayUserSpeakContent(qqGroup, date);
+            for (String s : todayUserSpeakContent) {
+                content.append(s);
+            }
+            answerContent.put("content", content.toString());
+            String s = PostGet.sendPost("http://" + AppConstant.proxy + "/.get_word_slices", answerContent);
+            JSONObject jsonObject = JSONObject.parseObject(s);
+            String slices = jsonObject.getJSONObject("data").getString("slices");
+            String[] keys = slices.split(",");
+            TreeMap<String, Integer> treeMap = new TreeMap<>();
+            StringBuilder resKeys = new StringBuilder();
+            for (String key : keys) {
+                key = key.replaceAll("[^\\u4e00-\\u9fa5]", "");
+                if (key.length() >= 2) {
+                    //预计排除的词
+                    if (key.equals("我们") || key.equals("你们") || key.equals("他们") || key.equals("还是") || key.equals("这个") || key.equals("不是") || key.equals("可以")) {
+                        continue;
+                    }
+                    Integer num = treeMap.get(key);
+                    treeMap.put(key, num == null ? 1 : num + 1);
+                }
+            }
+            List<Map.Entry<String, Integer>> list = new ArrayList<Map.Entry<String, Integer>>(treeMap.entrySet());
+            list.sort((map1, map2) -> {
+                Integer value1 = map1.getValue();
+                Integer value2 = map2.getValue();
+                return value2.compareTo(value1);
+            });
+            int i = 0;
+            for (Map.Entry<String, Integer> m : list) {
+                i++;
+                if (i > 10) break;
+                resKeys.append(m.getKey()).append("  ");
+            }
+            res.append(resKeys).append("\n\n");
+            int index = 1;
+            res.append("前五发言排名:\n");
+            for (UserMessage userMessage : todayUserSpeakRank) {
+                res.append("排名：").append(index).append("    账号：").append(userMessage.getQqNumber()).append("    昵称：").append(userMessage.getNickName()).append("    发言数：").append(userMessage.getSum()).append("\n");
+                index++;
+            }
+            answer.put("reply", res.toString());
+            SendGetMessage.sendMessage(answer, resp);
+        } catch (IOException e) {
+            log.info("获取今天发言排名异常: {}", e.getMessage());
+        }
+    }
+}
