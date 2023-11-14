@@ -15,7 +15,7 @@ public class InitializationApp implements ApplicationRunner {
     private FunctionStatusLoad functionStatusLoad;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         try {
             functionStatusLoad.act();
             log.info("初始化完成");

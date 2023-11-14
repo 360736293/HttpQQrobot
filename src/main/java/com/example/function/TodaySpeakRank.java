@@ -70,7 +70,7 @@ public class TodaySpeakRank {
             int index = 1;
             res.append("前五发言排名:\n");
             for (UserMessage userMessage : todayUserSpeakRank) {
-                res.append("排名：").append(index).append("    账号：").append(userMessage.getQqNumber()).append("    昵称：").append(userMessage.getNickName()).append("    发言数：").append(userMessage.getSum()).append("\n");
+                res.append("排名：").append(index).append("    账号：").append(userMessage.getQqNumber()).append("    昵称：").append(userMessage.getQqName()).append("    发言数：").append(userMessage.getSum()).append("\n");
                 index++;
             }
             answer.put("reply", res.toString());

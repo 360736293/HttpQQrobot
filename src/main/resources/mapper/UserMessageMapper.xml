@@ -4,7 +4,7 @@
 <mapper namespace="com.example.mapper.UserMessageMapper">
     <cache eviction="LRU" flushInterval="100000" readOnly="true" size="1024"/>
 
-    <select id="getTodayUserSpeakRank" resultMap="getTodayUserSpeakRank">
+    <select id="getTodayUserSpeakRank" resultType="com.example.entity.UserMessage">
         select qq_group                            as qqGroup,
                qq_number                           as qqNumber,
                qq_name                             as qqName,
