@@ -14,19 +14,8 @@ public class AppConstant {
     public static String TodaySpeakRank;
 
 
-    //当前充当机器人的QQ号，会在InitializationApp里进行初始化
+    //当前充当机器人的QQ号
     public static String robotQQ;
     //机器人反向代理服务器的地址
     public static String proxy;
-
-
-    @Value("${Robot.qq}")
-    public void setRobotQQ(String robotQQ) {
-        AppConstant.robotQQ = robotQQ;
-    }
-
-    @Value("${Robot.proxy}")
-    public void setProxy(String proxy) {
-        AppConstant.proxy = proxy;
-    }
 }

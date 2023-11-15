@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.example.entity.FunctionStatus;
 import com.example.service.IFunctionStatusService;
-import com.example.utils.FunctionStatusLoad;
+import com.example.utils.LoadConfig;
 import com.example.utils.SendGetMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class StartOrStopFunction {
     @Resource
     private IFunctionStatusService functionStatusService;
     @Resource
-    private FunctionStatusLoad functionStatusLoad;
+    private LoadConfig loadConfig;
 
     public void act(String message, String status, String qq, HttpServletResponse resp) {
         try {
@@ -44,7 +44,7 @@ public class StartOrStopFunction {
             );
             if (flag) {
                 answer.put("reply", "[CQ:at,qq=" + qq + "]操作成功!");
-                functionStatusLoad.act();
+                loadConfig.act();
             } else {
                 answer.put("reply", "[CQ:at,qq=" + qq + "]操作失败!");
             }
