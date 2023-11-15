@@ -3,6 +3,7 @@ package com.example.controller;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.example.annotation.RateLimit;
 import com.example.constant.AppConstant;
 import com.example.function.*;
 import com.example.utils.AddUserMessage;
@@ -36,6 +37,7 @@ public class HttpQQrobotMainController {
     @Resource
     private TodaySpeakRank todaySpeakRank;
 
+    @RateLimit(limit = 2)
     @RequestMapping("/handler")
     public void handler(HttpServletRequest req, HttpServletResponse resp) {
         try {
@@ -108,6 +110,12 @@ public class HttpQQrobotMainController {
         } catch (Exception e) {
             log.info("handler异常: {}", e.getMessage());
         }
+    }
+
+    @RateLimit(limit = 2)
+    @RequestMapping("/test")
+    public void test(HttpServletRequest req, HttpServletResponse resp) {
+        System.out.println("hello world");
     }
 
     //cron 定时属性  秒 分 时 日期 月份 星期几 年份
