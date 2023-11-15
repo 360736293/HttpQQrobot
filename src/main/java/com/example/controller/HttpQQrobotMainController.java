@@ -8,7 +8,6 @@ import com.example.function.*;
 import com.example.utils.AddUserMessage;
 import com.example.utils.SendGetMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -71,7 +70,7 @@ public class HttpQQrobotMainController {
             qq = json.getJSONObject("sender").getString("user_id");
             nickName = json.getJSONObject("sender").getString("nickname");
             message = json.getString("message");
-            Date date = new Date(Long.parseLong(json.getString("time")) * 1000);
+            Date date = new Date(json.getLong("time") * 1000);
             //消息记录到数据库中
             addUserMessage.act(group_id, qq, nickName, message, date);
             if (ObjectUtil.equal(AppConstant.FlashImageStatus, AppConstant.TRUE)) {
@@ -83,7 +82,7 @@ public class HttpQQrobotMainController {
             }
             //其他信息
             key = message.split(" ")[0];
-            if (key.equals("[CQ:at,qq=" + AppConstant.robotQQ + "]")) {//不是艾特不回复
+            if (ObjectUtil.equal(key, "[CQ:at,qq=" + AppConstant.robotQQ + "]")) {//不是艾特不回复
                 key = message.split(" ")[1] == null ? "无" : message.split(" ")[1];//获取操作
                 switch (key) {
                     case "菜单":
