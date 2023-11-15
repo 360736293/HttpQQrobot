@@ -14,3 +14,8 @@ spring:
 mybatis-plus:
   type-aliases-package: com.example.entity
   mapper-locations: classpath:mapper/*Mapper.xml
+threadPool:
+  corePoolSize: 5
+  maxPoolSize: 10
+  keepAliveTime: 60
+  blockingQueueSize: 20

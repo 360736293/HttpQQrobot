@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RateLimit {
     /**
-     * 令牌数量
+     * 每秒限制数量
      */
     int limit() default 2;
 }
