@@ -1,4 +1,4 @@
-package com.httpqqrobot.function;
+package com.httpqqrobot.function.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.utils.SendGetMessage;
@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class Default {
 
-    public void act(String qq, HttpServletResponse resp) {
+    public void act(JSONObject json, HttpServletResponse resp) {
         try {
+            String qq = json.getJSONObject("sender").getString("user_id");
             JSONObject answer = new JSONObject();
             answer.put("reply", "[CQ:at,qq=" + qq + "]我不识别你的指令请\"@\"我输入\"菜单\"查询");
             SendGetMessage.sendMessage(answer, resp);

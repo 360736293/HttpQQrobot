@@ -1,4 +1,4 @@
-package com.httpqqrobot.function;
+package com.httpqqrobot.function.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.constant.AppConstant;
@@ -13,7 +13,7 @@ import java.io.IOException;
 @Slf4j
 public class Menu {
 
-    public void act(HttpServletResponse resp) {
+    public void act(JSONObject json, HttpServletResponse resp) {
         try {
             JSONObject answer = new JSONObject();
             answer.put("reply", "" +

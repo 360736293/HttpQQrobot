@@ -1,7 +1,8 @@
-package com.httpqqrobot.function;
+package com.httpqqrobot.function.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.FunctionStatus;
 import com.httpqqrobot.service.IFunctionStatusService;
 import com.httpqqrobot.utils.LoadConfig;
@@ -14,14 +15,17 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 @Slf4j
-public class StartOrStopFunction {
+public class StopFunction {
     @Resource
     private IFunctionStatusService functionStatusService;
     @Resource
     private LoadConfig loadConfig;
 
-    public void act(String message, String status, String qq, HttpServletResponse resp) {
+    public void act(JSONObject json, HttpServletResponse resp) {
         try {
+            String qq = json.getJSONObject("sender").getString("user_id");
+            String message = json.getString("message").split(" ")[2];
+
             JSONObject answer = new JSONObject();
             switch (message) {
                 case "防撤回":
@@ -39,7 +43,7 @@ public class StartOrStopFunction {
             }
             boolean flag = functionStatusService.update(
                     Wrappers.lambdaUpdate(FunctionStatus.class)
-                            .set(FunctionStatus::getStatus, status)
+                            .set(FunctionStatus::getStatus, AppConstant.STOP)
                             .eq(FunctionStatus::getName, message)
             );
             if (flag) {

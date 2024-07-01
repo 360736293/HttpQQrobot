@@ -1,21 +1,33 @@
-package com.httpqqrobot.function;
+package com.httpqqrobot.function.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.constant.AppConstant;
+import com.httpqqrobot.function.FunctionAct;
 import com.httpqqrobot.utils.PostGet;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Component
 @Slf4j
-public class Poke {
+public class Poke implements FunctionAct {
 
-    public void act(JSONObject json) {
+    public void act(JSONObject json, HttpServletResponse resp) {
         try {
+            //是否开启了戳一戳功能
+            if (ObjectUtil.notEqual(AppConstant.PokeStatus, AppConstant.TRUE)) {
+                return;
+            }
+            String sub_type = json.getString("sub_type");
+            //是否发生了戳一戳
+            if (ObjectUtil.notEqual(sub_type, "poke")) {
+                return;
+            }
             String qq = null;
             Integer group_id = null;
             JSONObject answer = new JSONObject();
-
             qq = json.getString("target_id");
             if (qq.equals(json.getString("self_id"))) {
                 qq = json.getString("user_id");

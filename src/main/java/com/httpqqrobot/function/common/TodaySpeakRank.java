@@ -1,4 +1,4 @@
-package com.httpqqrobot.function;
+package com.httpqqrobot.function.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.constant.AppConstant;
@@ -21,18 +21,21 @@ public class TodaySpeakRank {
     @Resource
     private IUserMessageService userMessageService;
 
-    public void act(String qqGroup, String qqNumber, HttpServletResponse resp) {
+    public void act(JSONObject json, HttpServletResponse resp) {
         try {
+            String qq = json.getJSONObject("sender").getString("user_id");
+            String group_id = json.getString("group_id");
+
             JSONObject answer = new JSONObject();
             JSONObject answerContent = new JSONObject();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String date = simpleDateFormat.format(new Date());
-            List<UserMessage> todayUserSpeakRank = userMessageService.getTodayUserSpeakRank(qqGroup, date);
-            StringBuilder res = new StringBuilder("[CQ:at,qq=" + qqNumber + "]\n");
+            List<UserMessage> todayUserSpeakRank = userMessageService.getTodayUserSpeakRank(group_id, date);
+            StringBuilder res = new StringBuilder("[CQ:at,qq=" + qq + "]\n");
             res.append(date).append("  今日发言前十关键字:\n\n");
 
             StringBuilder content = new StringBuilder();
-            List<String> todayUserSpeakContent = userMessageService.getTodayUserSpeakContent(qqGroup, date);
+            List<String> todayUserSpeakContent = userMessageService.getTodayUserSpeakContent(group_id, date);
             for (String s : todayUserSpeakContent) {
                 content.append(s);
             }

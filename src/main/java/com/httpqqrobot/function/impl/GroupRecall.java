@@ -1,25 +1,37 @@
-package com.httpqqrobot.function;
+package com.httpqqrobot.function.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.constant.AppConstant;
+import com.httpqqrobot.function.FunctionAct;
 import com.httpqqrobot.utils.PostGet;
 import com.httpqqrobot.utils.StampToTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Component
 @Slf4j
-public class GroupRecall {
+public class GroupRecall implements FunctionAct {
 
-    public void act(JSONObject json) {
+    public void act(JSONObject json, HttpServletResponse resp) {
         try {
+            //是否开启了防撤回功能
+            if (ObjectUtil.notEqual(AppConstant.GroupRecallStatus, AppConstant.TRUE)) {
+                return;
+            }
+            String notice_type = json.getString("notice_type");
+            //是否发生了消息撤回
+            if (ObjectUtil.notEqual(notice_type, "group_recall")) {
+                return;
+            }
             int message_id;
             String message;
             int group_id;
             String qq;
             String time;
             JSONObject answer = new JSONObject();
-
             message_id = Integer.parseInt(json.get("message_id").toString());
             answer.put("message_id", message_id);
             String res = PostGet.sendPost("http://" + AppConstant.proxy + "/get_msg", answer);
