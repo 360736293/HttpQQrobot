@@ -77,7 +77,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>1.5.4.RELEASE</version>
                 <configuration>
-                    <mainClass>com.example.HttpQQrobotApplication</mainClass>
+                    <mainClass>com.httpqqrobot.HttpQQrobotApplication</mainClass>
                     <addResources>true</addResources>
                     <includeSystemScope>true</includeSystemScope>
                 </configuration>

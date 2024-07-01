@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.example.mapper.UserMessageMapper">
+<mapper namespace="com.httpqqrobot.mapper.UserMessageMapper">
     <cache eviction="LRU" flushInterval="100000" readOnly="true" size="1024"/>
 
-    <select id="getTodayUserSpeakRank" resultType="com.example.entity.UserMessage">
+    <select id="getTodayUserSpeakRank" resultType="com.httpqqrobot.entity.UserMessage">
         select qq_group                            as qqGroup,
                qq_number                           as qqNumber,
                qq_name                             as qqName,

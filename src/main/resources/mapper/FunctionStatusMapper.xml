@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="com.example.mapper.FunctionStatusMapper">
+<mapper namespace="com.httpqqrobot.mapper.FunctionStatusMapper">
     <cache eviction="LRU" flushInterval="100000" readOnly="true" size="1024"/>
 
 </mapper>

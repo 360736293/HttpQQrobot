@@ -9,7 +9,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/httpqqrobot?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
-    password: 1234
+    password: root
     driver-class-name: com.mysql.jdbc.Driver
 mybatis-plus:
   type-aliases-package: com.example.entity
