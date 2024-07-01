@@ -2,6 +2,7 @@ package com.httpqqrobot.function.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.function.FunctionAct;
 import com.httpqqrobot.function.common.*;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 @Slf4j
+@ChainSequence(4)
 public class Dialogue implements FunctionAct {
 
     @Resource

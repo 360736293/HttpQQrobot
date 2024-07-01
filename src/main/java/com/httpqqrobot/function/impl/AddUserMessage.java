@@ -2,6 +2,7 @@ package com.httpqqrobot.function.impl;
 
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.entity.UserMessage;
 import com.httpqqrobot.function.FunctionAct;
 import com.httpqqrobot.service.IUserMessageService;
@@ -14,6 +15,7 @@ import java.util.Date;
 
 @Component
 @Slf4j
+@ChainSequence(3)
 public class AddUserMessage implements FunctionAct {
     @Resource
     IUserMessageService userMessageService;
