@@ -112,7 +112,7 @@ public class HttpQQrobotMainController {
         }
     }
 
-    @RateLimit(limit = 2)
+    @RateLimit(limit = 1)
     @RequestMapping("/test")
     public void test(HttpServletRequest req, HttpServletResponse resp) {
         System.out.println("hello world");
