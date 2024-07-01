@@ -12,7 +12,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RateLimitException.class)
     @ResponseBody
-    public String handleNeedLoginException(RateLimitException e) {
+    public String handleRateLimitException(RateLimitException e) {
         log.error("Rate Limit Exception: {}", e.getMessage());
         return e.getMessage();
     }
