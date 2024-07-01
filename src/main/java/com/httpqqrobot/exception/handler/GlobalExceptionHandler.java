@@ -13,14 +13,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RateLimitException.class)
     @ResponseBody
     public String handleRateLimitException(RateLimitException e) {
+        //限流异常要给前台返回
         log.error("Rate Limit Exception: {}", e.getMessage());
         return e.getMessage();
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseBody
-    public String handleException(Exception e) {
+    public void handleException(Exception e) {
         log.error("Unknown Exception: {}", e.getMessage());
-        return e.getMessage();
     }
 }
