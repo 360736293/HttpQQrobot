@@ -1,4 +1,4 @@
-package com.httpqqrobot.function.common;
+package com.httpqqrobot.chain.function.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.constant.AppConstant;

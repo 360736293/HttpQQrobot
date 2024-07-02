@@ -1,11 +1,11 @@
-package com.httpqqrobot.function.impl;
+package com.httpqqrobot.chain.function.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.constant.AppConstant;
-import com.httpqqrobot.function.FunctionAct;
-import com.httpqqrobot.function.common.*;
+import com.httpqqrobot.chain.function.FunctionAct;
+import com.httpqqrobot.chain.function.common.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

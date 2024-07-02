@@ -1,7 +1,7 @@
 package com.httpqqrobot.chain;
 
 import com.alibaba.fastjson.JSONObject;
-import com.httpqqrobot.function.FunctionAct;
+import com.httpqqrobot.chain.function.FunctionAct;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletResponse;

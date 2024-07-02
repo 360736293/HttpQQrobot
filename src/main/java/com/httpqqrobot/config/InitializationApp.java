@@ -3,7 +3,7 @@ package com.httpqqrobot.config;
 import cn.hutool.core.util.ObjectUtil;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.FunctionHandlerChain;
-import com.httpqqrobot.function.FunctionAct;
+import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.utils.LoadConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;

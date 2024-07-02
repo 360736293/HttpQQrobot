@@ -1,4 +1,4 @@
-package com.httpqqrobot.function.common;
+package com.httpqqrobot.chain.function.common;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 @Slf4j
-public class StopFunction {
+public class StartFunction {
     @Resource
     private IFunctionStatusService functionStatusService;
     @Resource
@@ -43,7 +43,7 @@ public class StopFunction {
             }
             boolean flag = functionStatusService.update(
                     Wrappers.lambdaUpdate(FunctionStatus.class)
-                            .set(FunctionStatus::getStatus, AppConstant.STOP)
+                            .set(FunctionStatus::getStatus, AppConstant.START)
                             .eq(FunctionStatus::getName, message)
             );
             if (flag) {
