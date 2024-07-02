@@ -19,7 +19,7 @@ public class HttpQQrobotMainController {
     @Resource
     private FunctionHandlerChain functionHandlerChain;
 
-    @RateLimit(limit = 2)
+    @RateLimit(limit = 5)
     @RequestMapping("/handler")
     public void handler(HttpServletRequest req, HttpServletResponse resp) {
         try {
