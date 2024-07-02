@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 @ChainSequence(0)
 public class GroupRecall implements FunctionAct {
 
+    @Override
     public void act(JSONObject json, HttpServletResponse resp) {
         try {
             //是否开启了防撤回功能

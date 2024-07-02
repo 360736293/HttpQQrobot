@@ -17,6 +17,7 @@ import java.io.IOException;
 @ChainSequence(2)
 public class FlashImage implements FunctionAct {
 
+    @Override
     public void act(JSONObject json, HttpServletResponse resp) {
         try {
             //是否开启了防闪照功能

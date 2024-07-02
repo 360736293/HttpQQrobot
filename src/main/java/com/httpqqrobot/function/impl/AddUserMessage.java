@@ -20,6 +20,7 @@ public class AddUserMessage implements FunctionAct {
     @Resource
     IUserMessageService userMessageService;
 
+    @Override
     public void act(JSONObject json, HttpServletResponse resp) {
         try {
             //消息记录到数据库中

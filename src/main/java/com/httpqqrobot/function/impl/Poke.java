@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @ChainSequence(1)
 public class Poke implements FunctionAct {
 
+    @Override
     public void act(JSONObject json, HttpServletResponse resp) {
         try {
             //是否开启了戳一戳功能
