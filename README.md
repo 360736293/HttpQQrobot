@@ -4,7 +4,7 @@
 
 项目结构（httpqqrobot文件夹下）：
 
-1、annotation：自定义注解
+1、annotation：自定义注解类
 
 2、aop：切面类
 
