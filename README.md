@@ -18,7 +18,7 @@
 
 7、entity：实体类
 
-8、exception：自定义异常类
+8、exception：自定义异常及异常处理类
 
 9、mapper：mapper类（dao类）
 
