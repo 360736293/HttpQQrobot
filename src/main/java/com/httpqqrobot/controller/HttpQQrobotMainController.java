@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @Slf4j
 public class HttpQQrobotMainController {
+
     @Resource
     private FunctionHandlerChain functionHandlerChain;
 
@@ -30,16 +31,4 @@ public class HttpQQrobotMainController {
             log.info("handler异常: {}", e.getMessage());
         }
     }
-
-    @RateLimit(limit = 1)
-    @RequestMapping("/test")
-    public void test(HttpServletRequest req, HttpServletResponse resp) {
-        System.out.println("hello world");
-    }
-
-    //cron 定时属性  秒 分 时 日期 月份 星期几 年份
-//    @Scheduled(cron = "* * * * * ?")
-//    public void testScheduledTask() {
-//
-//    }
 }
