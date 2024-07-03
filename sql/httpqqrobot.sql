@@ -39,8 +39,8 @@ INSERT INTO `function_status` VALUES ('4', 'TodaySpeakRank', '1');
 -- ----------------------------
 -- Table structure for speak_content
 -- ----------------------------
-DROP TABLE IF EXISTS `speak_content`;
-CREATE TABLE `speak_content`  (
+DROP TABLE IF EXISTS `user_message`;
+CREATE TABLE `user_message`  (
   `id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `qq_group` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `qq_number` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
