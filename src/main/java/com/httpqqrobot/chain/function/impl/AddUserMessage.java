@@ -1,16 +1,15 @@
 package com.httpqqrobot.chain.function.impl;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.entity.UserMessage;
-import com.httpqqrobot.service.IUserMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
@@ -19,8 +18,7 @@ import java.util.Date;
 @ChainSequence(3)
 public class AddUserMessage implements FunctionAct {
 
-    @Resource
-    private RocketMQTemplate rocketMQTemplate;
+    private final RocketMQTemplate rocketMQTemplate = SpringUtil.getBean(RocketMQTemplate.class);
 
     @Override
     public void act(JSONObject json, HttpServletResponse resp) {
@@ -39,7 +37,7 @@ public class AddUserMessage implements FunctionAct {
             userMessage.setContent(message);
             userMessage.setDate(date);
             String userMessageString = JSONObject.toJSONString(userMessage);
-            rocketMQTemplate.convertAndSend("httpqqrobot-savemessage-topic",userMessageString);
+            rocketMQTemplate.convertAndSend("httpqqrobot-savemessage-topic", userMessageString);
         } catch (Exception e) {
             log.info("记录消息推送异常: {}", e.getMessage());
         }

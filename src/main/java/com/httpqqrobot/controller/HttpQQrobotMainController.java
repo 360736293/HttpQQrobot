@@ -6,6 +6,7 @@ import com.httpqqrobot.annotation.RateLimit;
 import com.httpqqrobot.chain.FunctionHandlerChain;
 import com.httpqqrobot.utils.SendGetMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,15 @@ public class HttpQQrobotMainController {
     @Resource
     private FunctionHandlerChain functionHandlerChain;
 
+//    {
+//        "group_id":"1",
+//        "sender":{
+//            "user_id":"1",
+//            "nickname":"1"
+//        },
+//        "message":"1",
+//        "time":10086
+//    }
     @RateLimit(limit = 5)
     @RequestMapping("/handler")
     public void handler(HttpServletRequest req, HttpServletResponse resp) {
