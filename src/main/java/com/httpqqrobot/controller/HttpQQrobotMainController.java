@@ -38,6 +38,7 @@ public class HttpQQrobotMainController {
             JSONObject json = RequestHolder.get();
             log.info("input parameter: {}", json.toJSONString());
             functionHandlerChain.doHandler(json, resp);
+            RequestHolder.remove();
         } catch (Exception e) {
             log.info("handler异常: {}", e.getMessage());
         }
