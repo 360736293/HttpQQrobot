@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.annotation.RateLimit;
 import com.httpqqrobot.chain.FunctionHandlerChain;
+import com.httpqqrobot.result.Result;
+import com.httpqqrobot.result.ResultInfo;
 import com.httpqqrobot.utils.RequestHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,17 +32,19 @@ public class HttpQQrobotMainController {
     //        "message":"1",
     //        "time":{{$timestamp}}
     //    }
-    @RateLimit(limit = 5)
+    @RateLimit(limit = 2)
     @Authorize(role = "user")
     @RequestMapping("/handler")
-    public void handler(HttpServletRequest req, HttpServletResponse resp) {
+    public Result handler(HttpServletRequest req, HttpServletResponse resp) {
         try {
             JSONObject json = RequestHolder.get();
             log.info("input parameter: {}", json.toJSONString());
             functionHandlerChain.doHandler(json, resp);
             RequestHolder.remove();
+            return Result.success(ResultInfo.SUCCESS.getCode(), ResultInfo.SUCCESS.getMsg(), null);
         } catch (Exception e) {
             log.info("handler异常: {}", e.getMessage());
+            return Result.fail(ResultInfo.UNKNOWFAIL.getCode(), ResultInfo.UNKNOWFAIL.getMsg(), null);
         }
     }
 }

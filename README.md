@@ -24,7 +24,9 @@
 
 10、mapper：mapper接口类
 
-11、service：服务及服务实现类
+11、result：统一封装响应结果类
 
-12、utils：工具类
+12、service：服务及服务实现类
+
+13、utils：工具类
 
