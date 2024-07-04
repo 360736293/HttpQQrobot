@@ -22,14 +22,14 @@ public class HttpQQrobotMainController {
     private FunctionHandlerChain functionHandlerChain;
 
     //    {
-//        "group_id":"1",
-//        "sender":{
-//            "user_id":"1",
-//            "nickname":"1"
-//        },
-//        "message":"1",
-//        "time":{{$timestamp}}
-//    }
+    //        "group_id":"1",
+    //        "sender":{
+    //            "user_id":"1",
+    //            "nickname":"1"
+    //        },
+    //        "message":"1",
+    //        "time":{{$timestamp}}
+    //    }
     @RateLimit(limit = 5)
     @Authorize(role = "user")
     @RequestMapping("/handler")
