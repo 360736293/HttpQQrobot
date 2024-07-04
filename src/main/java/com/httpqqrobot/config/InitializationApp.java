@@ -4,6 +4,9 @@ import cn.hutool.core.util.ObjectUtil;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.FunctionHandlerChain;
 import com.httpqqrobot.chain.function.FunctionAct;
+import com.httpqqrobot.constant.AppConstant;
+import com.httpqqrobot.entity.UserAuthority;
+import com.httpqqrobot.service.IUserAuthorityService;
 import com.httpqqrobot.utils.LoadConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -26,6 +29,8 @@ public class InitializationApp implements ApplicationRunner, ApplicationContextA
     private LoadConfig loadConfig;
     @Resource
     private FunctionHandlerChain functionHandlerChain;
+    @Resource
+    private IUserAuthorityService userAuthorityService;
 
     List<Class<FunctionAct>> classes = new ArrayList<>();
 
@@ -34,6 +39,8 @@ public class InitializationApp implements ApplicationRunner, ApplicationContextA
         try {
             //按照类上注解的顺序装配FunctionAct下面的实现类处理器链条
             assembleFunctionHandlerChain();
+            //加载用户权限数据
+            loadUserAuthorityData();
             //加载配置文件
             loadConfig.act();
             log.info("初始化完成");
@@ -64,6 +71,13 @@ public class InitializationApp implements ApplicationRunner, ApplicationContextA
         Map<String, FunctionAct> beansOfType = applicationContext.getBeansOfType(FunctionAct.class);
         for (String s : beansOfType.keySet()) {
             classes.add((Class<FunctionAct>) beansOfType.get(s).getClass());
+        }
+    }
+
+    public void loadUserAuthorityData() {
+        List<UserAuthority> userAuthorityList = userAuthorityService.list();
+        for (UserAuthority userAuthority : userAuthorityList) {
+            AppConstant.userAuthorityMap.put(userAuthority.getUserId(), userAuthority.getRole());
         }
     }
 }

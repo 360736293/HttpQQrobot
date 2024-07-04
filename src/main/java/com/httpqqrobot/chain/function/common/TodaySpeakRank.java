@@ -50,6 +50,7 @@ public class TodaySpeakRank {
                 key = key.replaceAll("[^\\u4e00-\\u9fa5]", "");
                 if (key.length() >= 2) {
                     //预计排除的词
+                    //TODO 排除词暂时固定写死
                     if (key.equals("我们") || key.equals("你们") || key.equals("他们") || key.equals("还是") || key.equals("这个") || key.equals("不是") || key.equals("可以")) {
                         continue;
                     }

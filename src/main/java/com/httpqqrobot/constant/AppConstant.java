@@ -2,6 +2,9 @@ package com.httpqqrobot.constant;
 
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Component
 public class AppConstant {
 
@@ -13,6 +16,9 @@ public class AppConstant {
     public static String FlashImageStatus;
     public static String PokeStatus;
     public static String TodaySpeakRank;
+
+    //用户权限map
+    public static Map<String, String> userAuthorityMap = new HashMap<>();
 
 
     //当前充当机器人的QQ号

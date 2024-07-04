@@ -6,6 +6,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -15,6 +16,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 @Aspect
 @Component
+@Order(100001)
 public class RateLimitAop {
     private final ConcurrentHashMap<String, Integer> tokens = new ConcurrentHashMap<>();
 
