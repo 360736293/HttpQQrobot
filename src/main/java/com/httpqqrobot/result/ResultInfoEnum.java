@@ -1,6 +1,6 @@
 package com.httpqqrobot.result;
 
-public enum ResultInfo {
+public enum ResultInfoEnum {
     SUCCESS(200, "成功"),
     UNKNOWFAIL(-1, "未知失败"),
     ERROR(500, "服务器异常"),
@@ -12,7 +12,7 @@ public enum ResultInfo {
 
     private String msg;
 
-    ResultInfo(int code, String msg) {
+    ResultInfoEnum(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }

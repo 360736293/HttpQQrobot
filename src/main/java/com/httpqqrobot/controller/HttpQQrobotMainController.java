@@ -6,7 +6,7 @@ import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.annotation.RateLimit;
 import com.httpqqrobot.chain.FunctionHandlerChain;
 import com.httpqqrobot.result.Result;
-import com.httpqqrobot.result.ResultInfo;
+import com.httpqqrobot.result.ResultInfoEnum;
 import com.httpqqrobot.utils.RequestHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,10 +41,10 @@ public class HttpQQrobotMainController {
             log.info("input parameter: {}", json.toJSONString());
             functionHandlerChain.doHandler(json, resp);
             RequestHolder.remove();
-            return Result.success(ResultInfo.SUCCESS.getCode(), ResultInfo.SUCCESS.getMsg(), null);
+            return Result.success(ResultInfoEnum.SUCCESS.getCode(), ResultInfoEnum.SUCCESS.getMsg(), null);
         } catch (Exception e) {
             log.info("handler异常: {}", e.getMessage());
-            return Result.fail(ResultInfo.UNKNOWFAIL.getCode(), ResultInfo.UNKNOWFAIL.getMsg(), null);
+            return Result.fail(ResultInfoEnum.UNKNOWFAIL.getCode(), ResultInfoEnum.UNKNOWFAIL.getMsg(), null);
         }
     }
 }
