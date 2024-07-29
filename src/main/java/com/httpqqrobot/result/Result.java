@@ -13,19 +13,19 @@ public class Result implements Serializable {
 
     public String msg;
 
-    public String data;
+    public Object data;
 
-    Result(int code, String msg, String data) {
+    Result(int code, String msg, Object data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
     }
 
-    public static Result success(int code, String msg, String data) {
+    public static Result success(int code, String msg, Object data) {
         return new Result(code, msg, data);
     }
 
-    public static Result fail(int code, String msg, String data) {
+    public static Result fail(int code, String msg, Object data) {
         return new Result(code, msg, data);
     }
 }

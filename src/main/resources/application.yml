@@ -11,6 +11,12 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
+  application:
+    name: HttpQQrobot
+nacos:
+  config:
+    server-addr: 127.0.0.1:8848
+    namespace: dev
 mybatis-plus:
   type-aliases-package: com.example.entity
   mapper-locations: classpath:mapper/*Mapper.xml

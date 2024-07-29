@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @Slf4j
 public class HttpQQrobotMainController {
-
     @Resource
     private FunctionHandlerChain functionHandlerChain;
 

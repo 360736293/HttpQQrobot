@@ -1,6 +1,8 @@
 package com.httpqqrobot;
 
 import cn.hutool.core.util.ObjectUtil;
+import com.alibaba.nacos.api.config.annotation.NacosValue;
+import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.FunctionHandlerChain;
 import com.httpqqrobot.chain.function.FunctionAct;
@@ -19,16 +21,16 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Slf4j
 @SpringBootApplication
 @EnableScheduling
+@NacosPropertySource(dataId = "excludeWords-dev.properties", autoRefreshed = true, groupId = "DEFAULT_GROUP")
 public class HttpQQrobotApplication implements ApplicationRunner, ApplicationContextAware {
 
+    @NacosValue(value = "${excludeWordsString}", autoRefreshed = true)
+    private String excludeWordsString;
     @Resource
     private LoadConfig loadConfig;
     @Resource
@@ -50,7 +52,11 @@ public class HttpQQrobotApplication implements ApplicationRunner, ApplicationCon
             //加载用户权限数据
             loadUserAuthorityData();
             //加载配置文件
-            loadConfig.act();
+            //loadConfig.act();
+            //加载排除词
+            if (ObjectUtil.isNotEmpty(excludeWordsString) && ObjectUtil.notEqual(excludeWordsString, "null")) {
+                AppConstant.excludeWordsList = Arrays.asList(excludeWordsString.split(","));
+            }
             log.info("初始化完成");
         } catch (Exception e) {
             log.info("初始化失败: {}", e.getMessage());

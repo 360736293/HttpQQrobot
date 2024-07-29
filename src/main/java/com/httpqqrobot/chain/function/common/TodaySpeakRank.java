@@ -40,6 +40,7 @@ public class TodaySpeakRank {
                 content.append(s);
             }
             answerContent.put("content", content.toString());
+            //go-cqhttp内置的分词
             String s = PostGet.sendPost("http://" + AppConstant.proxy + "/.get_word_slices", answerContent);
             JSONObject jsonObject = JSONObject.parseObject(s);
             String slices = jsonObject.getJSONObject("data").getString("slices");
@@ -48,10 +49,10 @@ public class TodaySpeakRank {
             StringBuilder resKeys = new StringBuilder();
             for (String key : keys) {
                 key = key.replaceAll("[^\\u4e00-\\u9fa5]", "");
+                //单个字的直接忽视
                 if (key.length() >= 2) {
                     //预计排除的词
-                    //TODO 排除词暂时固定写死
-                    if (key.equals("我们") || key.equals("你们") || key.equals("他们") || key.equals("还是") || key.equals("这个") || key.equals("不是") || key.equals("可以")) {
+                    if (AppConstant.excludeWordsList.contains(key)) {
                         continue;
                     }
                     Integer num = treeMap.get(key);

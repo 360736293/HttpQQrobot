@@ -2,7 +2,9 @@ package com.httpqqrobot.constant;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -19,6 +21,8 @@ public class AppConstant {
 
     //用户权限map
     public static Map<String, String> userAuthorityMap = new HashMap<>();
+    //排除词
+    public static List<String> excludeWordsList = new ArrayList<>();
 
 
     //当前充当机器人的QQ号
