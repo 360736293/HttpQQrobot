@@ -1,7 +1,5 @@
 server:
   port: 7777
-  servlet:
-    context-path: /HttpQQrobot
 robot:
   configPath: D:\MyProject\HttpQQrobot-master\go-cqhttp\config.yml
 spring:
