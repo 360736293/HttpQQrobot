@@ -11,6 +11,17 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   application:
     name: HttpQQrobot
+  redis:
+    # Redis服务器地址
+    host: 127.0.0.1
+    # Redis服务器端口号
+    port: 6379
+    # 使用的数据库索引，默认是0
+    database: 0
+    # 连接超时时间
+    timeout: 1800000
+    # 设置密码
+    password: 123456
 nacos:
   config:
     server-addr: 127.0.0.1:8848

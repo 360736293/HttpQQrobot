@@ -3,8 +3,8 @@ package com.httpqqrobot.aop;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.annotation.Authorize;
-import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.exception.AuthorizeException;
+import com.httpqqrobot.utils.RedisUtils;
 import com.httpqqrobot.utils.RequestHolder;
 import com.httpqqrobot.utils.SendGetMessage;
 import org.aspectj.lang.JoinPoint;
@@ -36,7 +36,7 @@ public class AuthorizeAop {
                         JSONObject json = SendGetMessage.getMessage(req);
                         //获取到user_id
                         String userId = json.getJSONObject("sender").getString("user_id");
-                        String userRole = AppConstant.userAuthorityMap.get(userId);
+                        String userRole = RedisUtils.getStr("UserId:" + userId);
                         //TODO 暂时角色仅判断相等
                         if (ObjectUtil.notEqual(role, userRole)) {
                             throw new RuntimeException();

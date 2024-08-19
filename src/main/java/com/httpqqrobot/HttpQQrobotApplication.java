@@ -10,6 +10,7 @@ import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.UserAuthority;
 import com.httpqqrobot.service.IUserAuthorityService;
 import com.httpqqrobot.utils.LoadConfig;
+import com.httpqqrobot.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.ApplicationArguments;
@@ -91,7 +92,7 @@ public class HttpQQrobotApplication implements ApplicationRunner, ApplicationCon
     public void loadUserAuthorityData() {
         List<UserAuthority> userAuthorityList = userAuthorityService.list();
         for (UserAuthority userAuthority : userAuthorityList) {
-            AppConstant.userAuthorityMap.put(userAuthority.getUserId(), userAuthority.getRole());
+            RedisUtils.set("UserId:" + userAuthority.getUserId(), userAuthority.getRole());
         }
     }
 }

@@ -19,8 +19,6 @@ public class AppConstant {
     public static String PokeStatus;
     public static String TodaySpeakRank;
 
-    //用户权限map
-    public static Map<String, String> userAuthorityMap = new HashMap<>();
     //排除词
     public static List<String> excludeWordsList = new ArrayList<>();
 
