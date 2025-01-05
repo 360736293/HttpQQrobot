@@ -14,9 +14,6 @@ public class AppConstant {
     public static String FALSE = "0";
     public static String START = "1";
     public static String STOP = "0";
-    public static String GroupRecallStatus;
-    public static String FlashImageStatus;
-    public static String PokeStatus;
     public static String TodaySpeakRank;
 
     //排除词

@@ -20,10 +20,6 @@ public class Dialogue implements FunctionAct {
     @Resource
     private Menu menu;
     @Resource
-    private StartFunction startFunction;
-    @Resource
-    private StopFunction stopFunction;
-    @Resource
     private TodaySpeakRank todaySpeakRank;
     @Resource
     private Default aDefault;
@@ -39,12 +35,6 @@ public class Dialogue implements FunctionAct {
             switch (message.split(" ")[1]) {
                 case "菜单":
                     menu.act(json, resp);
-                    break;
-                case "开启":
-                    startFunction.act(json, resp);
-                    break;
-                case "关闭":
-                    stopFunction.act(json, resp);
                     break;
                 case "查询发言":
                     todaySpeakRank.act(json, resp);

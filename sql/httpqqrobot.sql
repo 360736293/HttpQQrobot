@@ -1,40 +1,21 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : 110.42.211.208
  Source Server Type    : MySQL
- Source Server Version : 80037 (8.0.37)
- Source Host           : 127.0.0.1:3306
+ Source Server Version : 80040 (8.0.40)
+ Source Host           : 110.42.211.208:3306
  Source Schema         : httpqqrobot
 
  Target Server Type    : MySQL
- Target Server Version : 80037 (8.0.37)
+ Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 03/07/2024 17:58:02
+ Date: 05/01/2025 21:06:29
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for function_status
--- ----------------------------
-DROP TABLE IF EXISTS `function_status`;
-CREATE TABLE `function_status`  (
-  `id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `status` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of function_status
--- ----------------------------
-INSERT INTO `function_status` VALUES ('1', 'GroupRecallStatus', '1');
-INSERT INTO `function_status` VALUES ('2', 'FlashImageStatus', '1');
-INSERT INTO `function_status` VALUES ('3', 'PokeStatus', '1');
-INSERT INTO `function_status` VALUES ('4', 'TodaySpeakRank', '1');
 
 -- ----------------------------
 -- Table structure for user_authority
@@ -46,7 +27,7 @@ CREATE TABLE `user_authority`  (
   `role` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `role_value` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `role`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_authority

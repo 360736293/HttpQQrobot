@@ -19,10 +19,6 @@ public class Poke implements FunctionAct {
     @Override
     public void act(JSONObject json, HttpServletResponse resp) {
         try {
-            //是否开启了戳一戳功能
-            if (ObjectUtil.notEqual(AppConstant.PokeStatus, AppConstant.TRUE)) {
-                return;
-            }
             String sub_type = json.getString("sub_type");
             //是否发生了戳一戳
             if (ObjectUtil.notEqual(sub_type, "poke")) {

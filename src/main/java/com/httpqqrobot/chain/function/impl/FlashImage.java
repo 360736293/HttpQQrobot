@@ -20,10 +20,6 @@ public class FlashImage implements FunctionAct {
     @Override
     public void act(JSONObject json, HttpServletResponse resp) {
         try {
-            //是否开启了防闪照功能
-            if (ObjectUtil.notEqual(AppConstant.FlashImageStatus, AppConstant.TRUE)) {
-                return;
-            }
             String message = json.getString("message");
             //是否有人发闪照
             if (!(message.contains("flash") && message.contains("CQ:image"))) {

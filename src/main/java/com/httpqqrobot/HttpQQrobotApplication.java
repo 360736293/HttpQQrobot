@@ -9,7 +9,6 @@ import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.UserAuthority;
 import com.httpqqrobot.service.IUserAuthorityService;
-import com.httpqqrobot.utils.LoadConfig;
 import com.httpqqrobot.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -33,8 +32,6 @@ public class HttpQQrobotApplication implements ApplicationRunner, ApplicationCon
     @NacosValue(value = "${excludeWordsString}", autoRefreshed = true)
     private String excludeWordsString;
     @Resource
-    private LoadConfig loadConfig;
-    @Resource
     private FunctionHandlerChain functionHandlerChain;
     @Resource
     private IUserAuthorityService userAuthorityService;
@@ -52,8 +49,6 @@ public class HttpQQrobotApplication implements ApplicationRunner, ApplicationCon
             assembleFunctionHandlerChain();
             //加载用户权限数据
             loadUserAuthorityData();
-            //加载配置文件
-            //loadConfig.act();
             //加载排除词
             if (ObjectUtil.isNotEmpty(excludeWordsString) && ObjectUtil.notEqual(excludeWordsString, "null")) {
                 AppConstant.excludeWordsList = Arrays.asList(excludeWordsString.split(","));

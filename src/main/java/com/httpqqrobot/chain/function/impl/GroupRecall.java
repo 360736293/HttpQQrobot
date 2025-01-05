@@ -20,10 +20,6 @@ public class GroupRecall implements FunctionAct {
     @Override
     public void act(JSONObject json, HttpServletResponse resp) {
         try {
-            //是否开启了防撤回功能
-            if (ObjectUtil.notEqual(AppConstant.GroupRecallStatus, AppConstant.TRUE)) {
-                return;
-            }
             String notice_type = json.getString("notice_type");
             //是否发生了消息撤回
             if (ObjectUtil.notEqual(notice_type, "group_recall")) {

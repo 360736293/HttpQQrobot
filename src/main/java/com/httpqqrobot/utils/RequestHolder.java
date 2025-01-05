@@ -3,6 +3,10 @@ package com.httpqqrobot.utils;
 import com.alibaba.fastjson.JSONObject;
 
 public class RequestHolder {
+
+    private RequestHolder() {
+    }
+
     private static final ThreadLocal<JSONObject> threadLocal = new ThreadLocal<>();
 
     public static void add(JSONObject json) {
