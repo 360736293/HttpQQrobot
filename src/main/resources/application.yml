@@ -1,30 +1,24 @@
 server:
   port: 7777
 robot:
-  configPath: D:\MyProject\HttpQQrobot-master\go-cqhttp\config.yml
+  ip: xxx:3001
 spring:
-  #数据源配置
   datasource:
-    url: jdbc:mysql://localhost:3306/httpqqrobot?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: root
+    url: jdbc:mysql://xxx:3306/httpqqrobot?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    username: xxx
+    password: xxx
     driver-class-name: com.mysql.jdbc.Driver
   application:
     name: HttpQQrobot
   redis:
-    # Redis服务器地址
-    host: 127.0.0.1
-    # Redis服务器端口号
+    host: xxx
     port: 6379
-    # 使用的数据库索引，默认是0
     database: 0
-    # 连接超时时间
     timeout: 1800000
-    # 设置密码
-    password: 123456
+    password: xxx
 nacos:
   config:
-    server-addr: 127.0.0.1:8848
+    server-addr: xxx:8848
     namespace: dev
 mybatis-plus:
   type-aliases-package: com.example.entity
@@ -35,6 +29,6 @@ threadPool:
   keepAliveTime: 60
   blockingQueueSize: 20
 rocketmq:
-  name-server: 127.0.0.1:9876
+  name-server: xxx:9876
   producer:
     group: httpqqrobot-producer-group
