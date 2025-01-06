@@ -8,9 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class RequestHolder {
 
-    private RequestHolder() {
-    }
-
     private static final ConcurrentHashMap<String, ThreadLocal<JSONObject>> threadLocalMap = new ConcurrentHashMap<>();
 
     public static void add(JSONObject json) {
