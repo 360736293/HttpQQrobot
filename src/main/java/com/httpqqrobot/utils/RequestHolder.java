@@ -3,16 +3,15 @@ package com.httpqqrobot.utils;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RequestHolder {
 
     private RequestHolder() {
     }
 
-    private static final Map<String, ThreadLocal<JSONObject>> threadLocalMap = new HashMap<>();
+    private static final ConcurrentHashMap<String, ThreadLocal<JSONObject>> threadLocalMap = new ConcurrentHashMap<>();
 
     public static void add(JSONObject json) {
         ThreadLocal<JSONObject> threadLocal = Optional.ofNullable(
@@ -27,6 +26,7 @@ public class RequestHolder {
         if (ObjectUtil.isNotEmpty(threadLocal)) {
             threadLocal.remove();
         }
+        threadLocalMap.remove(Thread.currentThread().getName());
     }
 
     public static JSONObject get() {
