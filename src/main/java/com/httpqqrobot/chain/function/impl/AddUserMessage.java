@@ -2,7 +2,6 @@ package com.httpqqrobot.chain.function.impl;
 
 import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.entity.UserMessage;
@@ -22,7 +21,6 @@ public class AddUserMessage implements FunctionAct {
     @Resource
     private IUserMessageService userMessageService;
 
-    @Authorize(role = {"user", "admin"})
     @Override
     public void act(JSONObject json, HttpServletResponse resp) {
         try {

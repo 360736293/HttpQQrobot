@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://xxxx:3306/httpqqrobot?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: xxxx
     driver-class-name: com.mysql.jdbc.Driver
   application:
     name: HttpQQrobot
@@ -18,8 +18,11 @@ spring:
     password: xxxx
 nacos:
   config:
-    server-addr: xxxx:8848
+    serverAddr: xxxx:8848
     namespace: dev
+    group: DEFAULT_GROUP
+    excludeWordsDataId: excludeWords-dev.properties
+    timeout: 5000
 mybatis-plus:
   type-aliases-package: com.example.entity
   mapper-locations: classpath:mapper/*Mapper.xml

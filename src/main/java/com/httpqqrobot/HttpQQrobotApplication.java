@@ -3,8 +3,7 @@ package com.httpqqrobot;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.alibaba.nacos.api.config.annotation.NacosValue;
-import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
+import com.alibaba.nacos.api.config.ConfigService;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.FunctionHandlerChain;
 import com.httpqqrobot.chain.function.FunctionAct;
@@ -13,6 +12,7 @@ import com.httpqqrobot.entity.UserAuthority;
 import com.httpqqrobot.service.IUserAuthorityService;
 import com.httpqqrobot.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -28,15 +28,25 @@ import java.util.TreeMap;
 @Slf4j
 @SpringBootApplication
 @EnableScheduling
-@NacosPropertySource(dataId = "excludeWords-dev.properties", autoRefreshed = true, groupId = "DEFAULT_GROUP")
 public class HttpQQrobotApplication implements ApplicationRunner {
 
-    @NacosValue(value = "${excludeWordsString}", autoRefreshed = true)
-    private String excludeWordsString;
     @Resource
     private FunctionHandlerChain functionHandlerChain;
+
     @Resource
     private IUserAuthorityService userAuthorityService;
+
+    @Resource
+    private ConfigService nacosConfigService;
+
+    @Value("${nacos.config.group}")
+    private String group;
+
+    @Value("${nacos.config.excludeWordsDataId}")
+    private String excludeWordsDataId;
+
+    @Value("${nacos.config.timeout}")
+    private long timeout;
 
     public static void main(String[] args) {
         SpringApplication.run(HttpQQrobotApplication.class, args);
@@ -50,8 +60,9 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             //加载用户权限数据
             loadUserAuthorityData();
             //加载排除词
-            if (ObjectUtil.isNotEmpty(excludeWordsString) && ObjectUtil.notEqual(excludeWordsString, "null")) {
-                AppConstant.excludeWordsList = Arrays.asList(excludeWordsString.split(","));
+            String excludeWordsString = nacosConfigService.getConfig(excludeWordsDataId, group, timeout);
+            if (ObjectUtil.isNotEmpty(excludeWordsString)) {
+                AppConstant.excludeWordsList = Arrays.asList(excludeWordsString.split("\n"));
             }
             log.info("初始化完成");
         } catch (Exception e) {
@@ -59,7 +70,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
         }
     }
 
-    public void assembleFunctionHandlerChain() throws InstantiationException, IllegalAccessException {
+    public void assembleFunctionHandlerChain() {
         //获取目标路径下所有有指定注解的类
         Set<Class<?>> classes = ClassUtil.scanPackageByAnnotation("com.httpqqrobot.chain.function.impl", ChainSequence.class);
         TreeMap<Integer, FunctionAct> sortedMap = new TreeMap<>();
