@@ -60,7 +60,6 @@ public class RateLimitAop {
                     }
                 } else {
                     //令牌桶中没有令牌，抛出异常
-                    //TODO 向机器人返回限流信息
                     throw new RateLimitException("Rate Limit Exception");
                 }
             }

@@ -1,6 +1,5 @@
 package com.httpqqrobot.exception.handler;
 
-import com.httpqqrobot.exception.AuthorizeException;
 import com.httpqqrobot.exception.RateLimitException;
 import com.httpqqrobot.result.Result;
 import com.httpqqrobot.result.ResultInfoEnum;
@@ -16,17 +15,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RateLimitException.class)
     @ResponseBody
     public Result handleRateLimitException(RateLimitException e) {
-        //限流异常要给前台返回
+        //TODO 限流异常要给机器人返回
         log.error("Error: {}", e.getMessage());
         return Result.fail(ResultInfoEnum.SERVICEUNAVAILABLE.getCode(), ResultInfoEnum.SERVICEUNAVAILABLE.getMsg(), e.getMessage());
-    }
-
-    @ExceptionHandler(AuthorizeException.class)
-    @ResponseBody
-    public Result handleAuthorizeException(AuthorizeException e) {
-        //鉴权异常要给前台返回
-        log.error("Error: {}", e.getMessage());
-        return Result.fail(ResultInfoEnum.FORBIDDEN.getCode(), ResultInfoEnum.FORBIDDEN.getMsg(), e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
