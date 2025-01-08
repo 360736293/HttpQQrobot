@@ -1,7 +1,6 @@
 package com.httpqqrobot.chain.function.impl;
 
 import cn.hutool.core.util.IdUtil;
-import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.annotation.ChainSequence;
@@ -9,7 +8,6 @@ import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.entity.UserMessage;
 import com.httpqqrobot.service.IUserMessageService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
