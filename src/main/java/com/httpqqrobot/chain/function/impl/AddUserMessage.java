@@ -26,7 +26,7 @@ public class AddUserMessage implements FunctionAct {
     @Override
     public void act(JSONObject json, HttpServletResponse resp) {
         try {
-            //推送待记录的消息到消息队列中
+            //将用户消息记录进数据库中
             String group_id = json.getString("group_id");
             String qq = json.getJSONObject("sender").getString("user_id");
             String nickName = json.getJSONObject("sender").getString("nickname");
@@ -41,7 +41,7 @@ public class AddUserMessage implements FunctionAct {
             userMessage.setDate(date);
             userMessageService.save(userMessage);
         } catch (Exception e) {
-            log.info("记录消息推送异常: {}", e.getMessage());
+            log.info("记录用户消息异常: {}", e.getMessage());
         }
     }
 }
