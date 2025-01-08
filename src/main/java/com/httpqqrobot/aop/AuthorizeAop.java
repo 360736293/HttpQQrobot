@@ -3,7 +3,7 @@ package com.httpqqrobot.aop;
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.annotation.Authorize;
-import com.httpqqrobot.utils.RedisUtils;
+import com.httpqqrobot.utils.RedisUtil;
 import com.httpqqrobot.utils.RequestHolder;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -26,7 +26,7 @@ public class AuthorizeAop {
             JSONObject json = RequestHolder.get();
             //获取到user_id
             String userId = json.getJSONObject("sender").getString("user_id");
-            String userRole = RedisUtils.getStr("UserId:" + userId);
+            String userRole = RedisUtil.getStr("UserId:" + userId);
             //判断是否包含用户角色
             if (ObjectUtil.contains(role, userRole)) {
                 return joinPoint.proceed();

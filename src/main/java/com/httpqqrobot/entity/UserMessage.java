@@ -1,12 +1,11 @@
 package com.httpqqrobot.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.httpqqrobot.entity.Sender;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 public class UserMessage implements Serializable {
@@ -14,39 +13,56 @@ public class UserMessage implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * id
+     * 主键
      */
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
     /**
-     * QQ群
+     * 消息格式
      */
-    String qqGroup;
+    String messageFormat;
 
     /**
-     * QQ号
+     * 原始消息
      */
-    String qqNumber;
+    String rawMessage;
 
     /**
-     * 昵称
+     * 机器人QQ号
      */
-    String qqName;
+    String selfId;
 
     /**
-     * 内容
+     * 消息ID
      */
-    String content;
+    String messageId;
 
     /**
-     * 日期
+     * 消息类型
      */
-    Date date;
+    String messageType;
+
+    String targetId;
+
+    String message;
+
+    String userId;
+
+    String realId;
+
+    Sender sender;
+
+    String subType;
+
+    String postType;
 
     /**
-     * 数量
+     * 消息发送日期
      */
-    @TableField(exist = false)
-    Integer sum;
+    String time;
+
+    String messageSeq;
+
+    String font;
 }

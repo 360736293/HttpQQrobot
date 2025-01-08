@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class RequestHolder {
+public class RequestHolderUtil {
 
     private static final ConcurrentHashMap<String, ThreadLocal<JSONObject>> threadLocalMap = new ConcurrentHashMap<>();
 

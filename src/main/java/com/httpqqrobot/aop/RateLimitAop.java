@@ -3,8 +3,8 @@ package com.httpqqrobot.aop;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.annotation.RateLimit;
 import com.httpqqrobot.exception.RateLimitException;
-import com.httpqqrobot.utils.RequestHolder;
-import com.httpqqrobot.utils.SendGetMessage;
+import com.httpqqrobot.utils.RequestHolderUtil;
+import com.httpqqrobot.utils.RequestResponseUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -53,9 +53,9 @@ public class RateLimitAop {
                     for (Object arg : args) {
                         if (arg instanceof HttpServletRequest) {
                             HttpServletRequest req = (HttpServletRequest) arg;
-                            JSONObject json = SendGetMessage.getMessage(req);
+                            JSONObject json = RequestResponseUtil.getRequestMessage(req);
                             //请求结果存储到ThreadLocal里
-                            RequestHolder.add(json);
+                            RequestHolderUtil.add(json);
                         }
                     }
                 } else {

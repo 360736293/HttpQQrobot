@@ -1,12 +1,15 @@
 package com.httpqqrobot.controller;
 
 
+import cn.hutool.core.date.LocalDateTimeUtil;
+import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.annotation.RateLimit;
 import com.httpqqrobot.chain.FunctionHandlerChain;
+import com.httpqqrobot.entity.UserMessage;
 import com.httpqqrobot.result.Result;
 import com.httpqqrobot.result.ResultInfoEnum;
-import com.httpqqrobot.utils.RequestHolder;
+import com.httpqqrobot.utils.RequestHolderUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,26 +24,16 @@ public class HttpQQrobotMainController {
     @Resource
     private FunctionHandlerChain functionHandlerChain;
 
-    /**
-     * 机器人的代理服务器只会请求一个接口，所以处理流程全部在一个接口里，并且无固定的请求体
-     * 下面是示例用请求体
-     * {
-     * "group_id":"1",
-     * "sender":{
-     * "user_id":"1",
-     * "nickname":"1"
-     * },
-     * "message":"1",
-     * "time":{{$timestamp}}
-     * }
-     **/
     @RateLimit(limit = 5)
     @PostMapping("/handler")
     public Result handler(HttpServletRequest req, HttpServletResponse resp) {
-        JSONObject json = RequestHolder.get();
+        JSONObject json = RequestHolderUtil.get();
         log.info("input parameter: {}", json.toJSONString());
-        functionHandlerChain.doHandler(json, resp);
-        RequestHolder.remove();
+        UserMessage userMessage = JSONObject.toJavaObject(json, UserMessage.class);
+        RequestHolderUtil.remove();
+        userMessage.setId(IdUtil.getSnowflakeNextIdStr());
+        userMessage.setTime(LocalDateTimeUtil.format(LocalDateTimeUtil.of(Integer.parseInt(userMessage.getTime()) * 1000L), "yyyy-MM-dd HH:mm:ss"));
+        functionHandlerChain.doHandler(userMessage);
         return Result.success(ResultInfoEnum.SUCCESS.getCode(), ResultInfoEnum.SUCCESS.getMsg(), null);
     }
 }

@@ -11,7 +11,7 @@ import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.UserAuthority;
 import com.httpqqrobot.service.IUserAuthorityService;
-import com.httpqqrobot.utils.RedisUtils;
+import com.httpqqrobot.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -50,6 +50,9 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     @Value("${nacos.config.readConfigTimeout}")
     private long readConfigTimeout;
 
+    @Value("${robot.ip}")
+    private String robotIp;
+
     public static void main(String[] args) {
         SpringApplication.run(HttpQQrobotApplication.class, args);
     }
@@ -79,6 +82,8 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             if (ObjectUtil.isNotEmpty(excludeWordsString)) {
                 AppConstant.excludeWordsList = Arrays.asList(excludeWordsString.split("\n"));
             }
+            //赋值机器人IP地址
+            AppConstant.robotIp = robotIp;
             log.info("初始化完成");
         } catch (Exception e) {
             log.info("初始化失败: {}", e.getMessage());
@@ -107,7 +112,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     public void loadUserAuthorityData() {
         List<UserAuthority> userAuthorityList = userAuthorityService.list();
         for (UserAuthority userAuthority : userAuthorityList) {
-            RedisUtils.set("UserId:" + userAuthority.getUserId(), userAuthority.getRole());
+            RedisUtil.set("UserId:" + userAuthority.getUserId(), userAuthority.getRole());
         }
     }
 }

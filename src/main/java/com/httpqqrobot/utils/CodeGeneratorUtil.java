@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 
-public class CodeGenerator {
+public class CodeGeneratorUtil {
     public static void main(String[] args) {
         //1.获取代码生成器的对象
         AutoGenerator autoGenerator = new AutoGenerator();

@@ -18,12 +18,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class RedisUtils {
+public class RedisUtil {
 
     private static StringRedisTemplate stringRedisTemplate;
 
     static {
-        RedisUtils.stringRedisTemplate = SpringUtil.getBean(StringRedisTemplate.class);
+        RedisUtil.stringRedisTemplate = SpringUtil.getBean(StringRedisTemplate.class);
     }
 
     private static final String LUA_INCR_EXPIRE =
@@ -53,7 +53,7 @@ public class RedisUtils {
         try {
             return Integer.parseInt(result.toString());
         } catch (Exception e) {
-            RedisUtils.del(key);
+            RedisUtil.del(key);
             throw e;
         }
     }
