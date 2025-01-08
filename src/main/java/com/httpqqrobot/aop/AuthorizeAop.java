@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.utils.RedisUtil;
-import com.httpqqrobot.utils.RequestHolder;
+import com.httpqqrobot.utils.RequestHolderUtil;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -23,7 +23,7 @@ public class AuthorizeAop {
         if (method.isAnnotationPresent(Authorize.class)) {
             Authorize authorize = method.getAnnotation(Authorize.class);
             String[] role = authorize.role();
-            JSONObject json = RequestHolder.get();
+            JSONObject json = RequestHolderUtil.get();
             //获取到user_id
             String userId = json.getJSONObject("sender").getString("user_id");
             String userRole = RedisUtil.getStr("UserId:" + userId);

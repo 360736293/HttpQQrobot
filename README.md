@@ -1,6 +1,8 @@
-这是一个搭配GO-CQHTTP反向代理服务器 (https://github.com/Mrs4s/go-cqhttp) 使用的QQ机器人服务端项目。
+~~这是一个搭配GO-CQHTTP正反向代理服务器 (https://github.com/Mrs4s/go-cqhttp) 使用的QQ机器人项目。~~
 
-目前因为该反向代理服务器停止了维护，所以本项目基本不再具备实际使用功能，暂时仅为本人练习设计所继续维护。
+~~目前因为该正反向代理服务器停止了维护，所以本项目基本不再具备实际使用功能，暂时仅为本人练习设计所继续维护。~~
+
+这是一个搭配NapCat正反向代理服务器 (https://github.com/NapNeko/NapCatQQ) 使用的QQ机器人项目。
 
 项目结构（httpqqrobot文件夹下）：
 
