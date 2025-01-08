@@ -27,5 +27,3 @@
 11、service：服务及服务实现类
 
 12、utils：工具类
-
-在线文档采用的是Swagger的增强框架Knife4j，地址为 http://localhost:7777/doc.html
