@@ -20,14 +20,12 @@
 
 8、exception：自定义异常及异常处理类
 
-9、listener：监听器类
+9、mapper：mapper接口类
 
-10、mapper：mapper接口类
+10、result：统一封装响应结果类
 
-11、result：统一封装响应结果类
+11、service：服务及服务实现类
 
-12、service：服务及服务实现类
-
-13、utils：工具类
+12、utils：工具类
 
 在线文档采用的是Swagger的增强框架Knife4j，地址为 http://localhost:7777/doc.html
