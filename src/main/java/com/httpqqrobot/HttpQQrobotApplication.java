@@ -4,6 +4,7 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.nacos.api.config.ConfigService;
+import com.alibaba.nacos.api.config.listener.Listener;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.FunctionHandlerChain;
 import com.httpqqrobot.chain.function.FunctionAct;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.Executor;
 
 @Slf4j
 @SpringBootApplication
@@ -45,8 +47,8 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     @Value("${nacos.config.excludeWordsDataId}")
     private String excludeWordsDataId;
 
-    @Value("${nacos.config.timeout}")
-    private long timeout;
+    @Value("${nacos.config.readConfigTimeout}")
+    private long readConfigTimeout;
 
     public static void main(String[] args) {
         SpringApplication.run(HttpQQrobotApplication.class, args);
@@ -60,7 +62,20 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             //加载用户权限数据
             loadUserAuthorityData();
             //加载排除词
-            String excludeWordsString = nacosConfigService.getConfig(excludeWordsDataId, group, timeout);
+            String excludeWordsString = nacosConfigService.getConfigAndSignListener(excludeWordsDataId, group, readConfigTimeout, new Listener() {
+                @Override
+                public Executor getExecutor() {
+                    return null;
+                }
+
+                @Override
+                public void receiveConfigInfo(String excludeWordsString) {
+                    //更新排除词
+                    if (ObjectUtil.isNotEmpty(excludeWordsString)) {
+                        AppConstant.excludeWordsList = Arrays.asList(excludeWordsString.split("\n"));
+                    }
+                }
+            });
             if (ObjectUtil.isNotEmpty(excludeWordsString)) {
                 AppConstant.excludeWordsList = Arrays.asList(excludeWordsString.split("\n"));
             }

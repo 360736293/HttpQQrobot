@@ -22,7 +22,7 @@ nacos:
     namespace: dev
     group: DEFAULT_GROUP
     excludeWordsDataId: excludeWords-dev.properties
-    timeout: 5000
+    readConfigTimeout: 5000
 mybatis-plus:
   type-aliases-package: com.example.entity
   mapper-locations: classpath:mapper/*Mapper.xml
