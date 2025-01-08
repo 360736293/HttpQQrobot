@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 @Slf4j
-@ChainSequence(4)
 public class Dialogue implements FunctionAct {
 
     @Resource

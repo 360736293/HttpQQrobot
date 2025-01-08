@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 @Slf4j
-@ChainSequence(0)
 public class GroupRecall implements FunctionAct {
 
     @Override

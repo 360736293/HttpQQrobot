@@ -15,7 +15,7 @@ import java.util.Date;
 
 @Component
 @Slf4j
-@ChainSequence(3)
+@ChainSequence(0)
 public class AddUserMessage implements FunctionAct {
 
     private final RocketMQTemplate rocketMQTemplate = SpringUtil.getBean(RocketMQTemplate.class);

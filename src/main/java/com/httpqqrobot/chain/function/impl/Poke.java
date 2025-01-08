@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Component
 @Slf4j
-@ChainSequence(1)
 public class Poke implements FunctionAct {
 
     @Override

@@ -14,7 +14,6 @@ import java.io.IOException;
 
 @Component
 @Slf4j
-@ChainSequence(2)
 public class FlashImage implements FunctionAct {
 
     @Override

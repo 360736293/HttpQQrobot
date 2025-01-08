@@ -40,7 +40,7 @@ public class HttpQQrobotMainController {
         "time":{{$timestamp}}
     }
     **/
-    @RateLimit(limit = 2)
+    @RateLimit(limit = 5)
     @Authorize(role = "user")
     @PostMapping("/handler")
     @ApiOperation("主流程处理")
