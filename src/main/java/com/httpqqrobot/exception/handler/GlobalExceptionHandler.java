@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result handleRateLimitException(RateLimitException e) {
         //限流异常要给前台返回
-        log.error("Rate Limit Exception: {}", e.getMessage());
+        log.error("Error: {}", e.getMessage());
         return Result.fail(ResultInfoEnum.SERVICEUNAVAILABLE.getCode(), ResultInfoEnum.SERVICEUNAVAILABLE.getMsg(), e.getMessage());
     }
 
@@ -25,14 +25,14 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result handleAuthorizeException(AuthorizeException e) {
         //鉴权异常要给前台返回
-        log.error("Authorize Exception: {}", e.getMessage());
+        log.error("Error: {}", e.getMessage());
         return Result.fail(ResultInfoEnum.FORBIDDEN.getCode(), ResultInfoEnum.FORBIDDEN.getMsg(), e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result handleException(Exception e) {
-        log.error("Unknown Exception: {}", e.getMessage());
+        log.error("Error: {}", e.getMessage());
         return Result.fail(ResultInfoEnum.UNKNOWFAIL.getCode(), ResultInfoEnum.UNKNOWFAIL.getMsg(), null);
     }
 }

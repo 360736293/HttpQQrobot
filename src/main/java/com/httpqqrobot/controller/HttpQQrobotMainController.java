@@ -41,7 +41,6 @@ public class HttpQQrobotMainController {
     }
     **/
     @RateLimit(limit = 5)
-    @Authorize(role = "user")
     @PostMapping("/handler")
     @ApiOperation("主流程处理")
     @ApiResponses(value = {
@@ -52,15 +51,10 @@ public class HttpQQrobotMainController {
             @ApiResponse(code = -1, message = "未知失败")
     })
     public Result handler(HttpServletRequest req, HttpServletResponse resp) {
-        try {
-            JSONObject json = RequestHolder.get();
-            log.info("input parameter: {}", json.toJSONString());
-            functionHandlerChain.doHandler(json, resp);
-            RequestHolder.remove();
-            return Result.success(ResultInfoEnum.SUCCESS.getCode(), ResultInfoEnum.SUCCESS.getMsg(), null);
-        } catch (Exception e) {
-            log.info("handler异常: {}", e.getMessage());
-            return Result.fail(ResultInfoEnum.UNKNOWFAIL.getCode(), ResultInfoEnum.UNKNOWFAIL.getMsg(), null);
-        }
+        JSONObject json = RequestHolder.get();
+        log.info("input parameter: {}", json.toJSONString());
+        functionHandlerChain.doHandler(json, resp);
+        RequestHolder.remove();
+        return Result.success(ResultInfoEnum.SUCCESS.getCode(), ResultInfoEnum.SUCCESS.getMsg(), null);
     }
 }

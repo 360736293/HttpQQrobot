@@ -1,6 +1,8 @@
 package com.httpqqrobot;
 
+import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.nacos.api.config.annotation.NacosValue;
 import com.alibaba.nacos.spring.context.annotation.config.NacosPropertySource;
 import com.httpqqrobot.annotation.ChainSequence;
@@ -11,23 +13,23 @@ import com.httpqqrobot.entity.UserAuthority;
 import com.httpqqrobot.service.IUserAuthorityService;
 import com.httpqqrobot.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
 
 @Slf4j
 @SpringBootApplication
 @EnableScheduling
 @NacosPropertySource(dataId = "excludeWords-dev.properties", autoRefreshed = true, groupId = "DEFAULT_GROUP")
-public class HttpQQrobotApplication implements ApplicationRunner, ApplicationContextAware {
+public class HttpQQrobotApplication implements ApplicationRunner {
 
     @NacosValue(value = "${excludeWordsString}", autoRefreshed = true)
     private String excludeWordsString;
@@ -35,8 +37,6 @@ public class HttpQQrobotApplication implements ApplicationRunner, ApplicationCon
     private FunctionHandlerChain functionHandlerChain;
     @Resource
     private IUserAuthorityService userAuthorityService;
-
-    List<Class<FunctionAct>> classes = new ArrayList<>();
 
     public static void main(String[] args) {
         SpringApplication.run(HttpQQrobotApplication.class, args);
@@ -59,24 +59,18 @@ public class HttpQQrobotApplication implements ApplicationRunner, ApplicationCon
         }
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        Map<String, FunctionAct> beansOfType = applicationContext.getBeansOfType(FunctionAct.class);
-        for (String s : beansOfType.keySet()) {
-            classes.add((Class<FunctionAct>) beansOfType.get(s).getClass());
-        }
-    }
-
     public void assembleFunctionHandlerChain() throws InstantiationException, IllegalAccessException {
+        //获取目标路径下所有有指定注解的类
+        Set<Class<?>> classes = ClassUtil.scanPackageByAnnotation("com.httpqqrobot.chain.function.impl", ChainSequence.class);
         TreeMap<Integer, FunctionAct> sortedMap = new TreeMap<>();
-        for (Class<FunctionAct> aClass : classes) {
+        for (Class<?> aClass : classes) {
             //获取类上@ChainSequence注解
             ChainSequence chainSequence = aClass.getAnnotation(ChainSequence.class);
             if (ObjectUtil.isEmpty(chainSequence)) {
                 continue;
             }
             Integer sequence = chainSequence.value();
-            FunctionAct functionAct = aClass.newInstance();
+            FunctionAct functionAct = (FunctionAct) SpringUtil.getBean(aClass);
             sortedMap.put(sequence, functionAct);
         }
         for (Integer sequence : sortedMap.keySet()) {

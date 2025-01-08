@@ -3,6 +3,7 @@ package com.httpqqrobot.chain.function.impl;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.alibaba.fastjson.JSONObject;
+import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.entity.UserMessage;
@@ -20,6 +21,7 @@ public class AddUserMessage implements FunctionAct {
 
     private final RocketMQTemplate rocketMQTemplate = SpringUtil.getBean(RocketMQTemplate.class);
 
+    @Authorize(role = "user")
     @Override
     public void act(JSONObject json, HttpServletResponse resp) {
         try {
