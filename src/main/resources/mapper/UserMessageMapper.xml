@@ -4,29 +4,29 @@
 <mapper namespace="com.httpqqrobot.mapper.UserMessageMapper">
     <cache eviction="LRU" flushInterval="100000" readOnly="true" size="1024"/>
 
-    <select id="getTodayUserSpeakRank" resultType="com.httpqqrobot.entity.UserMessage">
-        select qq_group                            as qqGroup,
-               qq_number                           as qqNumber,
-               qq_name                             as qqName,
-               SUBSTRING_INDEX(time_stamp, " ", 1) as date,
-               count(1)                            as sum
-        from speak_content
-        group by qq_group,
-                 qq_number,
-                 qq_name,
-                 SUBSTRING_INDEX(time_stamp, " ", 1)
-        having qq_group = #{qqGroup}
-           and date = #{date}
-        order by sum desc
-        limit 5
-    </select>
+<!--    <select id="getTodayUserSpeakRank" resultType="com.httpqqrobot.entity.UserMessage">-->
+<!--        select qq_group                            as qqGroup,-->
+<!--               qq_number                           as qqNumber,-->
+<!--               qq_name                             as qqName,-->
+<!--               SUBSTRING_INDEX(time_stamp, " ", 1) as date,-->
+<!--               count(1)                            as sum-->
+<!--        from speak_content-->
+<!--        group by qq_group,-->
+<!--                 qq_number,-->
+<!--                 qq_name,-->
+<!--                 SUBSTRING_INDEX(time_stamp, " ", 1)-->
+<!--        having qq_group = #{qqGroup}-->
+<!--           and date = #{date}-->
+<!--        order by sum desc-->
+<!--        limit 5-->
+<!--    </select>-->
 
-    <select id="getTodayUserSpeakContent" resultType="String">
-        select content
-        from speak_content
-        where qq_group = #{qqGroup}
-          and SUBSTRING_INDEX(time_stamp, " ", 1) = #{date}
-    </select>
+<!--    <select id="getTodayUserSpeakContent" resultType="String">-->
+<!--        select content-->
+<!--        from speak_content-->
+<!--        where qq_group = #{qqGroup}-->
+<!--          and SUBSTRING_INDEX(time_stamp, " ", 1) = #{date}-->
+<!--    </select>-->
 
 </mapper>
 

@@ -1,5 +1,6 @@
 package com.httpqqrobot.chain.function.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.entity.UserMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class FlashImage implements FunctionAct {
 
     @Override
-    public void act(UserMessage userMessage) {
+    public void act(JSONObject json) {
         try {
 //            String message = json.getString("message");
 //            //是否有人发闪照

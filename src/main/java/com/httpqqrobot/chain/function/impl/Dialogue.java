@@ -1,5 +1,6 @@
 package com.httpqqrobot.chain.function.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.chain.function.common.*;
 import com.httpqqrobot.entity.UserMessage;
@@ -20,7 +21,7 @@ public class Dialogue implements FunctionAct {
     private Default aDefault;
 
     @Override
-    public void act(UserMessage userMessage) {
+    public void act(JSONObject json) {
         try {
 //            String message = json.getString("message");
 //            //不是艾特不回复

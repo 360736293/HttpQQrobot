@@ -3,6 +3,7 @@ package com.httpqqrobot.controller;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.annotation.RateLimit;
 import com.httpqqrobot.chain.FunctionHandlerChain;
@@ -28,12 +29,9 @@ public class HttpQQrobotMainController {
     @PostMapping("/handler")
     public Result handler(HttpServletRequest req, HttpServletResponse resp) {
         JSONObject json = RequestHolderUtil.get();
-        log.info("input parameter: {}", json.toJSONString());
-        UserMessage userMessage = JSONObject.toJavaObject(json, UserMessage.class);
         RequestHolderUtil.remove();
-        userMessage.setId(IdUtil.getSnowflakeNextIdStr());
-        userMessage.setTime(LocalDateTimeUtil.format(LocalDateTimeUtil.of(Integer.parseInt(userMessage.getTime()) * 1000L), "yyyy-MM-dd HH:mm:ss"));
-        functionHandlerChain.doHandler(userMessage);
+        log.info("input parameter: {}", json.toJSONString());
+        functionHandlerChain.doHandler(json);
         return Result.success(ResultInfoEnum.SUCCESS.getCode(), ResultInfoEnum.SUCCESS.getMsg(), null);
     }
 }

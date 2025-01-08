@@ -1,7 +1,7 @@
 package com.httpqqrobot.chain.function;
 
-import com.httpqqrobot.entity.UserMessage;
+import com.alibaba.fastjson.JSONObject;
 
 public interface FunctionAct {
-    public void act(UserMessage userMessage);
+    public void act(JSONObject json);
 }

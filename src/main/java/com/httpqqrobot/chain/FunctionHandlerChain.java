@@ -1,7 +1,7 @@
 package com.httpqqrobot.chain;
 
+import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.chain.function.FunctionAct;
-import com.httpqqrobot.entity.UserMessage;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,9 +17,9 @@ public class FunctionHandlerChain {
         return this;
     }
 
-    public void doHandler(UserMessage userMessage) {
+    public void doHandler(JSONObject json) {
         for (FunctionAct functionAct : handlerChain) {
-            functionAct.act(userMessage);
+            functionAct.act(json);
         }
     }
 }
