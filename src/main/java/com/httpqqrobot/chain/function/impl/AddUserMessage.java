@@ -21,7 +21,7 @@ public class AddUserMessage implements FunctionAct {
 
     private final RocketMQTemplate rocketMQTemplate = SpringUtil.getBean(RocketMQTemplate.class);
 
-    @Authorize(role = "user")
+    @Authorize(role = {"user", "admin"})
     @Override
     public void act(JSONObject json, HttpServletResponse resp) {
         try {

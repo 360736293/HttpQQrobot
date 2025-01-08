@@ -24,13 +24,13 @@ public class AuthorizeAop {
             Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
             if (method.isAnnotationPresent(Authorize.class)) {
                 Authorize authorize = method.getAnnotation(Authorize.class);
-                String role = authorize.role();
+                String[] role = authorize.role();
                 JSONObject json = RequestHolder.get();
                 //获取到user_id
                 String userId = json.getJSONObject("sender").getString("user_id");
                 String userRole = RedisUtils.getStr("UserId:" + userId);
-                //TODO 暂时角色仅判断相等
-                if (ObjectUtil.notEqual(role, userRole)) {
+                //判断是否包含用户角色
+                if (!ObjectUtil.contains(role, userRole)) {
                     throw new RuntimeException();
                 }
             }
