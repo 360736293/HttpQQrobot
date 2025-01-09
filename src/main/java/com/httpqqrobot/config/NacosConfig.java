@@ -21,18 +21,11 @@ public class NacosConfig {
     private String namespace;
 
     @Bean
-    public ConfigService nacosExcludeWordsConfigService() throws NacosException {
+    public ConfigService nacosConfigService() throws NacosException {
         Properties properties = new Properties();
         properties.setProperty("serverAddr", serverAddr);
         properties.setProperty("namespace", namespace);
         return NacosFactory.createConfigService(properties);
     }
 
-    @Bean
-    public ConfigService nacosPromptWordsConfigService() throws NacosException {
-        Properties properties = new Properties();
-        properties.setProperty("serverAddr", serverAddr);
-        properties.setProperty("namespace", namespace);
-        return NacosFactory.createConfigService(properties);
-    }
 }

@@ -78,12 +78,12 @@ public class RobotUtil {
                         .header("Content-Type", "application/json; utf-8")
                         .header("Accept", "application/json")
                         .body("{\n" +
-                                "    \"model\": \"qwen-plus\",\n" +
+                                "    \"model\": \"" + AppConstant.tongyiqianwenModel + "\",\n" +
                                 "    \"input\":{\n" +
                                 "        \"messages\":[      \n" +
                                 "            {\n" +
                                 "                \"role\": \"system\",\n" +
-                                "                \"content\": \"" + AppConstant.promptWordsString + "\"\n" +
+                                "                \"content\": \"" + AppConstant.promptWords + "\"\n" +
                                 "            },\n" +
                                 "            {\n" +
                                 "                \"role\": \"user\",\n" +
