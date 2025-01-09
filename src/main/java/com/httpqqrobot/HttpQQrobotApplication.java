@@ -53,6 +53,9 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     @Value("${robot.ip}")
     private String robotIp;
 
+    @Value("${robot.qq}")
+    private String robotQQ;
+
     public static void main(String[] args) {
         SpringApplication.run(HttpQQrobotApplication.class, args);
     }
@@ -84,6 +87,8 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             }
             //赋值机器人IP地址
             AppConstant.robotIp = robotIp;
+            //赋值机器人QQ
+            AppConstant.robotQQ = robotQQ;
             log.info("初始化完成");
         } catch (Exception e) {
             log.info("初始化失败: {}", e.getMessage());

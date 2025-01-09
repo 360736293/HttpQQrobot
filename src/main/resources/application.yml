@@ -1,6 +1,7 @@
 server:
   port: 7777
 robot:
+  qq: xxxx
   ip: xxxx:3000
 spring:
   datasource:

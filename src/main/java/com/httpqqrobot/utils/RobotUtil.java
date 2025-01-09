@@ -7,11 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class RobotUtil {
-    public static JSONObject sendMessage(String subUrl, JSONObject json) {
+    public static JSONObject sendMessage(String subUrl, String body) {
         String url = AppConstant.robotIp + subUrl;
         JSONObject response = JSONObject.parseObject(HttpRequest.post(url)
                 .header("Content-Type", "application/json")
-                .body(json.toJSONString())
+                .body(body)
                 .execute()
                 .body());
         log.info("response information: {}", response.toJSONString());

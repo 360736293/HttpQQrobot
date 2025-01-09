@@ -17,4 +17,7 @@ public class AppConstant {
 
     //机器人反向代理服务器的IP地址
     public static String robotIp;
+
+    //机器人QQ
+    public static String robotQQ;
 }
