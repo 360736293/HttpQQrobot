@@ -1,9 +1,11 @@
 package com.httpqqrobot.constant;
 
+import com.httpqqrobot.entity.AIRequestBody;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class AppConstant {
@@ -20,6 +22,12 @@ public class AppConstant {
 
     //通义千问模型
     public static String tongyiqianwenModel;
+
+    //通义千问最大上下文数量（双方合计）
+    public static int tongyiqianwenMaxContextCount;
+
+    //通义千问用户对话上下文，key由QQ群-QQ号组成，value是用户对话历史记录
+    public static ConcurrentHashMap<String, List<AIRequestBody.Message.MessageContent>> chatContext = new ConcurrentHashMap<>();
 
     //机器人反向代理服务器的IP地址
     public static String robotIp;

@@ -178,5 +178,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
         Map<String, Object> yamlConfig = yaml.load(commonConfig);
         //赋值通义千问模型
         AppConstant.tongyiqianwenModel = ((Map<String, Object>) ((Map<String, Object>) yamlConfig.get("robot")).get("tongyiqianwen")).get("model").toString();
+        //赋值通义千问最大上下文数量（双方合计）
+        AppConstant.tongyiqianwenMaxContextCount = Integer.parseInt(((Map<String, Object>) ((Map<String, Object>) yamlConfig.get("robot")).get("tongyiqianwen")).get("maxContextCount").toString());
     }
 }

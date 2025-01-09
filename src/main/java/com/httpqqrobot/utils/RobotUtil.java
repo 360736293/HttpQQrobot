@@ -3,7 +3,10 @@ package com.httpqqrobot.utils;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.constant.AppConstant;
+import com.httpqqrobot.entity.AIRequestBody;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 @Slf4j
 public class RobotUtil {
@@ -40,22 +43,22 @@ public class RobotUtil {
                 HttpRequest
                         .post(AppConstant.robotIp + "/send_group_msg")
                         .header("Content-Type", "application/json")
-                        .body("{\n" +
-                                "    \"group_id\": " + groupId + ",\n" +
-                                "    \"message\": [\n" +
-                                "        {\n" +
-                                "            \"type\": \"reply\",\n" +
-                                "            \"data\": {\n" +
-                                "                \"id\": " + messageId + "\n" +
-                                "            }\n" +
-                                "        },\n" +
-                                "        {\n" +
-                                "            \"type\": \"text\",\n" +
-                                "            \"data\": {\n" +
-                                "                \"text\": \"" + replyContent + "\"\n" +
-                                "            }\n" +
-                                "        }\n" +
-                                "    ]\n" +
+                        .body("{" +
+                                "    \"group_id\": " + groupId + "," +
+                                "    \"message\": [" +
+                                "        {" +
+                                "            \"type\": \"reply\"," +
+                                "            \"data\": {" +
+                                "                \"id\": " + messageId + "" +
+                                "            }" +
+                                "        }," +
+                                "        {" +
+                                "            \"type\": \"text\"," +
+                                "            \"data\": {" +
+                                "                \"text\": \"" + replyContent + "\"" +
+                                "            }" +
+                                "        }" +
+                                "    ]" +
                                 "}")
                         .execute()
                         .body()
@@ -67,34 +70,62 @@ public class RobotUtil {
     /**
      * 机器人发送消息到通义千问
      *
-     * @param body 消息内容
+     * @param content 消息内容
      * @return
      */
-    public static JSONObject sendMessageToTongyiqianwen(String body) {
+    public static JSONObject sendMessageToTongyiqianwen(String groupId, String userId, String content) {
+//        {
+//            "model": "",
+//            "input":{
+//                "messages":[
+//                    {
+//                        "role": "system",
+//                        "content": ""
+//                    },
+//                    {
+//                        "role": "user",
+//                        "content": ""
+//                    },
+//                    {
+//                        "role": "assistant",
+//                        "content": ""
+//                    }
+//                ]
+//            },
+//            "parameters": {
+//                "result_format": "message"
+//            }
+//        }
+        AIRequestBody body = new AIRequestBody();
+        AIRequestBody.Message input = body.new Message();
+        AIRequestBody.ResultFormat resultFormat = body.new ResultFormat();
+        body.setModel(AppConstant.tongyiqianwenModel);
+        AIRequestBody.Message.MessageContent systemMessageContent = input.new MessageContent();
+        systemMessageContent.setRole("system");
+        systemMessageContent.setContent(AppConstant.promptWords);
+        input.getMessages().add(systemMessageContent);
+
+        //按照用户和AI的历史对话记录依次填充消息内容
+        List<AIRequestBody.Message.MessageContent> messageContents = AppConstant.chatContext.get(groupId + "-" + userId);
+        for (AIRequestBody.Message.MessageContent messageContent : messageContents) {
+            input.getMessages().add(messageContent);
+        }
+        //填充用户最新的消息内容
+        AIRequestBody.Message.MessageContent messageContent = input.new MessageContent();
+        messageContent.setRole("user");
+        messageContent.setContent(content);
+        input.getMessages().add(messageContent);
+
+        body.setInput(input);
+        resultFormat.setResult_format("message");
+        body.setParameters(resultFormat);
         JSONObject response = JSONObject.parseObject(
                 HttpRequest
                         .post("https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation")
                         .header("Authorization", "Bearer " + AppConstant.tongyiqianwenApiKey)
                         .header("Content-Type", "application/json; utf-8")
                         .header("Accept", "application/json")
-                        .body("{\n" +
-                                "    \"model\": \"" + AppConstant.tongyiqianwenModel + "\",\n" +
-                                "    \"input\":{\n" +
-                                "        \"messages\":[      \n" +
-                                "            {\n" +
-                                "                \"role\": \"system\",\n" +
-                                "                \"content\": \"" + AppConstant.promptWords + "\"\n" +
-                                "            },\n" +
-                                "            {\n" +
-                                "                \"role\": \"user\",\n" +
-                                "                \"content\": \"" + body + "\"\n" +
-                                "            }\n" +
-                                "        ]\n" +
-                                "    },\n" +
-                                "    \"parameters\": {\n" +
-                                "        \"result_format\": \"message\"\n" +
-                                "    }\n" +
-                                "}")
+                        .body(JSONObject.toJSONString(body))
                         .execute()
                         .body()
         );
