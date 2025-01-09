@@ -63,4 +63,42 @@ public class RobotUtil {
         log.info("response information: {}", response.toJSONString());
         return response;
     }
+
+    /**
+     * 机器人发送消息到通义千问
+     *
+     * @param body 消息内容
+     * @return
+     */
+    public static JSONObject sendMessageToTongyiqianwen(String body) {
+        JSONObject response = JSONObject.parseObject(
+                HttpRequest
+                        .post("https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation")
+                        .header("Authorization", "Bearer " + AppConstant.tongyiqianwenApiKey)
+                        .header("Content-Type", "application/json; utf-8")
+                        .header("Accept", "application/json")
+                        .body("{\n" +
+                                "    \"model\": \"qwen-plus\",\n" +
+                                "    \"input\":{\n" +
+                                "        \"messages\":[      \n" +
+                                "            {\n" +
+                                "                \"role\": \"system\",\n" +
+                                "                \"content\": \"You are a cat girl. Your name is 奥菲莉亚.\"\n" +
+                                "            },\n" +
+                                "            {\n" +
+                                "                \"role\": \"user\",\n" +
+                                "                \"content\": \"" + body + "\"\n" +
+                                "            }\n" +
+                                "        ]\n" +
+                                "    },\n" +
+                                "    \"parameters\": {\n" +
+                                "        \"result_format\": \"message\"\n" +
+                                "    }\n" +
+                                "}")
+                        .execute()
+                        .body()
+        );
+        log.info("response information: {}", response.toJSONString());
+        return response;
+    }
 }

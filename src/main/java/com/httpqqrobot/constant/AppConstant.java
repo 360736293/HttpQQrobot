@@ -20,4 +20,7 @@ public class AppConstant {
 
     //机器人QQ
     public static String robotQQ;
+
+    //通义千问APIkey
+    public static String tongyiqianwenApiKey;
 }

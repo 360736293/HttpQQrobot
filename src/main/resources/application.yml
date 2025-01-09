@@ -32,3 +32,5 @@ threadPool:
   maxPoolSize: 10
   keepAliveTime: 60
   blockingQueueSize: 20
+tongyiqianwen:
+  apikey: xxxx

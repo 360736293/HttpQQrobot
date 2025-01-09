@@ -56,6 +56,9 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     @Value("${robot.qq}")
     private String robotQQ;
 
+    @Value("${tongyiqianwen.apikey}")
+    private String tongyiqianwenApiKey;
+
     public static void main(String[] args) {
         SpringApplication.run(HttpQQrobotApplication.class, args);
     }
@@ -89,6 +92,8 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             AppConstant.robotIp = robotIp;
             //赋值机器人QQ
             AppConstant.robotQQ = robotQQ;
+            //赋值通义千问APIKEY
+            AppConstant.tongyiqianwenApiKey = tongyiqianwenApiKey;
             log.info("初始化完成");
         } catch (Exception e) {
             log.info("初始化失败: {}", e.getMessage());
