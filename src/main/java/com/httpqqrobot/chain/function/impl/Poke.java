@@ -2,7 +2,6 @@ package com.httpqqrobot.chain.function.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.chain.function.FunctionAct;
-import com.httpqqrobot.entity.UserMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

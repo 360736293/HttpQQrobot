@@ -13,7 +13,14 @@ import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -772,7 +779,7 @@ public class RedisUtil {
         Long count = stringRedisTemplate.delete(keys);
         // 此处提示可自行删除
         log.debug("--------------------------------------------");
-        log.debug("成功删除缓存：" + keys.toString());
+        log.debug("成功删除缓存：" + keys);
         log.debug("缓存删除数量：" + count + "个");
         log.debug("--------------------------------------------");
     }

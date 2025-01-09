@@ -2,8 +2,9 @@ package com.httpqqrobot.chain.function.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.chain.function.FunctionAct;
-import com.httpqqrobot.chain.function.common.*;
-import com.httpqqrobot.entity.UserMessage;
+import com.httpqqrobot.chain.function.common.Default;
+import com.httpqqrobot.chain.function.common.Menu;
+import com.httpqqrobot.chain.function.common.TodaySpeakRank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

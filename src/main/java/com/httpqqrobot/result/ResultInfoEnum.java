@@ -7,9 +7,9 @@ public enum ResultInfoEnum {
     UNAUTHORIZED(401, "未认证"),
     FORBIDDEN(403, "禁止访问");
 
-    private int code;
+    private final int code;
 
-    private String msg;
+    private final String msg;
 
     ResultInfoEnum(int code, String msg) {
         this.code = code;
