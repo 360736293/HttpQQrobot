@@ -28,8 +28,8 @@ public class Dialogue implements FunctionAct {
             JSONObject aiAnswer = RobotUtil.sendMessageToTongyiqianwen(messageContent);
             String response = aiAnswer.getJSONObject("output").getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
             //处理返回数据
-            String replyContent = response.replace("\n", "");
-            RobotUtil.groupReply(groupId, messageId, replyContent);
+            response = response.replaceAll("\n", "");
+            RobotUtil.groupReply(groupId, messageId, response);
         } catch (Exception e) {
             log.info("对话回复异常: {}", e.getMessage());
         }
