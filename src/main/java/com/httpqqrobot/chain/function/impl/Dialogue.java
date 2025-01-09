@@ -31,8 +31,8 @@ public class Dialogue implements FunctionAct {
             while (response.contains("\n")) {
                 response = response.replace("\n", "");
             }
-            while (response.contains("\\")) {
-                response = response.replace("\\", "");
+            while (response.contains("\"")) {
+                response = response.replace("\"", "'");
             }
             RobotUtil.groupReply(groupId, messageId, response);
         } catch (Exception e) {
