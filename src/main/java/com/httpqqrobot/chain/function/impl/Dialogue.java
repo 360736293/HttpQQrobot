@@ -25,25 +25,7 @@ public class Dialogue implements FunctionAct {
             String groupId = json.getString("group_id");
             String messageContent = message.split(" ")[1];
             String messageId = json.getString("message_id");
-            RobotUtil.sendMessage("/send_group_msg",
-                    "{\n" +
-                            "    \"group_id\": " + groupId + ",\n" +
-                            "    \"message\": [\n" +
-                            "        {\n" +
-                            "            \"type\": \"reply\",\n" +
-                            "            \"data\": {\n" +
-                            "                \"id\": " + messageId + "\n" +
-                            "            }\n" +
-                            "        },\n" +
-                            "        {\n" +
-                            "            \"type\": \"text\",\n" +
-                            "            \"data\": {\n" +
-                            "                \"text\": \"" + messageContent + "\"\n" +
-                            "            }\n" +
-                            "        }\n" +
-                            "    ]\n" +
-                            "}"
-            );
+            RobotUtil.groupReply("/send_group_msg", groupId, messageId, messageContent);
         } catch (Exception e) {
             log.info("对话回复异常: {}", e.getMessage());
         }
