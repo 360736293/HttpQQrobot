@@ -1,11 +1,13 @@
 package com.httpqqrobot.utils;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSONObject;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.AIRequestBody;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -97,9 +99,11 @@ public class RobotUtil {
 //            }
 //        }
         AIRequestBody body = new AIRequestBody();
-        AIRequestBody.Message input = body.new Message();
-        AIRequestBody.ResultFormat resultFormat = body.new ResultFormat();
         body.setModel(AppConstant.tongyiqianwenModel);
+        AIRequestBody.Message input = body.new Message();
+        List<AIRequestBody.Message.MessageContent> messages = new ArrayList<>();
+        input.setMessages(messages);
+        body.setInput(input);
         AIRequestBody.Message.MessageContent systemMessageContent = input.new MessageContent();
         systemMessageContent.setRole("system");
         systemMessageContent.setContent(AppConstant.promptWords);
@@ -107,8 +111,10 @@ public class RobotUtil {
 
         //按照用户和AI的历史对话记录依次填充消息内容
         List<AIRequestBody.Message.MessageContent> messageContents = AppConstant.chatContext.get(groupId + "-" + userId);
-        for (AIRequestBody.Message.MessageContent messageContent : messageContents) {
-            input.getMessages().add(messageContent);
+        if (ObjectUtil.isNotEmpty(messageContents)) {
+            for (AIRequestBody.Message.MessageContent messageContent : messageContents) {
+                input.getMessages().add(messageContent);
+            }
         }
         //填充用户最新的消息内容
         AIRequestBody.Message.MessageContent messageContent = input.new MessageContent();
@@ -116,7 +122,7 @@ public class RobotUtil {
         messageContent.setContent(content);
         input.getMessages().add(messageContent);
 
-        body.setInput(input);
+        AIRequestBody.ResultFormat resultFormat = body.new ResultFormat();
         resultFormat.setResult_format("message");
         body.setParameters(resultFormat);
         JSONObject response = JSONObject.parseObject(
