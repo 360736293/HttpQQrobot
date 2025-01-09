@@ -83,7 +83,7 @@ public class RobotUtil {
                                 "        \"messages\":[      \n" +
                                 "            {\n" +
                                 "                \"role\": \"system\",\n" +
-                                "                \"content\": \"You are a cat girl. Your name is 奥菲莉亚.\"\n" +
+                                "                \"content\": \"" + AppConstant.promptWordsString + "\"\n" +
                                 "            },\n" +
                                 "            {\n" +
                                 "                \"role\": \"user\",\n" +

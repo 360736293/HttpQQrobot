@@ -39,13 +39,20 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     private IUserAuthorityService userAuthorityService;
 
     @Resource
-    private ConfigService nacosConfigService;
+    private ConfigService nacosExcludeWordsConfigService;
+
+    @Resource
+    private ConfigService nacosPromptWordsConfigService;
 
     @Value("${nacos.config.group}")
     private String group;
 
     @Value("${nacos.config.excludeWordsDataId}")
     private String excludeWordsDataId;
+
+    @Value("${nacos.config.promptWordsDataId}")
+    private String promptWordsDataId;
+
 
     @Value("${nacos.config.readConfigTimeout}")
     private long readConfigTimeout;
@@ -71,7 +78,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             //加载用户权限数据
             loadUserAuthorityData();
             //加载排除词
-            String excludeWordsString = nacosConfigService.getConfigAndSignListener(excludeWordsDataId, group, readConfigTimeout, new Listener() {
+            String excludeWordsString = nacosExcludeWordsConfigService.getConfigAndSignListener(excludeWordsDataId, group, readConfigTimeout, new Listener() {
                 @Override
                 public Executor getExecutor() {
                     return null;
@@ -87,6 +94,30 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             });
             if (ObjectUtil.isNotEmpty(excludeWordsString)) {
                 AppConstant.excludeWordsList = Arrays.asList(excludeWordsString.split("\n"));
+            }
+            //加载通义千问提示词
+            String promptWordsString = nacosPromptWordsConfigService.getConfigAndSignListener(promptWordsDataId, group, readConfigTimeout, new Listener() {
+                @Override
+                public Executor getExecutor() {
+                    return null;
+                }
+
+                @Override
+                public void receiveConfigInfo(String promptWordsString) {
+                    //更新排除词
+                    if (ObjectUtil.isNotEmpty(promptWordsString)) {
+                        String[] list = promptWordsString.split("\n");
+                        for (String s : list) {
+                            AppConstant.promptWordsString += s;
+                        }
+                    }
+                }
+            });
+            if (ObjectUtil.isNotEmpty(promptWordsString)) {
+                String[] list = promptWordsString.split("\n");
+                for (String s : list) {
+                    AppConstant.promptWordsString += s;
+                }
             }
             //赋值机器人IP地址
             AppConstant.robotIp = robotIp;

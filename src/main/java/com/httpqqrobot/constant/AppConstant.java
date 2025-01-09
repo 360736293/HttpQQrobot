@@ -15,6 +15,9 @@ public class AppConstant {
     //排除词
     public static List<String> excludeWordsList = new ArrayList<>();
 
+    //通义千问提示词
+    public static String promptWordsString = "";
+
     //机器人反向代理服务器的IP地址
     public static String robotIp;
 

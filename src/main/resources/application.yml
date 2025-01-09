@@ -22,7 +22,8 @@ nacos:
     serverAddr: xxxx:8848
     namespace: dev
     group: DEFAULT_GROUP
-    excludeWordsDataId: excludeWords-dev.properties
+    excludeWordsDataId: excludeWords-dev
+    promptWordsDataId: promptWords-dev
     readConfigTimeout: 5000
 mybatis-plus:
   type-aliases-package: com.example.entity
