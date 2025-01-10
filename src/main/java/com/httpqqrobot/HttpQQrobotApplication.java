@@ -17,7 +17,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.annotation.Resource;
@@ -30,7 +29,6 @@ import java.util.concurrent.Executor;
 
 @Slf4j
 @SpringBootApplication
-@EnableScheduling
 public class HttpQQrobotApplication implements ApplicationRunner {
 
     @Resource
@@ -44,16 +42,6 @@ public class HttpQQrobotApplication implements ApplicationRunner {
 
     @Value("${nacos.config.group}")
     private String group;
-
-    @Value("${nacos.config.excludeWordsDataId}")
-    private String excludeWordsDataId;
-
-    @Value("${nacos.config.promptWordsDataId}")
-    private String promptWordsDataId;
-
-    @Value("${nacos.config.commonDataId}")
-    private String commonDataId;
-
 
     @Value("${nacos.config.readConfigTimeout}")
     private long readConfigTimeout;
@@ -79,7 +67,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             //加载用户权限数据
             loadUserAuthorityData();
             //加载排除词
-            String excludeWordsString = nacosConfigService.getConfigAndSignListener(excludeWordsDataId, group, readConfigTimeout, new Listener() {
+            String excludeWordsString = nacosConfigService.getConfigAndSignListener("excludeWords-dev", group, readConfigTimeout, new Listener() {
                 @Override
                 public Executor getExecutor() {
                     return null;
@@ -97,7 +85,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
                 AppConstant.excludeWords = Arrays.asList(excludeWordsString.split("\n"));
             }
             //加载通义千问提示词
-            String promptWords = nacosConfigService.getConfigAndSignListener(promptWordsDataId, group, readConfigTimeout, new Listener() {
+            String promptWords = nacosConfigService.getConfigAndSignListener("promptWords-dev", group, readConfigTimeout, new Listener() {
                 @Override
                 public Executor getExecutor() {
                     return null;
@@ -121,7 +109,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
                 }
             }
             //加载基础数据
-            String commonConfig = nacosConfigService.getConfigAndSignListener(commonDataId, group, readConfigTimeout, new Listener() {
+            String commonConfig = nacosConfigService.getConfigAndSignListener("common-dev", group, readConfigTimeout, new Listener() {
                 @Override
                 public Executor getExecutor() {
                     return null;
