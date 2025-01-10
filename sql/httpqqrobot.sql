@@ -14,6 +14,9 @@
  Date: 09/01/2025 02:37:12
 */
 
+CREATE database if NOT EXISTS `httpqqrobot` default character set utf8mb4 collate utf8mb4_unicode_ci;
+use `httpqqrobot`;
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
