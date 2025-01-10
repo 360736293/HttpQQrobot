@@ -29,6 +29,9 @@ public class AppConstant {
     //通义千问用户对话上下文，key由QQ群-QQ号组成，value是用户对话历史记录
     public static ConcurrentHashMap<String, List<AIRequestBody.Message.MessageContent>> chatContext = new ConcurrentHashMap<>();
 
+    //用户权限数据
+    public static ConcurrentHashMap<String, String> userAuthorityMap = new ConcurrentHashMap<>();
+
     //机器人反向代理服务器的IP地址
     public static String robotIp;
 

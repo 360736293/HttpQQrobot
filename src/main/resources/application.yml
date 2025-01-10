@@ -11,12 +11,6 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
   application:
     name: HttpQQrobot
-  redis:
-    host: xxxx
-    port: 6379
-    database: 0
-    timeout: 1800000
-    password: xxxx
 nacos:
   config:
     serverAddr: xxxx:8848
