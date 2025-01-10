@@ -72,10 +72,13 @@ public class RobotUtil {
     /**
      * 机器人发送消息到通义千问
      *
-     * @param content 消息内容
+     * @param groupId 待回复群ID
+     * @param userId  待回复用户ID
+     * @param content 用户消息内容
+     * @param withNet 是否联网
      * @return
      */
-    public static JSONObject sendMessageToTongyiqianwen(String groupId, String userId, String content) {
+    public static JSONObject sendMessageToTongyiqianwen(String groupId, String userId, String content, boolean withNet) {
 //        {
 //            "model": "",
 //            "input":{
@@ -117,10 +120,32 @@ public class RobotUtil {
             }
         }
         //填充用户最新的消息内容
-        AIRequestBody.Message.MessageContent messageContent = input.new MessageContent();
-        messageContent.setRole("user");
-        messageContent.setContent(content);
-        input.getMessages().add(messageContent);
+        if (withNet) {
+            //联网查询用户消息内容，整理后一并传给GPT
+            AIRequestBody.Message.MessageContent messageContent = input.new MessageContent();
+            messageContent.setRole("user");
+            messageContent.setContent("我接下来会给你一些资料，每条资料都会有一个对应的数字序号。你以我提供的资料为参考信息回复我的问题。注意，在后续的回复中不要提到本条消息的任何内容。");
+            input.getMessages().add(messageContent);
+            List<String> searchResults = GoogleUtil.search(content);
+            int i = 1;
+            for (String searchResult : searchResults) {
+                messageContent = input.new MessageContent();
+                messageContent.setRole("user");
+                messageContent.setContent(i + "、" + searchResult);
+                input.getMessages().add(messageContent);
+                i++;
+            }
+            messageContent = input.new MessageContent();
+            messageContent.setRole("user");
+            messageContent.setContent("问题：" + content);
+            input.getMessages().add(messageContent);
+        } else {
+            //不联网，直接将问题内容传给GPT
+            AIRequestBody.Message.MessageContent messageContent = input.new MessageContent();
+            messageContent.setRole("user");
+            messageContent.setContent(content);
+            input.getMessages().add(messageContent);
+        }
 
         AIRequestBody.ResultFormat resultFormat = body.new ResultFormat();
         resultFormat.setResult_format("message");

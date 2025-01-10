@@ -34,8 +34,11 @@ public class Dialogue implements FunctionAct {
                 case "清除记忆":
                     clearMemory(groupId, messageId, userId);
                     break;
+                case "AI联网":
+                    aiTalk(groupId, messageId, userId, messageSplit[2], true);
+                    break;
                 default:
-                    aiTalk(groupId, messageId, userId, messageSplit);
+                    aiTalk(groupId, messageId, userId, messageSplit[1], false);
             }
         } catch (Exception e) {
             log.info("对话回复异常: {}", e.getMessage());
@@ -51,9 +54,8 @@ public class Dialogue implements FunctionAct {
         RobotUtil.groupReply(groupId, messageId, "记忆已清除");
     }
 
-    public void aiTalk(String groupId, String messageId, String userId, String[] messageSplit) {
-        String messageContent = messageSplit[1];
-        JSONObject aiAnswer = RobotUtil.sendMessageToTongyiqianwen(groupId, userId, messageContent);
+    public void aiTalk(String groupId, String messageId, String userId, String messageContent, boolean withNet) {
+        JSONObject aiAnswer = RobotUtil.sendMessageToTongyiqianwen(groupId, userId, messageContent, withNet);
         String response = aiAnswer.getJSONObject("output").getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
         //处理返回数据
         while (response.contains("\n")) {
