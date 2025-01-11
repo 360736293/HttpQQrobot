@@ -52,6 +52,12 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     @Value("${tongyiqianwen.apikey}")
     private String tongyiqianwenApiKey;
 
+    @Value("${http-https.proxy.ip}")
+    private String proxyIP;
+
+    @Value("${http-https.proxy.port}")
+    private int proxyPort;
+
     public static void main(String[] args) {
         SpringApplication.run(HttpQQrobotApplication.class, args);
     }
@@ -125,6 +131,9 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             AppConstant.robotQQ = robotQQ;
             //赋值通义千问APIKEY
             AppConstant.tongyiqianwenApiKey = tongyiqianwenApiKey;
+            //赋值http-https代理
+            AppConstant.proxyIP = proxyIP;
+            AppConstant.proxyPort = proxyPort;
             log.info("初始化完成");
         } catch (Exception e) {
             log.info("初始化失败: {}", e.getMessage());
