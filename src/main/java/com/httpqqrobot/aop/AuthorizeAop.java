@@ -1,7 +1,7 @@
 package com.httpqqrobot.aop;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.utils.RequestHolderUtil;

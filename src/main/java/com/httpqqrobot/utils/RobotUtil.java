@@ -2,7 +2,7 @@ package com.httpqqrobot.utils;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpRequest;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.AIRequestBody;
 import lombok.extern.slf4j.Slf4j;

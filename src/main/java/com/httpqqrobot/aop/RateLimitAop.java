@@ -1,6 +1,6 @@
 package com.httpqqrobot.aop;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.annotation.RateLimit;
 import com.httpqqrobot.exception.RateLimitException;
 import com.httpqqrobot.utils.RequestHolderUtil;

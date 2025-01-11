@@ -3,7 +3,7 @@ package com.httpqqrobot.chain.function.impl;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.entity.UserMessage;
@@ -25,7 +25,7 @@ public class AddUserMessage implements FunctionAct {
     public void act(JSONObject json) {
         try {
             //将消息记录进数据库中
-            UserMessage userMessage = JSONObject.toJavaObject(json, UserMessage.class);
+            UserMessage userMessage = JSONObject.parseObject(json.toJSONString(), UserMessage.class);
             userMessage.setId(IdUtil.getSnowflakeNextIdStr());
             if (ObjectUtil.isNotEmpty(userMessage.getTime())) {
                 userMessage.setTime(LocalDateTimeUtil.format(LocalDateTimeUtil.of(Integer.parseInt(userMessage.getTime()) * 1000L), "yyyy-MM-dd HH:mm:ss"));

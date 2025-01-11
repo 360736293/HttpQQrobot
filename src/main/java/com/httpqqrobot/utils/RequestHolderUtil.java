@@ -1,7 +1,7 @@
 package com.httpqqrobot.utils;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
