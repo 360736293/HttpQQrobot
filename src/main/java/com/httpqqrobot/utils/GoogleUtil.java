@@ -27,14 +27,15 @@ public class GoogleUtil {
                 .form("cx", "17bf6301118d143f2")
                 .form("q", content)
                 .form("safe", "on")
-                .form("cse_tok", "AB-tC_7cLI6GUH-nvzwIc876uHps%3A1736512213901")
-                .form("callback", "google.search.cse.api9564");
+                .form("cse_tok", "AB-tC_7ywA3y29M-is78iqBGBFGt:1736575153477")
+                .form("callback", "google.search.cse.api14638")
+                .form("rurl", "https://www.sougood.top/free/833/%23gsc.tab=0");
         if (ObjectUtil.isNotEmpty(AppConstant.proxyIP) && ObjectUtil.isNotEmpty(AppConstant.proxyPort)) {
             form.setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort);
         }
         String response = form.execute().body();
         response = response.replace("/*O_o*/", "");
-        response = response.replace("google.search.cse.api9564({", "");
+        response = response.replace("google.search.cse.api14638({", "");
         response = response.replace("});", "");
         response = "{" + response + "}";
         JSONObject json = JSONObject.parseObject(response);
