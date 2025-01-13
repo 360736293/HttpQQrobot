@@ -35,14 +35,30 @@ public class Dialogue implements FunctionAct {
                     clearMemory(groupId, messageId, userId);
                     break;
                 case "AI联网":
-                    aiTalk(groupId, messageId, userId, messageSplit[2], true);
+                    aiTalk(groupId, messageId, userId, spliceContent(messageSplit, true), true);
                     break;
                 default:
-                    aiTalk(groupId, messageId, userId, messageSplit[1], false);
+                    aiTalk(groupId, messageId, userId, spliceContent(messageSplit, false), false);
             }
         } catch (Exception e) {
             log.info("对话回复异常: {}", e.getMessage());
         }
+    }
+
+    public String spliceContent(String[] messageSplit, boolean containCommand) {
+        //因为内容中间可能也会存在空格而导致被分割，所以需要拼接起来
+        StringBuilder message = new StringBuilder();
+        if (containCommand) {
+            //请求内容存在指令关键字，所以要跳过
+            for (int i = 2; i < messageSplit.length; i++) {
+                message.append(messageSplit[i]).append(" ");
+            }
+        } else {
+            for (int i = 1; i < messageSplit.length; i++) {
+                message.append(messageSplit[i]).append(" ");
+            }
+        }
+        return message.toString();
     }
 
     public void clearMemory(String groupId, String messageId, String userId) {
