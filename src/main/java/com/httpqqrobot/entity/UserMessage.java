@@ -58,10 +58,19 @@ public class UserMessage implements Serializable {
     @TableField(exist = false)
     Sender sender;
 
+    /**
+     * 发送人QQ号
+     */
     String senderUserId;
 
+    /**
+     * 发送人QQ昵称
+     */
     String senderNickname;
 
+    /**
+     * 发送人QQ群昵称
+     */
     String senderCard;
 
     String subType;

@@ -1,15 +1,19 @@
 package com.httpqqrobot.chain.function.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.AIRequestBody;
+import com.httpqqrobot.entity.UserMessage;
+import com.httpqqrobot.service.IUserMessageService;
 import com.httpqqrobot.utils.RobotUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +21,9 @@ import java.util.List;
 @Slf4j
 @ChainSequence(1)
 public class Dialogue implements FunctionAct {
+
+    @Resource
+    public IUserMessageService userMessageServiceImpl;
 
     @Override
     public void act(JSONObject json) {
@@ -34,6 +41,9 @@ public class Dialogue implements FunctionAct {
                 case "清除记忆":
                     clearMemory(groupId, messageId, userId);
                     break;
+                case "群消息总结":
+                    groupMessageSummary(groupId, messageId, messageSplit[2]);
+                    break;
                 case "AI联网":
                     aiTalk(groupId, messageId, userId, spliceContent(messageSplit, true), true);
                     break;
@@ -43,6 +53,27 @@ public class Dialogue implements FunctionAct {
         } catch (Exception e) {
             log.info("对话回复异常: {}", e.getMessage());
         }
+    }
+
+    public void groupMessageSummary(String groupId, String messageId, String date) {
+        //传入的日期格式形如2025-01-13，跟查询出该群组该日所有消息记录
+        List<UserMessage> messageList = userMessageServiceImpl.lambdaQuery()
+                .eq(UserMessage::getGroupId, groupId)
+                .between(UserMessage::getTime, date + " 00:00:00", date + " 23:59:59")
+                .eq(UserMessage::getPostType, "message")
+                .select(UserMessage::getMessage)
+                .list();
+        //将查询出来的聊天记录消息数据清除QQ表情，图片，艾特等内置消息，并且拼接上序号，以及分割符号
+        StringBuilder message = new StringBuilder();
+        for (int i = 0; i < messageList.size(); i++) {
+            String tempMessage = messageList.get(i).getMessage();
+            tempMessage = ReUtil.delAll("\\[CQ.*?\\] ", tempMessage);
+            message.append(i + 1).append("、 ").append(tempMessage).append("\n");
+        }
+        //将消息发送给AI进行总结
+        String response = RobotUtil.sendMessageToTongyiqianwen(groupId, null, message.toString(), false, true);
+        //将总结内容发送到QQ群
+        RobotUtil.groupReply(groupId, messageId, response);
     }
 
     public String spliceContent(String[] messageSplit, boolean containCommand) {
@@ -71,15 +102,7 @@ public class Dialogue implements FunctionAct {
     }
 
     public void aiTalk(String groupId, String messageId, String userId, String messageContent, boolean withNet) {
-        JSONObject aiAnswer = RobotUtil.sendMessageToTongyiqianwen(groupId, userId, messageContent, withNet);
-        String response = aiAnswer.getJSONObject("output").getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
-        //处理返回数据
-        while (response.contains("\n")) {
-            response = response.replace("\n", "");
-        }
-        while (response.contains("\"")) {
-            response = response.replace("\"", "'");
-        }
+        String response = RobotUtil.sendMessageToTongyiqianwen(groupId, userId, messageContent, withNet, false);
         //将用户以及AI回答存起来，作为下一次用户提问时的上下文数据
         List<AIRequestBody.Message.MessageContent> chatContextList = AppConstant.chatContext.getOrDefault(groupId + "-" + userId, new ArrayList<>());
         if (chatContextList.size() >= AppConstant.tongyiqianwenMaxContextCount) {
