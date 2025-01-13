@@ -67,7 +67,10 @@ public class Dialogue implements FunctionAct {
         StringBuilder message = new StringBuilder();
         for (int i = 0; i < messageList.size(); i++) {
             String tempMessage = messageList.get(i).getMessage();
-            tempMessage = ReUtil.delAll("\\[CQ.*?\\] ", tempMessage);
+            tempMessage = ReUtil.delAll("\\[CQ.*?\\] *", tempMessage);
+            if (ObjectUtil.isEmpty(tempMessage)) {
+                continue;
+            }
             message.append(i + 1).append("、 ").append(tempMessage).append("\n");
         }
         //将消息发送给AI进行总结
