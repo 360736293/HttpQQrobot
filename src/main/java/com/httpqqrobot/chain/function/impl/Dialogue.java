@@ -42,7 +42,7 @@ public class Dialogue implements FunctionAct {
                     clearMemory(groupId, messageId, userId);
                     break;
                 case "群消息总结":
-                    groupMessageSummary(groupId, messageId, messageSplit[2]);
+                    groupMessageSummary(groupId, messageId, userId, messageSplit[2]);
                     break;
                 case "AI联网":
                     aiTalk(groupId, messageId, userId, spliceContent(messageSplit, true), true);
@@ -55,7 +55,7 @@ public class Dialogue implements FunctionAct {
         }
     }
 
-    public void groupMessageSummary(String groupId, String messageId, String date) {
+    public void groupMessageSummary(String groupId, String messageId, String userId, String date) {
         //传入的日期格式形如2025-01-13，跟查询出该群组该日所有消息记录
         List<UserMessage> messageList = userMessageServiceImpl.lambdaQuery()
                 .eq(UserMessage::getGroupId, groupId)
@@ -75,6 +75,8 @@ public class Dialogue implements FunctionAct {
         }
         //将消息发送给AI进行总结
         String response = RobotUtil.sendMessageToTongyiqianwen(groupId, null, message.toString(), false, true);
+        //将用户以及AI消息存起来，作为下一次用户提问时的上下文数据
+        saveSummaryToContext(groupId, userId, "群消息总结", response);
         //将总结内容发送到QQ群
         RobotUtil.groupReply(groupId, messageId, response);
     }
@@ -106,6 +108,13 @@ public class Dialogue implements FunctionAct {
 
     public void aiTalk(String groupId, String messageId, String userId, String messageContent, boolean withNet) {
         String response = RobotUtil.sendMessageToTongyiqianwen(groupId, userId, messageContent, withNet, false);
+        //将用户以及AI消息存起来，作为下一次用户提问时的上下文数据
+        saveSummaryToContext(groupId, userId, messageContent, response);
+        //将AI回答回复给用户
+        RobotUtil.groupReply(groupId, messageId, response);
+    }
+
+    public void saveSummaryToContext(String groupId, String userId, String userMessageContent, String robotMessageContent) {
         //将用户以及AI回答存起来，作为下一次用户提问时的上下文数据
         List<AIRequestBody.Message.MessageContent> chatContextList = AppConstant.chatContext.getOrDefault(groupId + "-" + userId, new ArrayList<>());
         if (chatContextList.size() >= AppConstant.tongyiqianwenMaxContextCount) {
@@ -116,14 +125,11 @@ public class Dialogue implements FunctionAct {
         AIRequestBody.Message.MessageContent userMessage = new AIRequestBody().new Message().new MessageContent();
         AIRequestBody.Message.MessageContent aiMessage = new AIRequestBody().new Message().new MessageContent();
         userMessage.setRole("user");
-        userMessage.setContent(messageContent);
+        userMessage.setContent(userMessageContent);
         aiMessage.setRole("assistant");
-        aiMessage.setContent(response);
+        aiMessage.setContent(robotMessageContent);
         chatContextList.add(userMessage);
         chatContextList.add(aiMessage);
-        //将用户以及AI消息存起来，作为下一次用户提问时的上下文数据
         AppConstant.chatContext.put(groupId + "-" + userId, chatContextList);
-        //将AI回答回复给用户
-        RobotUtil.groupReply(groupId, messageId, response);
     }
 }
