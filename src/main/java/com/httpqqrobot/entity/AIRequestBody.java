@@ -2,10 +2,13 @@ package com.httpqqrobot.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class AIRequestBody {
+public class AIRequestBody implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     String model;
 
@@ -14,12 +17,16 @@ public class AIRequestBody {
     ResultFormat parameters;
 
     @Data
-    public class Message {
+    public class Message implements Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         List<MessageContent> messages;
 
         @Data
-        public class MessageContent {
+        public class MessageContent implements Serializable {
+
+            private static final long serialVersionUID = 1L;
 
             String role;
 
@@ -28,7 +35,9 @@ public class AIRequestBody {
     }
 
     @Data
-    public class ResultFormat {
+    public class ResultFormat implements Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         String result_format;
     }

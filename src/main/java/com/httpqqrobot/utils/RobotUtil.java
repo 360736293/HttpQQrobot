@@ -5,6 +5,7 @@ import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.AIRequestBody;
+import com.httpqqrobot.entity.RobotResponseBody;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -34,6 +35,23 @@ public class RobotUtil {
 
     /**
      * 机器人回复群消息
+     * //        {
+     * //            "group_id": "",
+     * //            "message": [
+     * //                {
+     * //                    "type": "reply",
+     * //                    "data": {
+     * //                        "id": ""
+     * //                    }
+     * //                },
+     * //                {
+     * //                    "type": "text",
+     * //                    "data": {
+     * //                        "text": ""
+     * //                    }
+     * //                }
+     * //            ]
+     * //        }
      *
      * @param groupId      待回复群ID
      * @param messageId    待回复消息ID
@@ -41,27 +59,27 @@ public class RobotUtil {
      * @return
      */
     public static JSONObject groupReply(String groupId, String messageId, String replyContent) {
+        RobotResponseBody robotResponseBody = new RobotResponseBody();
+        robotResponseBody.setGroup_id(groupId);
+        List<RobotResponseBody.Message> messages = new ArrayList<>();
+        RobotResponseBody.Message message = robotResponseBody.new Message();
+        message.setType("reply");
+        RobotResponseBody.Message.SubMessage subMessage = message.new SubMessage();
+        subMessage.setId(messageId);
+        message.setData(subMessage);
+        messages.add(message);
+        message = robotResponseBody.new Message();
+        message.setType("text");
+        subMessage = message.new SubMessage();
+        subMessage.setText(replyContent);
+        message.setData(subMessage);
+        messages.add(message);
+        robotResponseBody.setMessage(messages);
         JSONObject response = JSONObject.parseObject(
                 HttpRequest
                         .post(AppConstant.robotIp + "/send_group_msg")
                         .header("Content-Type", "application/json")
-                        .body("{" +
-                                "    \"group_id\": " + groupId + "," +
-                                "    \"message\": [" +
-                                "        {" +
-                                "            \"type\": \"reply\"," +
-                                "            \"data\": {" +
-                                "                \"id\": " + messageId + "" +
-                                "            }" +
-                                "        }," +
-                                "        {" +
-                                "            \"type\": \"text\"," +
-                                "            \"data\": {" +
-                                "                \"text\": \"" + replyContent + "\"" +
-                                "            }" +
-                                "        }" +
-                                "    ]" +
-                                "}")
+                        .body(JSONObject.toJSONString(robotResponseBody))
                         .execute()
                         .body()
         );
@@ -71,6 +89,28 @@ public class RobotUtil {
 
     /**
      * 机器人发送消息到通义千问
+     * //        {
+     * //            "model": "",
+     * //            "input":{
+     * //                "messages":[
+     * //                    {
+     * //                        "role": "system",
+     * //                        "content": ""
+     * //                    },
+     * //                    {
+     * //                        "role": "user",
+     * //                        "content": ""
+     * //                    },
+     * //                    {
+     * //                        "role": "assistant",
+     * //                        "content": ""
+     * //                    }
+     * //                ]
+     * //            },
+     * //            "parameters": {
+     * //                "result_format": "message"
+     * //            }
+     * //        }
      *
      * @param groupId   待回复群ID
      * @param userId    待回复用户ID
@@ -80,28 +120,7 @@ public class RobotUtil {
      * @return
      */
     public static String sendMessageToTongyiqianwen(String groupId, String userId, String content, boolean withNet, boolean isSummary) {
-//        {
-//            "model": "",
-//            "input":{
-//                "messages":[
-//                    {
-//                        "role": "system",
-//                        "content": ""
-//                    },
-//                    {
-//                        "role": "user",
-//                        "content": ""
-//                    },
-//                    {
-//                        "role": "assistant",
-//                        "content": ""
-//                    }
-//                ]
-//            },
-//            "parameters": {
-//                "result_format": "message"
-//            }
-//        }
+        //TODO 使用策略模式重构这里，顺便可以兼容多种AI大模型
         AIRequestBody body = new AIRequestBody();
         body.setModel(AppConstant.tongyiqianwenModel);
         AIRequestBody.Message input = body.new Message();
@@ -172,15 +191,7 @@ public class RobotUtil {
                         .execute()
                         .body()
         );
-        String response = aiAnswer.getJSONObject("output").getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
-        while (response.contains("\n")) {
-            response = response.replace("\n", "");
-        }
-        while (response.contains("\"")) {
-            response = response.replace("\"", "'");
-        }
-        //处理返回数据
-        log.info("response information: {}", response);
-        return response;
+        log.info("response information: {}", aiAnswer.toJSONString());
+        return aiAnswer.getJSONObject("output").getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
     }
 }

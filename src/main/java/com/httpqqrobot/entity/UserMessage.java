@@ -1,13 +1,11 @@
 package com.httpqqrobot.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-@TableName(value = "user_message")
 public class UserMessage implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -89,4 +87,17 @@ public class UserMessage implements Serializable {
     String font;
 
     String noticeType;
+
+    @Data
+    public class Sender implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        String userId;
+
+        String nickname;
+
+        String card;
+    }
+
 }
