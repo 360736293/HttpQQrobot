@@ -39,7 +39,7 @@ public class HttpQQrobotJob {
                         .setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort)
                         .execute()
                         .body();
-                String regexp = "discount_prices";
+                String regexp = "game_purchase_discount_countdown";
                 String res = ReUtil.get(regexp, body, 0);
                 if (StringUtils.isNotEmpty(res)) {
                     //该游戏已打折，通知用户
