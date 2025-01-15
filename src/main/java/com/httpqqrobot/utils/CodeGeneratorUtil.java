@@ -17,16 +17,16 @@ public class CodeGeneratorUtil {
         //设置数据库相关配置
         DataSourceConfig dataSource = new DataSourceConfig();
         dataSource.setDriverName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/httpqqrobot?useUnicode=true&characterEncoding=utf8&useSSL=false");
+        dataSource.setUrl("jdbc:mysql://xxxx:3306/httpqqrobot?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true");
         dataSource.setUsername("root");
-        dataSource.setPassword("1234");
+        dataSource.setPassword("xxxx");
         autoGenerator.setDataSource(dataSource);
 
         //设置全局配置
         GlobalConfig globalConfig = new GlobalConfig();
         globalConfig.setOutputDir(System.getProperty("user.dir") + "/src/main/java");    //设置代码生成位置
         globalConfig.setOpen(false);    //设置生成完毕后是否打开生成代码所在的目录
-        globalConfig.setAuthor("mfliu");    //设置作者
+        globalConfig.setAuthor("xxxx");    //设置作者
         globalConfig.setFileOverride(true);     //设置是否覆盖原始生成的文件
         globalConfig.setIdType(IdType.ASSIGN_ID);   //设置Id生成策略
         autoGenerator.setGlobalConfig(globalConfig);
@@ -38,7 +38,7 @@ public class CodeGeneratorUtil {
 
         //策略设置
         StrategyConfig strategyConfig = new StrategyConfig();
-        strategyConfig.setInclude("xxx");  //设置当前参与生成的表名，参数为可变参数
+        strategyConfig.setInclude("xxxx");  //设置当前参与生成的表名，参数为可变参数
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);  //数据库表名的下划线转换为驼峰
         strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);  //数据库表的列名下划线转换为驼峰
         strategyConfig.setEntityLombokModel(true);  //设置是否启用lombok
