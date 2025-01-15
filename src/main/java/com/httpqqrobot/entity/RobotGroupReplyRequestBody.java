@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class RobotResponseBody implements Serializable {
+public class RobotGroupReplyRequestBody implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

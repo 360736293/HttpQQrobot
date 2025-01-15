@@ -1,5 +1,6 @@
 package com.httpqqrobot.chain.function.impl;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReUtil;
 import com.alibaba.fastjson2.JSONObject;
@@ -7,10 +8,13 @@ import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.AIRequestBody;
+import com.httpqqrobot.entity.SteamDiscountNotify;
 import com.httpqqrobot.entity.UserMessage;
+import com.httpqqrobot.service.ISteamDiscountNotifyService;
 import com.httpqqrobot.service.IUserMessageService;
 import com.httpqqrobot.utils.RobotUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -24,6 +28,9 @@ public class Dialogue implements FunctionAct {
 
     @Resource
     public IUserMessageService userMessageServiceImpl;
+
+    @Resource
+    private ISteamDiscountNotifyService steamDiscountNotifyServiceImpl;
 
     @Override
     public void act(JSONObject json) {
@@ -47,6 +54,12 @@ public class Dialogue implements FunctionAct {
                 case "AI联网":
                     aiTalk(groupId, messageId, userId, spliceContent(messageSplit, true), true);
                     break;
+                case "Steam打折消息订阅":
+                    subscribeStreamDiscountNotify(groupId, messageId, userId, messageSplit[2], AppConstant.INSERT);
+                    break;
+                case "Steam打折消息订阅删除":
+                    subscribeStreamDiscountNotify(groupId, messageId, userId, messageSplit[2], AppConstant.DELETE);
+                    break;
                 default:
                     aiTalk(groupId, messageId, userId, spliceContent(messageSplit, false), false);
             }
@@ -55,14 +68,52 @@ public class Dialogue implements FunctionAct {
         }
     }
 
+
+    public void subscribeStreamDiscountNotify(String groupId, String messageId, String userId, String url, String operation) {
+        //验证输入的url是否合法
+        if (StringUtils.isEmpty(url)) {
+            RobotUtil.groupReply(groupId, messageId, "Steam网址路径不合法");
+            return;
+        }
+        String regexp = "https{0,1}://store.steampowered.com/app/(\\d{1,})/.*";
+        String res = ReUtil.get(regexp, url, 0);
+        if (!StringUtils.equals(res, url)) {
+            RobotUtil.groupReply(groupId, messageId, "Steam网址路径不合法");
+            return;
+        }
+        String gameId = ReUtil.get(regexp, url, 1);
+        //在订阅定时任务表中查询该游戏
+        SteamDiscountNotify one = steamDiscountNotifyServiceImpl.lambdaQuery().eq(SteamDiscountNotify::getGameId, gameId).one();
+        switch (operation) {
+            case AppConstant.DELETE:
+                if (ObjectUtil.isEmpty(one)) {
+                    RobotUtil.groupReply(groupId, messageId, "未订阅该游戏");
+                    return;
+                }
+                steamDiscountNotifyServiceImpl.lambdaUpdate().eq(SteamDiscountNotify::getGameId, gameId).remove();
+                RobotUtil.groupReply(groupId, messageId, "Steam打折消息订阅删除成功");
+                break;
+            case AppConstant.INSERT:
+                if (ObjectUtil.isNotEmpty(one)) {
+                    RobotUtil.groupReply(groupId, messageId, "请勿重复订阅");
+                    return;
+                }
+                SteamDiscountNotify steamDiscountNotify = new SteamDiscountNotify();
+                steamDiscountNotify.setId(IdUtil.getSnowflakeNextIdStr());
+                steamDiscountNotify.setGameId(gameId);
+                steamDiscountNotify.setUserId(userId);
+                steamDiscountNotify.setUrl(url);
+                steamDiscountNotifyServiceImpl.save(steamDiscountNotify);
+                RobotUtil.groupReply(groupId, messageId, "Steam打折消息订阅成功");
+                break;
+            default:
+                break;
+        }
+    }
+
     public void groupMessageSummary(String groupId, String messageId, String userId, String date) {
         //传入的日期格式形如2025-01-13，跟查询出该群组该日所有消息记录
-        List<UserMessage> messageList = userMessageServiceImpl.lambdaQuery()
-                .eq(UserMessage::getGroupId, groupId)
-                .between(UserMessage::getTime, date + " 00:00:00", date + " 23:59:59")
-                .eq(UserMessage::getPostType, "message")
-                .select(UserMessage::getMessage)
-                .list();
+        List<UserMessage> messageList = userMessageServiceImpl.lambdaQuery().eq(UserMessage::getGroupId, groupId).between(UserMessage::getTime, date + " 00:00:00", date + " 23:59:59").eq(UserMessage::getPostType, "message").select(UserMessage::getMessage).list();
         //将查询出来的聊天记录消息数据清除QQ表情，图片，艾特等内置消息，并且拼接上序号，以及分割符号
         StringBuilder message = new StringBuilder();
         for (int i = 0; i < messageList.size(); i++) {

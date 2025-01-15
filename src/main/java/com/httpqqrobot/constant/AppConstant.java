@@ -10,9 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class AppConstant {
 
-    public static String TRUE = "1";
-
-    public static String FALSE = "0";
+    public final static String INSERT = "0";
+    public final static String DELETE = "1";
+    public final static String UPDATE = "2";
+    public final static String QUERY = "3";
 
     //排除词
     public static List<String> excludeWords = new ArrayList<>();

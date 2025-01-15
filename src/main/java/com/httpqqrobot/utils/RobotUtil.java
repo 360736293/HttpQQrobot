@@ -5,7 +5,8 @@ import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.AIRequestBody;
-import com.httpqqrobot.entity.RobotResponseBody;
+import com.httpqqrobot.entity.RobotGroupReplyRequestBody;
+import com.httpqqrobot.entity.RobotPrivateMessageRequestBody;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -13,25 +14,6 @@ import java.util.List;
 
 @Slf4j
 public class RobotUtil {
-    /**
-     * 机器人主动发起消息
-     *
-     * @param subUrl 主动发起消息请求路径
-     * @param body   发送内容
-     * @return
-     */
-    public static JSONObject sendMessage(String subUrl, String body) {
-        JSONObject response = JSONObject.parseObject(
-                HttpRequest
-                        .post(AppConstant.robotIp + subUrl)
-                        .header("Content-Type", "application/json")
-                        .body(body)
-                        .execute()
-                        .body()
-        );
-        log.info("response information: {}", response.toJSONString());
-        return response;
-    }
 
     /**
      * 机器人回复群消息
@@ -59,27 +41,69 @@ public class RobotUtil {
      * @return
      */
     public static JSONObject groupReply(String groupId, String messageId, String replyContent) {
-        RobotResponseBody robotResponseBody = new RobotResponseBody();
-        robotResponseBody.setGroup_id(groupId);
-        List<RobotResponseBody.Message> messages = new ArrayList<>();
-        RobotResponseBody.Message message = robotResponseBody.new Message();
+        RobotGroupReplyRequestBody robotGroupReplyRequestBody = new RobotGroupReplyRequestBody();
+        robotGroupReplyRequestBody.setGroup_id(groupId);
+        List<RobotGroupReplyRequestBody.Message> messages = new ArrayList<>();
+        RobotGroupReplyRequestBody.Message message = robotGroupReplyRequestBody.new Message();
         message.setType("reply");
-        RobotResponseBody.Message.SubMessage subMessage = message.new SubMessage();
+        RobotGroupReplyRequestBody.Message.SubMessage subMessage = message.new SubMessage();
         subMessage.setId(messageId);
         message.setData(subMessage);
         messages.add(message);
-        message = robotResponseBody.new Message();
+        message = robotGroupReplyRequestBody.new Message();
         message.setType("text");
         subMessage = message.new SubMessage();
         subMessage.setText(replyContent);
         message.setData(subMessage);
         messages.add(message);
-        robotResponseBody.setMessage(messages);
+        robotGroupReplyRequestBody.setMessage(messages);
         JSONObject response = JSONObject.parseObject(
                 HttpRequest
                         .post(AppConstant.robotIp + "/send_group_msg")
                         .header("Content-Type", "application/json")
-                        .body(JSONObject.toJSONString(robotResponseBody))
+                        .body(JSONObject.toJSONString(robotGroupReplyRequestBody))
+                        .execute()
+                        .body()
+        );
+        log.info("response information: {}", response.toJSONString());
+        return response;
+    }
+
+    /**
+     * 机器人发送私聊消息
+     * //{
+     * //    "user_id": "",
+     * //    "message": [
+     * //        {
+     * //           "type": "text",
+     * //            "data": {
+     * //                "text": ""
+     * //            }
+     * //        }
+     * //    ]
+     * //}
+     *
+     * @param userId         用户QQ号
+     * @param messageContent 消息内容
+     * @return
+     */
+    public static JSONObject privateMessage(String userId, String messageContent) {
+        RobotPrivateMessageRequestBody robotPrivateMessageRequestBody = new RobotPrivateMessageRequestBody();
+        robotPrivateMessageRequestBody.setUser_id(userId);
+        List<RobotPrivateMessageRequestBody.Message> messages = new ArrayList<>();
+        RobotPrivateMessageRequestBody.Message message = robotPrivateMessageRequestBody.new Message();
+        message.setType("text");
+        RobotPrivateMessageRequestBody.Message.SubMessage subMessage = message.new SubMessage();
+        subMessage.setText(messageContent);
+        message.setData(subMessage);
+        messages.add(message);
+        robotPrivateMessageRequestBody.setMessage(messages);
+
+        JSONObject response = JSONObject.parseObject(
+                HttpRequest
+                        .post(AppConstant.robotIp + "/send_private_msg")
+                        .header("Content-Type", "application/json")
+                        .body(JSONObject.toJSONString(robotPrivateMessageRequestBody))
                         .execute()
                         .body()
         );
