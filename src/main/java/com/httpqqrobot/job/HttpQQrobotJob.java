@@ -6,6 +6,7 @@ import cn.hutool.http.HttpRequest;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.SteamDiscountNotify;
 import com.httpqqrobot.service.ISteamDiscountNotifyService;
+import com.httpqqrobot.utils.RobotUtil;
 import com.xxl.job.core.handler.annotation.XxlJob;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -42,8 +43,8 @@ public class HttpQQrobotJob {
                 String res = ReUtil.get(regexp, body, 0);
                 if (StringUtils.isNotEmpty(res)) {
                     //该游戏已打折，通知用户
-
-                    //删除改游戏记录
+                    RobotUtil.privateMessage(userId, "你订阅的游戏: " + url + " 打折了，快去看看吧!");
+                    //删除该游戏订阅记录
                     steamDiscountNotifyServiceImpl.lambdaUpdate().eq(SteamDiscountNotify::getGameId, gameId).remove();
                 }
             } catch (Exception e) {
