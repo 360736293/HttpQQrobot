@@ -3,6 +3,7 @@ package com.httpqqrobot.chain.function.impl;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReUtil;
+import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.function.FunctionAct;
@@ -100,11 +101,17 @@ public class Dialogue implements FunctionAct {
                     RobotUtil.groupReply(groupId, messageId, "请勿重复订阅");
                     return;
                 }
+                //查询该网站获取游戏名以及封面图网址
+                String response = HttpRequest.get(url).setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort).execute().body();
+                String imgUrl = ReUtil.get("<img class=\"game_header_image_full\" src=\"(.*?)\">", response, 1);
+                String gameName = ReUtil.get("<div id=\"appHubAppName_responsive\" style=\"display: none;\" class=\"apphub_AppName\">(.*?)</div>", response, 1);
                 SteamDiscountNotify steamDiscountNotify = new SteamDiscountNotify();
                 steamDiscountNotify.setId(IdUtil.getSnowflakeNextIdStr());
                 steamDiscountNotify.setGameId(gameId);
                 steamDiscountNotify.setUserId(userId);
                 steamDiscountNotify.setUrl(url);
+                steamDiscountNotify.setGameName(gameName);
+                steamDiscountNotify.setImageUrl(imgUrl);
                 steamDiscountNotifyServiceImpl.save(steamDiscountNotify);
                 RobotUtil.groupReply(groupId, messageId, "Steam打折消息订阅成功");
                 break;
@@ -119,7 +126,7 @@ public class Dialogue implements FunctionAct {
                 RobotGroupIntegrativeReplyRequestBody robotGroupIntegrativeReplyRequestBody = new RobotGroupIntegrativeReplyRequestBody();
                 robotGroupIntegrativeReplyRequestBody.setGroup_id(groupId);
                 robotGroupIntegrativeReplyRequestBody.setPrompt("Steam打折消息订阅记录");
-                robotGroupIntegrativeReplyRequestBody.setSummary("用户：" + gameList.get(0).getUserId());
+                robotGroupIntegrativeReplyRequestBody.setSummary("QQ：" + gameList.get(0).getUserId());
                 robotGroupIntegrativeReplyRequestBody.setSource("Steam打折消息订阅记录");
                 List<RobotGroupIntegrativeReplyRequestBody.New> news = new ArrayList<>();
                 RobotGroupIntegrativeReplyRequestBody.New aNew = robotGroupIntegrativeReplyRequestBody.new New();

@@ -33,17 +33,14 @@ public class HttpQQrobotJob {
                 //依次处理每一个用户的订阅记录
                 String userId = steamDiscountNotify.getUserId();
                 String gameId = steamDiscountNotify.getGameId();
+                String gameName = steamDiscountNotify.getGameName();
                 String url = steamDiscountNotify.getUrl();
-                String body = HttpRequest
-                        .get(url)
-                        .setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort)
-                        .execute()
-                        .body();
+                String body = HttpRequest.get(url).setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort).execute().body();
                 String regexp = "game_purchase_discount_countdown";
                 String res = ReUtil.get(regexp, body, 0);
                 if (StringUtils.isNotEmpty(res)) {
                     //该游戏已打折，通知用户
-                    RobotUtil.privateMessage(userId, "你订阅的游戏: " + url + " 打折了，快去看看吧!");
+                    RobotUtil.privateMessage(userId, "你订阅的游戏: " + gameName + " (" + url + ") 打折了，快去看看吧!");
                     //删除该游戏订阅记录
                     steamDiscountNotifyServiceImpl.lambdaUpdate().eq(SteamDiscountNotify::getGameId, gameId).remove();
                 }
