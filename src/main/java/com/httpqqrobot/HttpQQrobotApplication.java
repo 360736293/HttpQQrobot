@@ -136,7 +136,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             AppConstant.proxyPort = proxyPort;
             log.info("初始化完成");
         } catch (Exception e) {
-            log.info("初始化失败: ", e.getCause());
+            log.info("初始化失败: ", e);
         }
     }
 

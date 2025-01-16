@@ -72,7 +72,7 @@ public class Dialogue implements FunctionAct {
                     aiTalk(groupId, messageId, userId, spliceContent(messageSplit, false), false);
             }
         } catch (Exception e) {
-            log.info("对话回复异常: ", e.getCause());
+            log.info("对话回复异常: ", e);
         }
     }
 

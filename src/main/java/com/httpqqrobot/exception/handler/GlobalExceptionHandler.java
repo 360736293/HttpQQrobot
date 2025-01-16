@@ -15,14 +15,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RateLimitException.class)
     @ResponseBody
     public Result handleRateLimitException(RateLimitException e) {
-        log.error("RateLimit Error");
+        log.error(e.getMessage());
         return Result.fail(ResultInfoEnum.SERVICEUNAVAILABLE.getCode(), ResultInfoEnum.SERVICEUNAVAILABLE.getMsg(), e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result handleException(Exception e) {
-        log.error("Unknow Error: ", e.getCause());
+        log.error("Unknow Error: ", e);
         return Result.fail(ResultInfoEnum.UNKNOWFAIL.getCode(), ResultInfoEnum.UNKNOWFAIL.getMsg(), null);
     }
 }

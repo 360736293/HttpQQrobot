@@ -52,7 +52,7 @@ public class HttpQQrobotJob {
                 log.info("用户:{} 游戏:{} 处理完毕", steamDiscountNotify.getUserId(), steamDiscountNotify.getGameId());
                 Thread.sleep(1000);
             } catch (Exception e) {
-                log.error("用户:{} 游戏:{} 通知异常:", steamDiscountNotify.getUserId(), steamDiscountNotify.getGameId(), e.getCause());
+                log.error("用户:{} 游戏:{} 通知异常:", steamDiscountNotify.getUserId(), steamDiscountNotify.getGameId(), e);
             }
         }
         stopWatch.stop();
