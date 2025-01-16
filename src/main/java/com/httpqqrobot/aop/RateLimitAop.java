@@ -5,6 +5,7 @@ import com.httpqqrobot.annotation.RateLimit;
 import com.httpqqrobot.exception.RateLimitException;
 import com.httpqqrobot.utils.RequestHolderUtil;
 import com.httpqqrobot.utils.RequestResponseUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -17,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+@Slf4j
 @Aspect
 @Component
 public class RateLimitAop {
@@ -59,12 +61,12 @@ public class RateLimitAop {
                         }
                     }
                 } else {
-                    //令牌桶中没有令牌，抛出异常
-                    throw new RateLimitException("Rate Limit Exception");
+                    //令牌桶中没有令牌，抛出限流异常
+                    throw new RateLimitException();
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("Unknow Exception");
+            log.error("限流AOP异常: ", e);
         }
     }
 

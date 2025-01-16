@@ -15,8 +15,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RateLimitException.class)
     @ResponseBody
     public Result handleRateLimitException(RateLimitException e) {
-        log.error(e.getMessage());
-        return Result.fail(ResultInfoEnum.SERVICEUNAVAILABLE.getCode(), ResultInfoEnum.SERVICEUNAVAILABLE.getMsg(), e.getMessage());
+        log.error("RateLimit Error");
+        return Result.fail(ResultInfoEnum.SERVICEUNAVAILABLE.getCode(), ResultInfoEnum.SERVICEUNAVAILABLE.getMsg(), "RateLimit Error");
     }
 
     @ExceptionHandler(Exception.class)

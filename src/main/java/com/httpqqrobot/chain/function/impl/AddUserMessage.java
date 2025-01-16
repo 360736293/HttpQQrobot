@@ -38,7 +38,7 @@ public class AddUserMessage implements FunctionAct {
             }
             userMessageService.save(userMessage);
         } catch (Exception e) {
-            log.info("记录用户消息异常: ", e);
+            log.error("记录用户消息异常: ", e);
         }
     }
 }
