@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * </p>
  *
  * @author mfliu
- * @since 2025-01-15
+ * @since 2025-01-16
  */
 @Mapper
 public interface SteamDiscountNotifyMapper extends BaseMapper<SteamDiscountNotify> {

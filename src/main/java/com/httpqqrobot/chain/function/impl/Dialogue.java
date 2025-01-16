@@ -8,6 +8,7 @@ import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.AIRequestBody;
+import com.httpqqrobot.entity.RobotGroupIntegrativeReplyRequestBody;
 import com.httpqqrobot.entity.SteamDiscountNotify;
 import com.httpqqrobot.entity.UserMessage;
 import com.httpqqrobot.service.ISteamDiscountNotifyService;
@@ -57,8 +58,14 @@ public class Dialogue implements FunctionAct {
                 case "Steam打折消息订阅":
                     subscribeStreamDiscountNotify(groupId, messageId, userId, messageSplit[2], AppConstant.INSERT);
                     break;
+                case "Steam打折消息订阅查询":
+                    subscribeStreamDiscountNotify(groupId, messageId, userId, null, AppConstant.QUERY);
+                    break;
                 case "Steam打折消息订阅删除":
                     subscribeStreamDiscountNotify(groupId, messageId, userId, messageSplit[2], AppConstant.DELETE);
+                    break;
+                case "Steam打折消息预测":
+
                     break;
                 default:
                     aiTalk(groupId, messageId, userId, spliceContent(messageSplit, false), false);
@@ -70,31 +77,26 @@ public class Dialogue implements FunctionAct {
 
 
     public void subscribeStreamDiscountNotify(String groupId, String messageId, String userId, String url, String operation) {
-        //验证输入的url是否合法
-        if (StringUtils.isEmpty(url)) {
-            RobotUtil.groupReply(groupId, messageId, "Steam网址路径不合法");
-            return;
+        String gameId = null;
+        if (!StringUtils.equals(operation, AppConstant.QUERY)) {
+            //验证输入的url是否合法
+            if (StringUtils.isEmpty(url)) {
+                RobotUtil.groupReply(groupId, messageId, "Steam网址路径不合法");
+                return;
+            }
+            String regexp = "https{0,1}://store.steampowered.com/app/(\\d{1,})/.*";
+            String res = ReUtil.get(regexp, url, 0);
+            if (!StringUtils.equals(res, url)) {
+                RobotUtil.groupReply(groupId, messageId, "Steam网址路径不合法");
+                return;
+            }
+            gameId = ReUtil.get(regexp, url, 1);
         }
-        String regexp = "https{0,1}://store.steampowered.com/app/(\\d{1,})/.*";
-        String res = ReUtil.get(regexp, url, 0);
-        if (!StringUtils.equals(res, url)) {
-            RobotUtil.groupReply(groupId, messageId, "Steam网址路径不合法");
-            return;
-        }
-        String gameId = ReUtil.get(regexp, url, 1);
-        //在订阅定时任务表中查询该游戏
-        SteamDiscountNotify one = steamDiscountNotifyServiceImpl.lambdaQuery().eq(SteamDiscountNotify::getGameId, gameId).one();
         switch (operation) {
-            case AppConstant.DELETE:
-                if (ObjectUtil.isEmpty(one)) {
-                    RobotUtil.groupReply(groupId, messageId, "未订阅该游戏");
-                    return;
-                }
-                steamDiscountNotifyServiceImpl.lambdaUpdate().eq(SteamDiscountNotify::getGameId, gameId).remove();
-                RobotUtil.groupReply(groupId, messageId, "Steam打折消息订阅删除成功");
-                break;
             case AppConstant.INSERT:
-                if (ObjectUtil.isNotEmpty(one)) {
+                //在订阅定时任务表中查询该游戏
+                SteamDiscountNotify insertTarget = steamDiscountNotifyServiceImpl.lambdaQuery().eq(SteamDiscountNotify::getGameId, gameId).one();
+                if (ObjectUtil.isNotEmpty(insertTarget)) {
                     RobotUtil.groupReply(groupId, messageId, "请勿重复订阅");
                     return;
                 }
@@ -105,6 +107,64 @@ public class Dialogue implements FunctionAct {
                 steamDiscountNotify.setUrl(url);
                 steamDiscountNotifyServiceImpl.save(steamDiscountNotify);
                 RobotUtil.groupReply(groupId, messageId, "Steam打折消息订阅成功");
+                break;
+            case AppConstant.QUERY:
+                //查询出该用户所有的订阅信息
+                List<SteamDiscountNotify> gameList = steamDiscountNotifyServiceImpl.lambdaQuery().eq(SteamDiscountNotify::getUserId, userId).list();
+                if (ObjectUtil.isEmpty(gameList)) {
+                    RobotUtil.groupReply(groupId, messageId, "无订阅记录");
+                    return;
+                }
+                //封装请求实体基础信息
+                RobotGroupIntegrativeReplyRequestBody robotGroupIntegrativeReplyRequestBody = new RobotGroupIntegrativeReplyRequestBody();
+                robotGroupIntegrativeReplyRequestBody.setGroup_id(groupId);
+                robotGroupIntegrativeReplyRequestBody.setPrompt("Steam打折消息订阅记录");
+                robotGroupIntegrativeReplyRequestBody.setSummary("用户：" + gameList.get(0).getUserId());
+                robotGroupIntegrativeReplyRequestBody.setSource("Steam打折消息订阅记录");
+                List<RobotGroupIntegrativeReplyRequestBody.New> news = new ArrayList<>();
+                RobotGroupIntegrativeReplyRequestBody.New aNew = robotGroupIntegrativeReplyRequestBody.new New();
+                aNew.setText("Steam打折消息订阅记录");
+                news.add(aNew);
+                robotGroupIntegrativeReplyRequestBody.setNews(news);
+                List<RobotGroupIntegrativeReplyRequestBody.Message> messages = new ArrayList<>();
+                int i = 0;
+                for (SteamDiscountNotify game : gameList) {
+                    i++;
+                    //挨个遍历查找每一个游戏对应的图片和游戏名，然后封装到请求实体类里
+                    RobotGroupIntegrativeReplyRequestBody.Message message = robotGroupIntegrativeReplyRequestBody.new Message();
+                    message.setType("node");
+                    RobotGroupIntegrativeReplyRequestBody.Message.OuterData outerData = message.new OuterData();
+                    outerData.setUser_id(userId);
+                    outerData.setNickname(userId);
+                    List<RobotGroupIntegrativeReplyRequestBody.Message.OuterData.Content> contents = new ArrayList<>();
+                    RobotGroupIntegrativeReplyRequestBody.Message.OuterData.Content content = outerData.new Content();
+                    content.setType("text");
+                    RobotGroupIntegrativeReplyRequestBody.Message.OuterData.Content.InnerData innerData = content.new InnerData();
+                    innerData.setText("序号：" + i + "\n游戏名：" + game.getGameName() + "\n商店地址：" + game.getUrl());
+                    content.setData(innerData);
+                    contents.add(content);
+                    content = outerData.new Content();
+                    content.setType("image");
+                    innerData = content.new InnerData();
+                    innerData.setFile(game.getImageUrl());
+                    content.setData(innerData);
+                    contents.add(content);
+                    outerData.setContent(contents);
+                    message.setData(outerData);
+                    messages.add(message);
+                }
+                robotGroupIntegrativeReplyRequestBody.setMessages(messages);
+                RobotUtil.groupIntegrativeReply(robotGroupIntegrativeReplyRequestBody);
+                break;
+            case AppConstant.DELETE:
+                //在订阅定时任务表中查询该游戏
+                SteamDiscountNotify deleteTarget = steamDiscountNotifyServiceImpl.lambdaQuery().eq(SteamDiscountNotify::getGameId, gameId).one();
+                if (ObjectUtil.isEmpty(deleteTarget)) {
+                    RobotUtil.groupReply(groupId, messageId, "未订阅该游戏");
+                    return;
+                }
+                steamDiscountNotifyServiceImpl.lambdaUpdate().eq(SteamDiscountNotify::getGameId, gameId).remove();
+                RobotUtil.groupReply(groupId, messageId, "Steam打折消息订阅删除成功");
                 break;
             default:
                 break;

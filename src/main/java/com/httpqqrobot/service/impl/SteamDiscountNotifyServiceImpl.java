@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author mfliu
- * @since 2025-01-15
+ * @since 2025-01-16
  */
 @Service
 public class SteamDiscountNotifyServiceImpl extends ServiceImpl<SteamDiscountNotifyMapper, SteamDiscountNotify> implements ISteamDiscountNotifyService {

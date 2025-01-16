@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author mfliu
- * @since 2025-01-15
+ * @since 2025-01-16
  */
 public interface ISteamDiscountNotifyService extends IService<SteamDiscountNotify> {
 

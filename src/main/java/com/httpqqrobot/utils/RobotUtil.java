@@ -5,6 +5,7 @@ import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.AIRequestBody;
+import com.httpqqrobot.entity.RobotGroupIntegrativeReplyRequestBody;
 import com.httpqqrobot.entity.RobotGroupReplyRequestBody;
 import com.httpqqrobot.entity.RobotPrivateMessageRequestBody;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +63,59 @@ public class RobotUtil {
                         .post(AppConstant.robotIp + "/send_group_msg")
                         .header("Content-Type", "application/json")
                         .body(JSONObject.toJSONString(robotGroupReplyRequestBody))
+                        .execute()
+                        .body()
+        );
+        log.info("response information: {}", response.toJSONString());
+        return response;
+    }
+
+    /**
+     * 机器人发送群合并消息
+     * //    {
+     * //        "group_id": ,
+     * //        "messages": [
+     * //           {
+     * //               "type": "node",
+     * //               "data": {
+     * //                   "user_id": "",
+     * //                   "nickname": "",
+     * //                   "content": [
+     * //                       {
+     * //                           "type": "text",
+     * //                           "data": {
+     * //                               "text": ""
+     * //                           }
+     * //                       },
+     * //                       {
+     * //                           "type": "image",
+     * //                           "data": {
+     * //                               "file": ""
+     * //                           }
+     * //                       }
+     * //                   ]
+     * //               }
+     * //           }
+     * //       ],
+     * //       "news": [
+     * //           {
+     * //               "text": "外显内容"
+     * //           }
+     * //       ],
+     * //       "prompt": "移动端提示",
+     * //       "summary": "外显总结",
+     * //       "source": "标题"
+     * //    }
+     *
+     * @param robotGroupIntegrativeReplyRequestBody 群发送合并消息请求体
+     * @return
+     */
+    public static JSONObject groupIntegrativeReply(RobotGroupIntegrativeReplyRequestBody robotGroupIntegrativeReplyRequestBody) {
+        JSONObject response = JSONObject.parseObject(
+                HttpRequest
+                        .post(AppConstant.robotIp + "/send_group_forward_msg")
+                        .header("Content-Type", "application/json")
+                        .body(JSONObject.toJSONString(robotGroupIntegrativeReplyRequestBody))
                         .execute()
                         .body()
         );

@@ -15,7 +15,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RateLimitException.class)
     @ResponseBody
     public Result handleRateLimitException(RateLimitException e) {
-        //TODO 限流异常要给机器人返回
         log.error("Error: {}", e.getMessage());
         return Result.fail(ResultInfoEnum.SERVICEUNAVAILABLE.getCode(), ResultInfoEnum.SERVICEUNAVAILABLE.getMsg(), e.getMessage());
     }
