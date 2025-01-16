@@ -35,7 +35,12 @@ public class HttpQQrobotJob {
                 String gameId = steamDiscountNotify.getGameId();
                 String gameName = steamDiscountNotify.getGameName();
                 String url = steamDiscountNotify.getUrl();
-                String body = HttpRequest.get(url).setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort).execute().body();
+                String body = HttpRequest
+                        .get(url)
+                        .form("Cookie", "wants_mature_content=1; birthtime=915120001; lastagecheckage=1-January-1999;")
+                        .setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort)
+                        .execute()
+                        .body();
                 String regexp = "game_purchase_discount_countdown";
                 String res = ReUtil.get(regexp, body, 0);
                 if (StringUtils.isNotEmpty(res)) {
@@ -44,6 +49,8 @@ public class HttpQQrobotJob {
                     //删除该游戏订阅记录
                     steamDiscountNotifyServiceImpl.lambdaUpdate().eq(SteamDiscountNotify::getGameId, gameId).remove();
                 }
+                log.error("用户:{} 游戏:{} 处理完毕", steamDiscountNotify.getUserId(), steamDiscountNotify.getGameId());
+                Thread.sleep(1000);
             } catch (Exception e) {
                 log.error("用户:{} 游戏:{} 通知异常:{}", steamDiscountNotify.getUserId(), steamDiscountNotify.getGameId(), e.getMessage());
             }
