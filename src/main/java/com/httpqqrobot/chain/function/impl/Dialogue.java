@@ -141,8 +141,8 @@ public class Dialogue implements FunctionAct {
                     RobotGroupIntegrativeReplyRequestBody.Message message = robotGroupIntegrativeReplyRequestBody.new Message();
                     message.setType("node");
                     RobotGroupIntegrativeReplyRequestBody.Message.OuterData outerData = message.new OuterData();
-                    outerData.setUser_id(userId);
-                    outerData.setNickname(userId);
+                    outerData.setUser_id(AppConstant.robotQQ);
+                    outerData.setNickname(AppConstant.robotQQ);
                     List<RobotGroupIntegrativeReplyRequestBody.Message.OuterData.Content> contents = new ArrayList<>();
                     RobotGroupIntegrativeReplyRequestBody.Message.OuterData.Content content = outerData.new Content();
                     content.setType("text");
