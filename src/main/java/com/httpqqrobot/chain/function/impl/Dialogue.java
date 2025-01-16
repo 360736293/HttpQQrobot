@@ -134,9 +134,7 @@ public class Dialogue implements FunctionAct {
                 news.add(aNew);
                 robotGroupIntegrativeReplyRequestBody.setNews(news);
                 List<RobotGroupIntegrativeReplyRequestBody.Message> messages = new ArrayList<>();
-                int i = 0;
                 for (SteamDiscountNotify game : gameList) {
-                    i++;
                     //挨个遍历查找每一个游戏对应的图片和游戏名，然后封装到请求实体类里
                     RobotGroupIntegrativeReplyRequestBody.Message message = robotGroupIntegrativeReplyRequestBody.new Message();
                     message.setType("node");
@@ -147,7 +145,7 @@ public class Dialogue implements FunctionAct {
                     RobotGroupIntegrativeReplyRequestBody.Message.OuterData.Content content = outerData.new Content();
                     content.setType("text");
                     RobotGroupIntegrativeReplyRequestBody.Message.OuterData.Content.InnerData innerData = content.new InnerData();
-                    innerData.setText("序号：" + i + "\n游戏名：" + game.getGameName() + "\n商店地址：" + game.getUrl());
+                    innerData.setText("游戏名：" + game.getGameName() + "\n商店地址：" + game.getUrl());
                     content.setData(innerData);
                     contents.add(content);
                     content = outerData.new Content();
