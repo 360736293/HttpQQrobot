@@ -104,7 +104,7 @@ public class Dialogue implements FunctionAct {
                 //查询该网站获取游戏名以及封面图网址
                 String response = HttpRequest
                         .get(url)
-                        .form("Cookie", "wants_mature_content=1; birthtime=915120001; lastagecheckage=1-January-1999;")
+                        .header("Cookie", "wants_mature_content=1; birthtime=915120001; lastagecheckage=1-January-1999;")
                         .setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort)
                         .execute()
                         .body();
