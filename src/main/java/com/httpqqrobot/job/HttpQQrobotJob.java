@@ -1,6 +1,7 @@
 package com.httpqqrobot.job;
 
 import cn.hutool.core.date.StopWatch;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.http.HttpRequest;
 import com.httpqqrobot.constant.AppConstant;
@@ -35,12 +36,13 @@ public class HttpQQrobotJob {
                 String gameId = steamDiscountNotify.getGameId();
                 String gameName = steamDiscountNotify.getGameName();
                 String url = steamDiscountNotify.getUrl();
-                String body = HttpRequest
+                HttpRequest httpRequest = HttpRequest
                         .get(url)
-                        .form("Cookie", "wants_mature_content=1; birthtime=915120001; lastagecheckage=1-January-1999;")
-                        .setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort)
-                        .execute()
-                        .body();
+                        .form("Cookie", "wants_mature_content=1; birthtime=915120001; lastagecheckage=1-January-1999;");
+                if (ObjectUtil.isNotEmpty(AppConstant.proxyIP) && ObjectUtil.isNotEmpty(AppConstant.proxyPort)) {
+                    httpRequest.setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort);
+                }
+                String body = httpRequest.execute().body();
                 String regexp = "game_purchase_discount_countdown";
                 String res = ReUtil.get(regexp, body, 0);
                 if (StringUtils.isNotEmpty(res)) {

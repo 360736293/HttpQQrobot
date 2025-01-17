@@ -102,12 +102,13 @@ public class Dialogue implements FunctionAct {
                     return;
                 }
                 //查询该网站获取游戏名以及封面图网址
-                String response = HttpRequest
+                HttpRequest httpRequest = HttpRequest
                         .get(url)
-                        .header("Cookie", "wants_mature_content=1; birthtime=915120001; lastagecheckage=1-January-1999;")
-                        .setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort)
-                        .execute()
-                        .body();
+                        .header("Cookie", "wants_mature_content=1; birthtime=915120001; lastagecheckage=1-January-1999;");
+                if (ObjectUtil.isNotEmpty(AppConstant.proxyIP) && ObjectUtil.isNotEmpty(AppConstant.proxyPort)) {
+                    httpRequest.setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort);
+                }
+                String response = httpRequest.execute().body();
                 String imgUrl = ReUtil.get("<img class=\"game_header_image_full\" src=\"(.*?)\">", response, 1);
                 String gameName = ReUtil.get("<div id=\"appHubAppName_responsive\" style=\"display: none;\" class=\"apphub_AppName\">(.*?)</div>", response, 1);
                 SteamDiscountNotify steamDiscountNotify = new SteamDiscountNotify();

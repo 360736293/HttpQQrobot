@@ -20,7 +20,7 @@ public class GoogleUtil {
      */
     public static List<String> search(String content) {
         List<String> res = new ArrayList<>();
-        HttpRequest form = HttpRequest
+        HttpRequest httpRequest = HttpRequest
                 .get("https://cse.google.com/cse/element/v1")
                 .form("num", "5")
                 .form("cselibv", "8fa85d58e016b414")
@@ -31,9 +31,9 @@ public class GoogleUtil {
                 .form("callback", "google.search.cse.api14638")
                 .form("rurl", "https://www.sougood.top/free/833/%23gsc.tab=0");
         if (ObjectUtil.isNotEmpty(AppConstant.proxyIP) && ObjectUtil.isNotEmpty(AppConstant.proxyPort)) {
-            form.setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort);
+            httpRequest.setHttpProxy(AppConstant.proxyIP, AppConstant.proxyPort);
         }
-        String response = form.execute().body();
+        String response = httpRequest.execute().body();
         response = response.replace("/*O_o*/", "");
         response = response.replace("google.search.cse.api14638({", "");
         response = response.replace("});", "");
