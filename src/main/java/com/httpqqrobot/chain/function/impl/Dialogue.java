@@ -75,7 +75,6 @@ public class Dialogue implements FunctionAct {
             log.error("对话回复异常: ", e);
         }
     }
-    //1
 
     public void showMenu(String groupId, String messageId) {
         StringBuilder menu = new StringBuilder();

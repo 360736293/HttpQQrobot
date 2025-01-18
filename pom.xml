@@ -7,6 +7,16 @@
     <artifactId>HttpQQrobot</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!-- omitted xml -->
+    <distributionManagement>
+        <repository>
+            <!--必须与 settings.xml 的 id 一致-->
+            <id>l360736293-httpqqrobot-demo</id>
+            <name>demo</name>
+            <url>https://l360736293-maven.pkg.coding.net/repository/httpqqrobot/demo/</url>
+        </repository>
+    </distributionManagement>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -15,6 +25,13 @@
 
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>HttpQQrobot</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>

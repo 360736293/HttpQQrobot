@@ -1,0 +1,41 @@
+<settings>
+    <servers>
+        <server>
+            <id>l360736293-httpqqrobot-demo</id>
+            <username>demo-1737222897785</username>
+            <password>1cb44d52127c5e9048485a9fca9f6160bf1e1e34</password>
+        </server>
+    </servers>
+
+    <profiles>
+        <profile>
+            <id>Repository Proxy</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>l360736293-httpqqrobot-demo</id>
+                    <name>demo</name>
+                    <url>https://l360736293-maven.pkg.coding.net/repository/httpqqrobot/demo/</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+    <mirrors>
+        <mirror>
+            <id>nexus-tencentyun</id>
+            <!-- 此配置避免了本仓库制品的拉取流量被切换到腾讯云镜像源，保证您在使用镜像加速的同时可以从本仓库拉取制品 -->
+            <mirrorOf>!l360736293-httpqqrobot-demo</mirrorOf>
+            <name>Nexus tencentyun</name>
+            <url>http://mirrors.cloud.tencent.com/nexus/repository/maven-public/</url>
+        </mirror>
+    </mirrors>
+</settings>
