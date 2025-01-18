@@ -47,4 +47,10 @@ public class AppConstant {
 
     //http-https代理端口
     public static Integer proxyPort;
+
+    //谷歌搜索APIKEY
+    public static String googleSearchApikey;
+
+    //谷歌搜索引擎ID
+    public static String googleSearchEngineID;
 }

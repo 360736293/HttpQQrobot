@@ -58,6 +58,12 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     @Value("${http-https.proxy.port}")
     private int proxyPort;
 
+    @Value("${googleSearch.apikey}")
+    private String googleSearchApikey;
+
+    @Value("${googleSearch.searchEngineID}")
+    private String googleSearchEngineID;
+
     public static void main(String[] args) {
         SpringApplication.run(HttpQQrobotApplication.class, args);
     }
@@ -134,6 +140,9 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             //赋值http-https代理
             AppConstant.proxyIP = proxyIP;
             AppConstant.proxyPort = proxyPort;
+            //赋值谷歌搜索相关
+            AppConstant.googleSearchApikey = googleSearchApikey;
+            AppConstant.googleSearchEngineID = googleSearchEngineID;
             log.info("初始化完成");
         } catch (Exception e) {
             log.error("初始化失败: ", e);

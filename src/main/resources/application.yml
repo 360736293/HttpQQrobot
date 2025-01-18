@@ -26,6 +26,9 @@ threadPool:
   blockingQueueSize: 20
 tongyiqianwen:
   apikey: xxxx
+googleSearch:
+  apikey: xxxx
+  searchEngineID: xxxx
 xxl:
   job:
     admin:
