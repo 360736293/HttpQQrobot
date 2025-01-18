@@ -65,8 +65,8 @@ public class Dialogue implements FunctionAct {
                 case "Steam打折消息订阅删除":
                     subscribeStreamDiscountNotify(groupId, messageId, userId, messageSplit[2], AppConstant.DELETE);
                     break;
-                case "Steam打折消息预测":
-
+                case "菜单":
+                    showMenu(groupId, messageId);
                     break;
                 default:
                     aiTalk(groupId, messageId, userId, spliceContent(messageSplit, false), false);
@@ -76,6 +76,26 @@ public class Dialogue implements FunctionAct {
         }
     }
 
+
+    public void showMenu(String groupId, String messageId) {
+        StringBuilder menu = new StringBuilder();
+        menu.append("所有与机器人的交互都是通过@机器人，通过对话来触发的。").append("\n");
+        menu.append("1、示例：[任意一句话]").append("\n");
+        menu.append("描述：与机器人的对话支持记忆（联想上下文），每个群每个人的记忆空间都是独立，机器人最多能记住最近的50条对话记录（用户和机器人各25条，新的对话记录会替换最早的对话记录）。").append("\n");
+        menu.append("2、示例：清除记忆").append("\n");
+        menu.append("描述：清除机器人的记忆，也就是清除上下文联想，适用于开启一个新的话题。").append("\n");
+        menu.append("3、示例：群消息总结 2222-02-01").append("\n");
+        menu.append("描述：机器人总结2222-02-01这天当前群消息内容。").append("\n");
+        menu.append("4、示例：AI联网 [任意一句话]").append("\n");
+        menu.append("描述：先将内容经过谷歌搜索引擎进行查询，将返回的十条内容概述一并发送给机器人进行总结。").append("\n");
+        menu.append("5、示例：Steam打折消息订阅 [Steam商店地址]").append("\n");
+        menu.append("描述：订阅指定商店地址游戏的打折通知。").append("\n");
+        menu.append("6、示例：Steam打折消息订阅查询").append("\n");
+        menu.append("描述：查询当前已经订阅的全部记录。").append("\n");
+        menu.append("7、示例：Steam打折消息订阅删除 [Steam商店地址]").append("\n");
+        menu.append("描述：删除指定商店地址游戏的打折通知。").append("\n");
+        RobotUtil.groupReply(groupId, messageId, menu.toString());
+    }
 
     public void subscribeStreamDiscountNotify(String groupId, String messageId, String userId, String url, String operation) {
         String gameId = null;
@@ -136,7 +156,7 @@ public class Dialogue implements FunctionAct {
                 robotGroupIntegrativeReplyRequestBody.setSource("Steam打折消息订阅记录");
                 List<RobotGroupIntegrativeReplyRequestBody.New> news = new ArrayList<>();
                 RobotGroupIntegrativeReplyRequestBody.New aNew = robotGroupIntegrativeReplyRequestBody.new New();
-                aNew.setText("Steam打折消息订阅记录");
+                aNew.setText("共 " + gameList.size() + " 条");
                 news.add(aNew);
                 robotGroupIntegrativeReplyRequestBody.setNews(news);
                 List<RobotGroupIntegrativeReplyRequestBody.Message> messages = new ArrayList<>();
