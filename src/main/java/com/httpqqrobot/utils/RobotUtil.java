@@ -167,28 +167,20 @@ public class RobotUtil {
 
     /**
      * 机器人发送消息到通义千问
-     * //        {
-     * //            "model": "",
-     * //            "input":{
-     * //                "messages":[
-     * //                    {
-     * //                        "role": "system",
-     * //                        "content": ""
-     * //                    },
-     * //                    {
-     * //                        "role": "user",
-     * //                        "content": ""
-     * //                    },
-     * //                    {
-     * //                        "role": "assistant",
-     * //                        "content": ""
-     * //                    }
-     * //                ]
-     * //            },
-     * //            "parameters": {
-     * //                "result_format": "message"
-     * //            }
-     * //        }
+     * //    {
+     * //        "model": "",
+     * //        "messages": [
+     * //           {
+     * //               "role": "",
+     * //                "content": ""
+     * //           },
+     * //           {
+     * //               "role": "user",
+     * //               "content": ""
+     * //           }
+     * //        ],
+     * //        "enable_search": true
+     * //    }
      *
      * @param groupId   待回复群ID
      * @param userId    待回复用户ID
@@ -198,70 +190,41 @@ public class RobotUtil {
      * @return
      */
     public static String sendMessageToTongyiqianwen(String groupId, String userId, String content, boolean withNet, boolean isSummary) {
-        //TODO 使用策略模式重构这里，顺便可以兼容多种AI大模型
         AIRequestBody body = new AIRequestBody();
         body.setModel(AppConstant.tongyiqianwenModel);
-        AIRequestBody.Message input = body.new Message();
-        List<AIRequestBody.Message.MessageContent> messages = new ArrayList<>();
-        input.setMessages(messages);
-        body.setInput(input);
-        AIRequestBody.Message.MessageContent systemMessageContent = input.new MessageContent();
-        systemMessageContent.setRole("system");
-        systemMessageContent.setContent(AppConstant.promptWords);
-        input.getMessages().add(systemMessageContent);
+        List<AIRequestBody.Message> messages = new ArrayList<>();
 
+        AIRequestBody.Message message = body.new Message();
+        message.setRole("system");
+        message.setContent(AppConstant.promptWords);
+        messages.add(message);
         if (isSummary) {
-            AIRequestBody.Message.MessageContent messageContent = input.new MessageContent();
+            AIRequestBody.Message messageContent = body.new Message();
             messageContent.setRole("user");
             messageContent.setContent("我接下来会给你一些文字记录，这些文字记录是一天内产生的消息记录，每条记录都会以数字序号作为起始，换行符作为结束。你将我发给你的记录进行总结，整理出重点。注意，在后续的回复中不要提到本条消息的任何内容。");
-            input.getMessages().add(messageContent);
-            messageContent = input.new MessageContent();
+            messages.add(messageContent);
+            messageContent = body.new Message();
             messageContent.setRole("user");
             messageContent.setContent(content);
-            input.getMessages().add(messageContent);
+            messages.add(messageContent);
         } else {
             //按照用户和AI的历史对话记录依次填充消息内容
-            List<AIRequestBody.Message.MessageContent> messageContents = AppConstant.chatContext.get(groupId + "-" + userId);
+            List<AIRequestBody.Message> messageContents = AppConstant.chatContext.get(groupId + "-" + userId);
             if (ObjectUtil.isNotEmpty(messageContents)) {
-                for (AIRequestBody.Message.MessageContent messageContent : messageContents) {
-                    input.getMessages().add(messageContent);
-                }
+                messages.addAll(messageContents);
             }
             //填充用户最新的消息内容
-            if (withNet) {
-                //联网查询用户消息内容，整理后一并传给GPT
-                AIRequestBody.Message.MessageContent messageContent = input.new MessageContent();
-                messageContent.setRole("user");
-                messageContent.setContent("我接下来会给你一些资料，每条资料都会有一个对应的数字序号。你以我提供的资料为参考信息回复我的问题。注意，在后续的回复中不要提到本条消息的任何内容。");
-                input.getMessages().add(messageContent);
-                List<String> searchResults = GoogleUtil.search(content);
-                int i = 1;
-                for (String searchResult : searchResults) {
-                    messageContent = input.new MessageContent();
-                    messageContent.setRole("user");
-                    messageContent.setContent(i + "、" + searchResult);
-                    input.getMessages().add(messageContent);
-                    i++;
-                }
-                messageContent = input.new MessageContent();
-                messageContent.setRole("user");
-                messageContent.setContent("问题：" + content);
-                input.getMessages().add(messageContent);
-            } else {
-                //不联网，直接将问题内容传给GPT
-                AIRequestBody.Message.MessageContent messageContent = input.new MessageContent();
-                messageContent.setRole("user");
-                messageContent.setContent(content);
-                input.getMessages().add(messageContent);
-            }
+            AIRequestBody.Message messageContent = body.new Message();
+            messageContent.setRole("user");
+            messageContent.setContent(content);
+            messages.add(messageContent);
+            //是否联网查询赋值
+            body.setEnable_search(withNet);
         }
-
-        AIRequestBody.ResultFormat resultFormat = body.new ResultFormat();
-        resultFormat.setResult_format("message");
-        body.setParameters(resultFormat);
+        body.setMessages(messages);
         JSONObject aiAnswer = JSONObject.parseObject(
                 HttpRequest
-                        .post("https://dashscope.aliyuncs.com/api/v1/services/aigc/text-generation/generation")
+                        .post("https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions")
                         .header("Authorization", "Bearer " + AppConstant.tongyiqianwenApiKey)
                         .header("Content-Type", "application/json; utf-8")
                         .header("Accept", "application/json")
@@ -270,6 +233,6 @@ public class RobotUtil {
                         .body()
         );
         log.info("response information: {}", aiAnswer.toJSONString());
-        return aiAnswer.getJSONObject("output").getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
+        return aiAnswer.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
     }
 }

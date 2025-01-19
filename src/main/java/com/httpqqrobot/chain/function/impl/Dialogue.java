@@ -80,25 +80,25 @@ public class Dialogue implements FunctionAct {
         StringBuilder menu = new StringBuilder();
         menu.append("所有与机器人的交互都是通过@机器人，通过对话来触发的。").append("\n");
         menu.append("\n");
-        menu.append("1、示例：[任意一句话]").append("\n");
+        menu.append("示例：[任意一句话]").append("\n");
         menu.append("描述：与机器人的对话支持记忆（联想上下文），每个群每个人的记忆空间都是独立，机器人最多能记住最近的50条对话记录（用户和机器人各25条，新的对话记录会替换最早的对话记录）。").append("\n");
         menu.append("\n");
-        menu.append("2、示例：清除记忆").append("\n");
+        menu.append("示例：清除记忆").append("\n");
         menu.append("描述：清除机器人的记忆，也就是清除上下文联想，适用于开启一个新的话题。").append("\n");
         menu.append("\n");
-        menu.append("3、示例：群消息总结 2222-02-01").append("\n");
+        menu.append("示例：群消息总结 2222-02-01").append("\n");
         menu.append("描述：机器人总结2222-02-01这天当前群消息内容。").append("\n");
         menu.append("\n");
-        menu.append("4、示例：AI联网 [任意一句话]").append("\n");
-        menu.append("描述：先将内容经过谷歌搜索引擎进行查询，将返回的十条内容概述一并发送给机器人进行总结。").append("\n");
+        menu.append("示例：AI联网 [任意一句话]").append("\n");
+        menu.append("描述：与机器人的对话会先经过机器人联网搜索查阅资料之后才会回复，这有效解决了机器人已读乱回的情况以及资料库老旧的问题。").append("\n");
         menu.append("\n");
-        menu.append("5、示例：Steam打折消息订阅 [Steam商店地址]").append("\n");
+        menu.append("示例：Steam打折消息订阅 [Steam商店地址]").append("\n");
         menu.append("描述：订阅指定商店地址游戏的打折通知。").append("\n");
         menu.append("\n");
-        menu.append("6、示例：Steam打折消息订阅查询").append("\n");
+        menu.append("示例：Steam打折消息订阅查询").append("\n");
         menu.append("描述：查询当前已经订阅的全部记录。").append("\n");
         menu.append("\n");
-        menu.append("7、示例：Steam打折消息订阅删除 [Steam商店地址]").append("\n");
+        menu.append("示例：Steam打折消息订阅删除 [Steam商店地址]").append("\n");
         menu.append("描述：删除指定商店地址游戏的打折通知。").append("\n");
         RobotUtil.groupReply(groupId, messageId, menu.toString());
     }
@@ -246,7 +246,7 @@ public class Dialogue implements FunctionAct {
     }
 
     public void clearMemory(String groupId, String messageId, String userId) {
-        List<AIRequestBody.Message.MessageContent> chatContextList = AppConstant.chatContext.get(groupId + "-" + userId);
+        List<AIRequestBody.Message> chatContextList = AppConstant.chatContext.get(groupId + "-" + userId);
         if (ObjectUtil.isNotEmpty(chatContextList)) {
             chatContextList.clear();
             AppConstant.chatContext.put(groupId + "-" + userId, chatContextList);
@@ -264,14 +264,14 @@ public class Dialogue implements FunctionAct {
 
     public void saveResponseToContext(String groupId, String userId, String userMessageContent, String robotMessageContent) {
         //将用户以及AI回答存起来，作为下一次用户提问时的上下文数据
-        List<AIRequestBody.Message.MessageContent> chatContextList = AppConstant.chatContext.getOrDefault(groupId + "-" + userId, new ArrayList<>());
+        List<AIRequestBody.Message> chatContextList = AppConstant.chatContext.getOrDefault(groupId + "-" + userId, new ArrayList<>());
         if (chatContextList.size() >= AppConstant.tongyiqianwenMaxContextCount) {
             //达到了上下文上限，清空最早的一组对话记录
             chatContextList.remove(0);
             chatContextList.remove(1);
         }
-        AIRequestBody.Message.MessageContent userMessage = new AIRequestBody().new Message().new MessageContent();
-        AIRequestBody.Message.MessageContent aiMessage = new AIRequestBody().new Message().new MessageContent();
+        AIRequestBody.Message userMessage = new AIRequestBody().new Message();
+        AIRequestBody.Message aiMessage = new AIRequestBody().new Message();
         userMessage.setRole("user");
         userMessage.setContent(userMessageContent);
         aiMessage.setRole("assistant");

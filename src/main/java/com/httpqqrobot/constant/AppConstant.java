@@ -28,7 +28,7 @@ public class AppConstant {
     public static Integer tongyiqianwenMaxContextCount;
 
     //通义千问用户对话上下文，key由QQ群-QQ号组成，value是用户对话历史记录
-    public static ConcurrentHashMap<String, List<AIRequestBody.Message.MessageContent>> chatContext = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, List<AIRequestBody.Message>> chatContext = new ConcurrentHashMap<>();
 
     //用户权限数据
     public static ConcurrentHashMap<String, String> userAuthorityMap = new ConcurrentHashMap<>();

@@ -12,33 +12,20 @@ public class AIRequestBody implements Serializable {
 
     String model;
 
-    Message input;
+    List<Message> messages;
 
-    ResultFormat parameters;
+    boolean enable_search;
+
 
     @Data
     public class Message implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
-        List<MessageContent> messages;
+        String role;
 
-        @Data
-        public class MessageContent implements Serializable {
-
-            private static final long serialVersionUID = 1L;
-
-            String role;
-
-            String content;
-        }
+        String content;
     }
 
-    @Data
-    public class ResultFormat implements Serializable {
 
-        private static final long serialVersionUID = 1L;
-
-        String result_format;
-    }
 }
