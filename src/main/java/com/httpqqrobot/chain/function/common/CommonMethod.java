@@ -295,6 +295,15 @@ public class CommonMethod {
     @Authorize(roleValue = 7)
     public void unban(String groupId, String messageId, String userId, String targetUserId) {
         try {
+            UserAuthority userAuthority = userAuthorityService.lambdaQuery().eq(UserAuthority::getUserId, targetUserId).one();
+            if (ObjectUtil.isEmpty(userAuthority)) {
+                RobotUtil.groupReply(groupId, messageId, "该用户不存在");
+                return;
+            }
+            if (userAuthority.getRoleValue() != UserRoleEnum.Banned.getRoleValue()) {
+                RobotUtil.groupReply(groupId, messageId, "该用户未被ban");
+                return;
+            }
             //直接删除指定用户的权限记录
             userAuthorityService.lambdaUpdate().eq(UserAuthority::getUserId, targetUserId).remove();
             RobotUtil.groupReply(groupId, messageId, "该用户已被unban");
