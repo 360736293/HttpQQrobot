@@ -33,9 +33,9 @@ public class GlobalExceptionHandler {
         return Result.fail(ResultInfoEnum.FORBIDDEN.getCode(), ResultInfoEnum.FORBIDDEN.getMsg(), "Authorize Error");
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(Throwable.class)
     @ResponseBody
-    public Result handleException(Exception e) {
+    public Result handleException(Throwable e) {
         JSONObject json = RequestHolderUtil.get();
         RequestHolderUtil.remove();
         log.error("Unknow Error: {}", json);

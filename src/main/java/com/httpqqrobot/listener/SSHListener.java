@@ -26,7 +26,7 @@ public class SSHListener implements ServletContextListener {
 //            JschUtil.bindPort(session, "127.0.0.1", 9849, 9849);
 //            JschUtil.bindPort(session, "127.0.0.1", 7848, 7848);
 //            log.info("SSH连接成功");
-//        } catch (Exception e) {
+//        } catch (Throwable e) {
 //            log.error("SSH建立连接失败: ", e);
 //        }
     }
@@ -37,7 +37,7 @@ public class SSHListener implements ServletContextListener {
 //            log.info("SSH开始断开连接");
 //            JschUtil.close(session);
 //            log.info("SSH断开连接成功");
-//        } catch (Exception e) {
+//        } catch (Throwable e) {
 //            log.error("SSH断开连接失败: ", e);
 //        }
     }

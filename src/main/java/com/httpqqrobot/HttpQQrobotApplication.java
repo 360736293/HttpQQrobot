@@ -7,7 +7,7 @@ import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.FunctionHandlerChain;
-import com.httpqqrobot.chain.function.FunctionAct;
+import com.httpqqrobot.chain.function.FunctionHandler;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.UserAuthority;
 import com.httpqqrobot.service.IUserAuthorityService;
@@ -144,7 +144,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
             AppConstant.googleSearchApikey = googleSearchApikey;
             AppConstant.googleSearchEngineID = googleSearchEngineID;
             log.info("初始化完成");
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error("初始化失败: ", e);
         }
     }
@@ -152,7 +152,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     public void assembleFunctionHandlerChain() {
         //获取目标路径下所有有指定注解的类
         Set<Class<?>> classes = ClassUtil.scanPackageByAnnotation("com.httpqqrobot.chain.function.impl", ChainSequence.class);
-        TreeMap<Integer, FunctionAct> sortedMap = new TreeMap<>();
+        TreeMap<Integer, FunctionHandler> sortedMap = new TreeMap<>();
         for (Class<?> aClass : classes) {
             //获取类上@ChainSequence注解
             ChainSequence chainSequence = aClass.getAnnotation(ChainSequence.class);
@@ -160,8 +160,8 @@ public class HttpQQrobotApplication implements ApplicationRunner {
                 continue;
             }
             Integer sequence = chainSequence.value();
-            FunctionAct functionAct = (FunctionAct) SpringUtil.getBean(aClass);
-            sortedMap.put(sequence, functionAct);
+            FunctionHandler functionHandler = (FunctionHandler) SpringUtil.getBean(aClass);
+            sortedMap.put(sequence, functionHandler);
         }
         for (Integer sequence : sortedMap.keySet()) {
             functionHandlerChain.addHandler(sortedMap.get(sequence));

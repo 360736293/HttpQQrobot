@@ -26,25 +26,32 @@ import java.lang.reflect.Method;
 public class AuthorizeAop {
 
     @Around("@annotation(com.httpqqrobot.annotation.Authorize)")
-    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
-        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
-        if (method.isAnnotationPresent(Authorize.class)) {
-            Authorize authorize = method.getAnnotation(Authorize.class);
-            Integer roleValue = authorize.roleValue();
-            JSONObject json = RequestHolderUtil.get();
-            UserMessage userMessage = JSONObject.parseObject(json.toJSONString(), UserMessage.class, JSONReader.Feature.SupportSmartMatch);
-            String userId = userMessage.getUserId();
-            Integer userRoleValue = AppConstant.userAuthorityMap.get(userId);
-            if (ObjectUtil.isEmpty(userRoleValue)) {
-                userRoleValue = UserRoleEnum.Guest.getroleValue();
+    public Object around(ProceedingJoinPoint joinPoint) {
+        try {
+            Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+            if (method.isAnnotationPresent(Authorize.class)) {
+                Authorize authorize = method.getAnnotation(Authorize.class);
+                Integer roleValue = authorize.roleValue();
+                JSONObject json = RequestHolderUtil.get();
+                UserMessage userMessage = JSONObject.parseObject(json.toJSONString(), UserMessage.class, JSONReader.Feature.SupportSmartMatch);
+                String userId = userMessage.getUserId();
+                Integer userRoleValue = AppConstant.userAuthorityMap.get(userId);
+                if (ObjectUtil.isEmpty(userRoleValue)) {
+                    userRoleValue = UserRoleEnum.Guest.getroleValue();
+                }
+                //判断用户角色权限值是否大于需求角色权限值
+                if (userRoleValue >= roleValue) {
+                    return joinPoint.proceed();
+                } else {
+                    throw new AuthorizeException();
+                }
             }
-            //判断用户角色权限值是否大于需求角色权限值
-            if (userRoleValue >= roleValue) {
-                return joinPoint.proceed();
-            } else {
-                throw new AuthorizeException();
-            }
+            return null;
+        } catch (AuthorizeException e) {
+            throw new AuthorizeException();
+        } catch (Throwable e) {
+            log.error("鉴权AOP异常: ", e);
+            return null;
         }
-        return null;
     }
 }

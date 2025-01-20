@@ -6,7 +6,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONReader;
 import com.httpqqrobot.annotation.ChainSequence;
-import com.httpqqrobot.chain.function.FunctionAct;
+import com.httpqqrobot.chain.function.FunctionHandler;
 import com.httpqqrobot.entity.UserMessage;
 import com.httpqqrobot.service.IUserMessageService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 @Component
 @Slf4j
 @ChainSequence(0)
-public class AddUserMessage implements FunctionAct {
+public class AddUserMessage implements FunctionHandler {
 
     @Resource
     private IUserMessageService userMessageService;
@@ -37,7 +37,7 @@ public class AddUserMessage implements FunctionAct {
                 userMessage.setSenderCard(userMessage.getSender().getCard());
             }
             userMessageService.save(userMessage);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error("记录用户消息异常: ", e);
         }
     }
