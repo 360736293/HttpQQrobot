@@ -16,11 +16,11 @@ public enum UserRoleEnum {
         this.roleName = roleName;
     }
 
-    public int getroleValue() {
+    public int getRoleValue() {
         return this.roleValue;
     }
 
-    public String getuserRole() {
+    public String getRoleName() {
         return this.roleName;
     }
 }

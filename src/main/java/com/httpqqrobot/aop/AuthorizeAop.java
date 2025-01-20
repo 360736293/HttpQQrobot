@@ -37,7 +37,7 @@ public class AuthorizeAop {
                 String userId = userMessage.getUserId();
                 Integer userRoleValue = AppConstant.userAuthorityMap.get(userId);
                 if (ObjectUtil.isEmpty(userRoleValue)) {
-                    userRoleValue = UserRoleEnum.Guest.getroleValue();
+                    userRoleValue = UserRoleEnum.Guest.getRoleValue();
                 }
                 //判断用户角色权限值是否大于需求角色权限值
                 if (userRoleValue >= roleValue) {

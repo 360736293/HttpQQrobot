@@ -4,8 +4,8 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.annotation.ChainSequence;
-import com.httpqqrobot.chain.function.common.CommonMethod;
 import com.httpqqrobot.chain.function.FunctionHandler;
+import com.httpqqrobot.chain.function.common.CommonMethod;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.exception.AuthorizeException;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +55,12 @@ public class Dialogue implements FunctionHandler {
                     break;
                 case "菜单":
                     commonMethod.showMenu(groupId, messageId);
+                    break;
+                case "ban":
+                    commonMethod.ban(groupId, messageId, userId, messageSplit[2]);
+                    break;
+                case "unban":
+                    commonMethod.unban(groupId, messageId, userId, messageSplit[2]);
                     break;
                 default:
                     commonMethod.aiTalk(groupId, messageId, userId, commonMethod.spliceContent(messageSplit, false), false);

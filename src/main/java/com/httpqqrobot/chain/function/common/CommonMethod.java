@@ -4,14 +4,19 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.http.HttpRequest;
+import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.AIRequestBody;
 import com.httpqqrobot.entity.RobotGroupIntegrativeReplyRequestBody;
 import com.httpqqrobot.entity.SteamDiscountNotify;
+import com.httpqqrobot.entity.UserAuthority;
 import com.httpqqrobot.entity.UserMessage;
+import com.httpqqrobot.entity.UserRoleEnum;
 import com.httpqqrobot.service.ISteamDiscountNotifyService;
+import com.httpqqrobot.service.IUserAuthorityService;
 import com.httpqqrobot.service.IUserMessageService;
 import com.httpqqrobot.utils.RobotUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +24,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 public class CommonMethod {
 
@@ -28,9 +34,12 @@ public class CommonMethod {
     @Resource
     private ISteamDiscountNotifyService steamDiscountNotifyServiceImpl;
 
+    @Resource
+    private IUserAuthorityService userAuthorityService;
+
     public void showMenu(String groupId, String messageId) {
         StringBuilder menu = new StringBuilder();
-        menu.append("所有与机器人的交互都是通过@机器人，通过对话来触发的。").append("\n");
+        menu.append("所有与机器人的互动都是通过@机器人，通过对话来触发的。").append("\n");
         menu.append("\n");
         menu.append("示例：[任意一句话]").append("\n");
         menu.append("描述：与机器人的对话支持记忆（联想上下文），每个群每个人的记忆空间都是独立的，机器人最多能记住最近的50条对话记录（用户和机器人各25条，新的对话记录会替换最早的对话记录）。").append("\n");
@@ -52,6 +61,12 @@ public class CommonMethod {
         menu.append("\n");
         menu.append("示例：Steam打折消息订阅删除 [Steam商店地址]").append("\n");
         menu.append("描述：删除指定商店地址游戏的打折通知。").append("\n");
+        menu.append("\n");
+        menu.append("示例：ban [QQ号]").append("\n");
+        menu.append("描述：需要管理员以上的权限，指定QQ号会被禁止，无法与机器人互动。").append("\n");
+        menu.append("\n");
+        menu.append("示例：unban [QQ号]").append("\n");
+        menu.append("描述：需要管理员以上的权限，指定QQ号恢复为游客权限。").append("\n");
         RobotUtil.groupReply(groupId, messageId, menu.toString());
     }
 
@@ -231,5 +246,62 @@ public class CommonMethod {
         chatContextList.add(userMessage);
         chatContextList.add(aiMessage);
         AppConstant.chatContext.put(groupId + "-" + userId, chatContextList);
+    }
+
+    @Authorize(roleValue = 7)
+    public void ban(String groupId, String messageId, String userId, String targetUserId) {
+        try {
+            Integer userRoleValue = AppConstant.userAuthorityMap.get(userId);
+            //目标用户可能是游客
+            Integer targetUserRoleValue = AppConstant.userAuthorityMap.getOrDefault(targetUserId, UserRoleEnum.Guest.getRoleValue());
+            //超级管理员不能被ban
+            if (targetUserRoleValue == UserRoleEnum.SuperAdmin.getRoleValue()) {
+                RobotUtil.groupReply(groupId, messageId, "管理员不可以互相ban");
+                return;
+            }
+            //除非超级管理员，管理员不能互相ban
+            if (userRoleValue != UserRoleEnum.SuperAdmin.getRoleValue() && targetUserRoleValue == UserRoleEnum.Admin.getRoleValue()) {
+                RobotUtil.groupReply(groupId, messageId, "管理员不可以互相ban");
+                return;
+            }
+            //查询该用户是否存在
+            UserAuthority userAuthority = userAuthorityService.lambdaQuery().eq(UserAuthority::getUserId, targetUserId).one();
+            if (ObjectUtil.isEmpty(userAuthority)) {
+                //ban用户
+                UserAuthority newUserAuthority = new UserAuthority();
+                newUserAuthority.setId(IdUtil.getSnowflakeNextIdStr());
+                newUserAuthority.setUserId(targetUserId);
+                newUserAuthority.setRoleName(UserRoleEnum.Banned.getRoleName());
+                newUserAuthority.setRoleValue(UserRoleEnum.Banned.getRoleValue());
+                userAuthorityService.save(newUserAuthority);
+                RobotUtil.groupReply(groupId, messageId, "该用户已被ban");
+                return;
+            }
+            if (userAuthority.getRoleValue() == UserRoleEnum.Banned.getRoleValue()) {
+                RobotUtil.groupReply(groupId, messageId, "该用户已被ban");
+                return;
+            }
+            userAuthority.setRoleName(UserRoleEnum.Banned.getRoleName());
+            userAuthority.setRoleValue(UserRoleEnum.Banned.getRoleValue());
+            userAuthorityService.lambdaUpdate().eq(UserAuthority::getUserId, targetUserId).update(userAuthority);
+            RobotUtil.groupReply(groupId, messageId, "该用户已被ban");
+            //更新缓存的用户权限数据
+            AppConstant.userAuthorityMap.put(targetUserId, UserRoleEnum.Banned.getRoleValue());
+        } catch (Throwable e) {
+            log.error("ban用户异常: ", e);
+        }
+    }
+
+    @Authorize(roleValue = 7)
+    public void unban(String groupId, String messageId, String userId, String targetUserId) {
+        try {
+            //直接删除指定用户的权限记录
+            userAuthorityService.lambdaUpdate().eq(UserAuthority::getUserId, targetUserId).remove();
+            RobotUtil.groupReply(groupId, messageId, "该用户已被unban");
+            //更新缓存的用户权限数据
+            AppConstant.userAuthorityMap.put(targetUserId, UserRoleEnum.Guest.getRoleValue());
+        } catch (Throwable e) {
+            log.error("unban用户异常: ", e);
+        }
     }
 }
