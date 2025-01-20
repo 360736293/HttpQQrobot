@@ -1,5 +1,6 @@
 package com.httpqqrobot.exception.handler;
 
+import com.httpqqrobot.exception.AuthorizeException;
 import com.httpqqrobot.exception.RateLimitException;
 import com.httpqqrobot.result.Result;
 import com.httpqqrobot.result.ResultInfoEnum;
@@ -17,6 +18,13 @@ public class GlobalExceptionHandler {
     public Result handleRateLimitException(RateLimitException e) {
         log.error("RateLimit Error");
         return Result.fail(ResultInfoEnum.SERVICEUNAVAILABLE.getCode(), ResultInfoEnum.SERVICEUNAVAILABLE.getMsg(), "RateLimit Error");
+    }
+
+    @ExceptionHandler(AuthorizeException.class)
+    @ResponseBody
+    public Result handleAuthorizeException(AuthorizeException e) {
+        log.error("Authorize Error");
+        return Result.fail(ResultInfoEnum.FORBIDDEN.getCode(), ResultInfoEnum.FORBIDDEN.getMsg(), "Authorize Error");
     }
 
     @ExceptionHandler(Exception.class)

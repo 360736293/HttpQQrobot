@@ -81,7 +81,7 @@ public class Dialogue implements FunctionAct {
         menu.append("所有与机器人的交互都是通过@机器人，通过对话来触发的。").append("\n");
         menu.append("\n");
         menu.append("示例：[任意一句话]").append("\n");
-        menu.append("描述：与机器人的对话支持记忆（联想上下文），每个群每个人的记忆空间都是独立，机器人最多能记住最近的50条对话记录（用户和机器人各25条，新的对话记录会替换最早的对话记录）。").append("\n");
+        menu.append("描述：与机器人的对话支持记忆（联想上下文），每个群每个人的记忆空间都是独立的，机器人最多能记住最近的50条对话记录（用户和机器人各25条，新的对话记录会替换最早的对话记录）。").append("\n");
         menu.append("\n");
         menu.append("示例：清除记忆").append("\n");
         menu.append("描述：清除机器人的记忆，也就是清除上下文联想，适用于开启一个新的话题。").append("\n");
