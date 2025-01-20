@@ -18,7 +18,7 @@ nacos:
     readConfigTimeout: 5000
 mybatis-plus:
   type-aliases-package: com.example.entity
-  mapper-locations: classpath:mapper/*Mapper.xml
+  mapper-locations: classpath:com/httpqqrobot/mapper/xml/.xml
 threadPool:
   corePoolSize: 5
   maxPoolSize: 10
