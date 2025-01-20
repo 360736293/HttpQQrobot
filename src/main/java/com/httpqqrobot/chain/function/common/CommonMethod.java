@@ -1,4 +1,4 @@
-package com.httpqqrobot.chain.function.Common;
+package com.httpqqrobot.chain.function.common;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;

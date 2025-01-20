@@ -4,7 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.annotation.ChainSequence;
-import com.httpqqrobot.chain.function.Common.CommonMethod;
+import com.httpqqrobot.chain.function.common.CommonMethod;
 import com.httpqqrobot.chain.function.FunctionHandler;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.exception.AuthorizeException;
