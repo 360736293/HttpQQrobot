@@ -21,13 +21,14 @@ public class HttpQQrobotMainController {
     @Resource
     private FunctionHandlerChain functionHandlerChain;
 
+
     @RateLimit(limit = 5)
     @PostMapping("/handler")
     public Result handler(HttpServletRequest req, HttpServletResponse resp) {
         JSONObject json = RequestHolderUtil.get();
-        RequestHolderUtil.remove();
         log.info("input parameter: {}", json.toJSONString());
         functionHandlerChain.doHandler(json);
+        RequestHolderUtil.remove();
         return Result.success(ResultInfoEnum.SUCCESS.getCode(), ResultInfoEnum.SUCCESS.getMsg(), null);
     }
 }

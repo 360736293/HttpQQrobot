@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson2.JSONObject;
+import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.function.FunctionAct;
 import com.httpqqrobot.constant.AppConstant;
@@ -34,6 +35,7 @@ public class Dialogue implements FunctionAct {
     @Resource
     private ISteamDiscountNotifyService steamDiscountNotifyServiceImpl;
 
+    @Authorize(roleValue = 1)
     @Override
     public void act(JSONObject json) {
         try {

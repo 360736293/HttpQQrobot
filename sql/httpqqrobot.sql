@@ -4,14 +4,14 @@
  Source Server         : 110.42.211.208
  Source Server Type    : MySQL
  Source Server Version : 80040 (8.0.40)
- Source Host           : 110.42.211.208:3306
+ Source Host           : 127.0.0.1:3306
  Source Schema         : httpqqrobot
 
  Target Server Type    : MySQL
  Target Server Version : 80040 (8.0.40)
  File Encoding         : 65001
 
- Date: 16/01/2025 19:41:37
+ Date: 20/01/2025 21:14:31
 */
 
 CREATE database if NOT EXISTS `httpqqrobot` default character set utf8mb4 collate utf8mb4_unicode_ci;
@@ -32,18 +32,18 @@ CREATE TABLE `steam_discount_notify`  (
   `url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `image_url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   PRIMARY KEY (`id`, `game_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for user_authority
 -- ----------------------------
 DROP TABLE IF EXISTS `user_authority`;
 CREATE TABLE `user_authority`  (
-  `id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `user_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `role` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `role_value` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`, `role`) USING BTREE
+  `id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `role_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `role_value` int NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -73,6 +73,6 @@ CREATE TABLE `user_message`  (
   `font` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `notice_type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;

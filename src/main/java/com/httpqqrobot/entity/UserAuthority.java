@@ -3,32 +3,32 @@ package com.httpqqrobot.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
+/**
+ * <p>
+ * 
+ * </p>
+ *
+ * @author mfliu
+ * @since 2025-01-20
+ */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class UserAuthority implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * id
-     */
     @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
-    /**
-     * 用户ID
-     */
-    String userId;
+    private String userId;
 
-    /**
-     * 用户角色
-     */
-    String role;
+    private String roleName;
 
-    /**
-     * 角色值
-     */
-    String roleValue;
+    private Integer roleValue;
+
+
 }

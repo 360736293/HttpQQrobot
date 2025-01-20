@@ -171,7 +171,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     public void loadUserAuthorityData() {
         List<UserAuthority> userAuthorityList = userAuthorityService.list();
         for (UserAuthority userAuthority : userAuthorityList) {
-            AppConstant.userAuthorityMap.put(userAuthority.getUserId(), userAuthority.getRole());
+            AppConstant.userAuthorityMap.put(userAuthority.getUserId(), userAuthority.getRoleValue());
         }
     }
 

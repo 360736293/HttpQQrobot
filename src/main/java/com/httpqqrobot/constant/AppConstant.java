@@ -31,7 +31,7 @@ public class AppConstant {
     public static ConcurrentHashMap<String, List<AIRequestBody.Message>> chatContext = new ConcurrentHashMap<>();
 
     //用户权限数据
-    public static ConcurrentHashMap<String, String> userAuthorityMap = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Integer> userAuthorityMap = new ConcurrentHashMap<>();
 
     //机器人反向代理服务器的IP地址
     public static String robotIp;
