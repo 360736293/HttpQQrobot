@@ -12,6 +12,7 @@ import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.UserAuthority;
 import com.httpqqrobot.service.IUserAuthorityService;
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -28,6 +29,7 @@ import java.util.TreeMap;
 import java.util.concurrent.Executor;
 
 @Slf4j
+@MapperScan("com.httpqqrobot.mapper")
 @SpringBootApplication
 public class HttpQQrobotApplication implements ApplicationRunner {
 

@@ -1,18 +1,16 @@
 package com.httpqqrobot.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.httpqqrobot.entity.SteamDiscountNotify;
-import org.apache.ibatis.annotations.Mapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
  * <p>
- * Mapper 接口
+ *  Mapper 接口
  * </p>
  *
  * @author mfliu
- * @since 2025-01-16
+ * @since 2025-01-20
  */
-@Mapper
 public interface SteamDiscountNotifyMapper extends BaseMapper<SteamDiscountNotify> {
 
 }

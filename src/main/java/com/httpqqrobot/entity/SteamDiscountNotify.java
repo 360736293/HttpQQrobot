@@ -2,9 +2,10 @@ package com.httpqqrobot.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -12,7 +13,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author mfliu
- * @since 2025-01-16
+ * @since 2025-01-20
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

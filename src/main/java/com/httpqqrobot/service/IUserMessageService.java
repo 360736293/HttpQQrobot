@@ -1,13 +1,16 @@
 package com.httpqqrobot.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.httpqqrobot.entity.UserMessage;
+import com.baomidou.mybatisplus.extension.service.IService;
 
-import java.util.List;
-
+/**
+ * <p>
+ *  服务类
+ * </p>
+ *
+ * @author mfliu
+ * @since 2025-01-20
+ */
 public interface IUserMessageService extends IService<UserMessage> {
 
-    List<UserMessage> getTodayUserSpeakRank(String qqGroup, String date);
-
-    List<String> getTodayUserSpeakContent(String qqGroup, String date);
 }

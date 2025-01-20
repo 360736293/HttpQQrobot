@@ -34,6 +34,12 @@ public class CodeGeneratorUtil {
         //设置包名相关配置
         PackageConfig packageInfo = new PackageConfig();
         packageInfo.setParent("com.httpqqrobot");   //设置生成的包名，与代码所在位置不冲突，二者叠加组成完整路径
+        packageInfo.setService("service");  //设置service的包名
+        packageInfo.setServiceImpl("service.impl");  //设置service.impl的包名
+        packageInfo.setMapper("mapper");    //设置mapper的包名
+        packageInfo.setXml("mapper.xml");   //设置mapper.xml的包名
+        packageInfo.setEntity("entity");    //设置entity的包名
+        packageInfo.setController("controller");    //设置controller的包名
         autoGenerator.setPackageInfo(packageInfo);
 
         //策略设置

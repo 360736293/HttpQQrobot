@@ -1,17 +1,16 @@
 package com.httpqqrobot.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.httpqqrobot.entity.UserMessage;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import java.util.List;
-
-@Mapper
+/**
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
+ * @author mfliu
+ * @since 2025-01-20
+ */
 public interface UserMessageMapper extends BaseMapper<UserMessage> {
-
-    List<UserMessage> getTodayUserSpeakRank(@Param("qqGroup") String qqGroup, @Param("date") String date);
-
-    List<String> getTodayUserSpeakContent(@Param("qqGroup") String qqGroup, @Param("date") String date);
 
 }
