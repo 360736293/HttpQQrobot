@@ -288,10 +288,14 @@ public class CommonMethod {
                 newUserAuthority.setRoleValue(UserRoleEnum.Banned.getRoleValue());
                 userAuthorityService.save(newUserAuthority);
                 RobotUtil.groupReply(groupId, messageId, "该用户已被ban");
+                //更新缓存的用户权限数据
+                AppConstant.userAuthorityMap.put(targetUserId, UserRoleEnum.Banned.getRoleValue());
                 return;
             }
             if (userAuthority.getRoleValue() == UserRoleEnum.Banned.getRoleValue()) {
                 RobotUtil.groupReply(groupId, messageId, "该用户已被ban");
+                //更新缓存的用户权限数据
+                AppConstant.userAuthorityMap.put(targetUserId, UserRoleEnum.Banned.getRoleValue());
                 return;
             }
             userAuthority.setRoleName(UserRoleEnum.Banned.getRoleName());
@@ -341,10 +345,14 @@ public class CommonMethod {
                 newUserAuthority.setRoleValue(UserRoleEnum.Admin.getRoleValue());
                 userAuthorityService.save(newUserAuthority);
                 RobotUtil.groupReply(groupId, messageId, "该用户已被赋予管理员权限");
+                //更新缓存的用户权限数据
+                AppConstant.userAuthorityMap.put(targetUserId, UserRoleEnum.Admin.getRoleValue());
                 return;
             }
             if (userAuthority.getRoleValue() == UserRoleEnum.Admin.getRoleValue()) {
                 RobotUtil.groupReply(groupId, messageId, "该用户已被赋予管理员权限");
+                //更新缓存的用户权限数据
+                AppConstant.userAuthorityMap.put(targetUserId, UserRoleEnum.Admin.getRoleValue());
                 return;
             }
             userAuthority.setRoleName(UserRoleEnum.Admin.getRoleName());
