@@ -269,7 +269,7 @@ public class CommonMethod {
             Integer targetUserRoleValue = AppConstant.userAuthorityMap.getOrDefault(targetUserId, UserRoleEnum.Guest.getRoleValue());
             //超级管理员不能被ban
             if (targetUserRoleValue == UserRoleEnum.SuperAdmin.getRoleValue()) {
-                RobotUtil.groupReply(groupId, messageId, "管理员不可以互相ban");
+                RobotUtil.groupReply(groupId, messageId, "超级管理员不能被ban");
                 return;
             }
             //除非超级管理员，管理员不能互相ban
