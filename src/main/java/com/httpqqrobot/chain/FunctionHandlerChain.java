@@ -1,7 +1,7 @@
 package com.httpqqrobot.chain;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.httpqqrobot.chain.function.FunctionHandler;
+import com.httpqqrobot.chain.functionHandler.FunctionHandler;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

@@ -7,7 +7,7 @@ import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.httpqqrobot.annotation.ChainSequence;
 import com.httpqqrobot.chain.FunctionHandlerChain;
-import com.httpqqrobot.chain.function.FunctionHandler;
+import com.httpqqrobot.chain.functionHandler.FunctionHandler;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.entity.UserAuthority;
 import com.httpqqrobot.service.IUserAuthorityService;
@@ -153,7 +153,7 @@ public class HttpQQrobotApplication implements ApplicationRunner {
 
     public void assembleFunctionHandlerChain() {
         //获取目标路径下所有有指定注解的类
-        Set<Class<?>> classes = ClassUtil.scanPackageByAnnotation("com.httpqqrobot.chain.function.impl", ChainSequence.class);
+        Set<Class<?>> classes = ClassUtil.scanPackageByAnnotation("com.httpqqrobot.chain.functionHandler.impl", ChainSequence.class);
         TreeMap<Integer, FunctionHandler> sortedMap = new TreeMap<>();
         for (Class<?> aClass : classes) {
             //获取类上@ChainSequence注解

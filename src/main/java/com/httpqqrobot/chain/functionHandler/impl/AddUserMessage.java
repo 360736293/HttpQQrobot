@@ -1,4 +1,4 @@
-package com.httpqqrobot.chain.function.impl;
+package com.httpqqrobot.chain.functionHandler.impl;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.IdUtil;
@@ -6,7 +6,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.JSONReader;
 import com.httpqqrobot.annotation.ChainSequence;
-import com.httpqqrobot.chain.function.FunctionHandler;
+import com.httpqqrobot.chain.functionHandler.FunctionHandler;
 import com.httpqqrobot.entity.UserMessage;
 import com.httpqqrobot.service.IUserMessageService;
 import lombok.extern.slf4j.Slf4j;

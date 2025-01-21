@@ -1,11 +1,11 @@
-package com.httpqqrobot.chain.function.impl;
+package com.httpqqrobot.chain.functionHandler.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson2.JSONObject;
 import com.httpqqrobot.annotation.Authorize;
 import com.httpqqrobot.annotation.ChainSequence;
-import com.httpqqrobot.chain.function.FunctionHandler;
-import com.httpqqrobot.chain.function.common.CommonMethod;
+import com.httpqqrobot.chain.functionHandler.FunctionHandler;
+import com.httpqqrobot.chain.functionHandler.common.CommonMethod;
 import com.httpqqrobot.constant.AppConstant;
 import com.httpqqrobot.exception.AuthorizeException;
 import lombok.extern.slf4j.Slf4j;
