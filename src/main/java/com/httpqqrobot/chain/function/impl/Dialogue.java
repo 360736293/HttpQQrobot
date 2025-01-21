@@ -56,11 +56,20 @@ public class Dialogue implements FunctionHandler {
                 case "菜单":
                     commonMethod.showMenu(groupId, messageId);
                     break;
+                case "admin":
+                    commonMethod.showAdminMenu(groupId, messageId);
+                    break;
                 case "ban":
                     commonMethod.ban(groupId, messageId, userId, messageSplit[2]);
                     break;
                 case "unban":
                     commonMethod.unban(groupId, messageId, userId, messageSplit[2]);
+                    break;
+                case "giveadmin":
+                    commonMethod.giveAdmin(groupId, messageId, userId, messageSplit[2]);
+                    break;
+                case "revokeadmin":
+                    commonMethod.revokeAdmin(groupId, messageId, userId, messageSplit[2]);
                     break;
                 default:
                     commonMethod.aiTalk(groupId, messageId, userId, commonMethod.spliceContent(messageSplit, false), false);

@@ -62,11 +62,24 @@ public class CommonMethod {
         menu.append("示例：Steam打折消息订阅删除 [Steam商店地址]").append("\n");
         menu.append("描述：删除指定商店地址游戏的打折通知。").append("\n");
         menu.append("\n");
+        menu.append("示例：admin").append("\n");
+        menu.append("描述：展示管理菜单。").append("\n");
+        RobotUtil.groupReply(groupId, messageId, menu.toString());
+    }
+
+    public void showAdminMenu(String groupId, String messageId) {
+        StringBuilder menu = new StringBuilder();
         menu.append("示例：ban [QQ号]").append("\n");
-        menu.append("描述：需要管理员以上的权限，指定QQ号会被禁止，无法与机器人互动。").append("\n");
+        menu.append("描述：需要管理员以上权限，指定QQ号会被禁止，无法与机器人互动。").append("\n");
         menu.append("\n");
         menu.append("示例：unban [QQ号]").append("\n");
-        menu.append("描述：需要管理员以上的权限，指定QQ号恢复为游客权限。").append("\n");
+        menu.append("描述：需要管理员以上权限，指定QQ号恢复为游客权限。").append("\n");
+        menu.append("\n");
+        menu.append("示例：giveadmin [QQ号]").append("\n");
+        menu.append("描述：需要超级管理员以上权限，给与指定QQ号管理员权限。").append("\n");
+        menu.append("\n");
+        menu.append("示例：revokeadmin [QQ号]").append("\n");
+        menu.append("描述：需要超级管理员以上权限，撤销指定QQ号管理员权限，恢复为用户权限。").append("\n");
         RobotUtil.groupReply(groupId, messageId, menu.toString());
     }
 
@@ -311,6 +324,61 @@ public class CommonMethod {
             AppConstant.userAuthorityMap.put(targetUserId, UserRoleEnum.Guest.getRoleValue());
         } catch (Throwable e) {
             log.error("unban用户异常: ", e);
+        }
+    }
+
+    @Authorize(roleValue = 9)
+    public void giveAdmin(String groupId, String messageId, String userId, String targetUserId) {
+        try {
+            //查询该用户是否存在
+            UserAuthority userAuthority = userAuthorityService.lambdaQuery().eq(UserAuthority::getUserId, targetUserId).one();
+            if (ObjectUtil.isEmpty(userAuthority)) {
+                //直接添加新权限数据
+                UserAuthority newUserAuthority = new UserAuthority();
+                newUserAuthority.setId(IdUtil.getSnowflakeNextIdStr());
+                newUserAuthority.setUserId(targetUserId);
+                newUserAuthority.setRoleName(UserRoleEnum.Admin.getRoleName());
+                newUserAuthority.setRoleValue(UserRoleEnum.Admin.getRoleValue());
+                userAuthorityService.save(newUserAuthority);
+                RobotUtil.groupReply(groupId, messageId, "该用户已被赋予管理员权限");
+                return;
+            }
+            if (userAuthority.getRoleValue() == UserRoleEnum.Admin.getRoleValue()) {
+                RobotUtil.groupReply(groupId, messageId, "该用户已被赋予管理员权限");
+                return;
+            }
+            userAuthority.setRoleName(UserRoleEnum.Admin.getRoleName());
+            userAuthority.setRoleValue(UserRoleEnum.Admin.getRoleValue());
+            userAuthorityService.lambdaUpdate().eq(UserAuthority::getUserId, targetUserId).update(userAuthority);
+            RobotUtil.groupReply(groupId, messageId, "该用户已被赋予管理员权限");
+            //更新缓存的用户权限数据
+            AppConstant.userAuthorityMap.put(targetUserId, UserRoleEnum.Admin.getRoleValue());
+        } catch (Throwable e) {
+            log.error("giveadmin用户异常: ", e);
+        }
+    }
+
+    @Authorize(roleValue = 9)
+    public void revokeAdmin(String groupId, String messageId, String userId, String targetUserId) {
+        try {
+            UserAuthority userAuthority = userAuthorityService.lambdaQuery().eq(UserAuthority::getUserId, targetUserId).one();
+            if (ObjectUtil.isEmpty(userAuthority)) {
+                RobotUtil.groupReply(groupId, messageId, "该用户不存在");
+                return;
+            }
+            if (userAuthority.getRoleValue() != UserRoleEnum.Admin.getRoleValue()) {
+                RobotUtil.groupReply(groupId, messageId, "该用户未被赋予管理员权限");
+                return;
+            }
+            //直接修改指定用户的权限记录
+            userAuthority.setRoleName(UserRoleEnum.User.getRoleName());
+            userAuthority.setRoleValue(UserRoleEnum.User.getRoleValue());
+            userAuthorityService.lambdaUpdate().eq(UserAuthority::getUserId, targetUserId).update(userAuthority);
+            RobotUtil.groupReply(groupId, messageId, "该用户已被撤销管理员权限");
+            //更新缓存的用户权限数据
+            AppConstant.userAuthorityMap.put(targetUserId, UserRoleEnum.User.getRoleValue());
+        } catch (Throwable e) {
+            log.error("revokeadmin用户异常: ", e);
         }
     }
 }
