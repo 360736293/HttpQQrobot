@@ -19,6 +19,7 @@ public class SpringApplicationRunProgressListener implements SpringApplicationRu
 
     @Override
     public void starting() {
+        //这里使用SpringBoot的日志打印是不会打印内容的，这是预期行为，这是因为SpringBoot在LogbackLoggingSystem初始化期间限制日志打印（FilterReply.DENY），来避免不一致。
         log.info("SpringBoot 开始启动");
     }
 
