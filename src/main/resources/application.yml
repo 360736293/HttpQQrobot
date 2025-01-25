@@ -1,5 +1,5 @@
 server:
-  port: 7777
+  port: 80
 robot:
   qq: xxxx
   ip: 127.0.0.1:3000

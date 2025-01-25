@@ -23,7 +23,7 @@ public class HttpQQrobotMainController {
 
 
     @RateLimit(limit = 5)
-    @PostMapping("/handler")
+    @PostMapping("/napcat")
     public Result handler(HttpServletRequest req, HttpServletResponse resp) {
         JSONObject json = RequestHolderUtil.get();
         log.info("input parameter: {}", json.toJSONString());
