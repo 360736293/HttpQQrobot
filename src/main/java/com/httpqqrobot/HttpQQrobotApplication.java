@@ -66,6 +66,9 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     @Value("${googleSearch.searchEngineID}")
     private String googleSearchEngineID;
 
+    @Value("${wechatService.token}")
+    private String wechatServiceToken;
+
     public static void main(String[] args) {
         SpringApplication.run(HttpQQrobotApplication.class, args);
     }
@@ -133,18 +136,20 @@ public class HttpQQrobotApplication implements ApplicationRunner {
                 }
             });
             loadCommonConfig(commonConfig);
-            //赋值机器人IP地址
+            //加载机器人IP地址
             AppConstant.robotIp = robotIp;
-            //赋值机器人QQ
+            //加载机器人QQ
             AppConstant.robotQQ = robotQQ;
-            //赋值通义千问APIKEY
+            //加载通义千问APIKEY
             AppConstant.tongyiqianwenApiKey = tongyiqianwenApiKey;
-            //赋值http-https代理
+            //加载http-https代理
             AppConstant.proxyIP = proxyIP;
             AppConstant.proxyPort = proxyPort;
-            //赋值谷歌搜索相关
+            //加载谷歌搜索相关
             AppConstant.googleSearchApikey = googleSearchApikey;
             AppConstant.googleSearchEngineID = googleSearchEngineID;
+            //加载微信服务号token
+            AppConstant.wechatServiceToken = wechatServiceToken;
             log.info("初始化完成");
         } catch (Throwable e) {
             log.error("初始化失败: ", e);
@@ -180,9 +185,9 @@ public class HttpQQrobotApplication implements ApplicationRunner {
     public void loadCommonConfig(String commonConfig) {
         Yaml yaml = new Yaml();
         Map<String, Object> yamlConfig = yaml.load(commonConfig);
-        //赋值通义千问模型
+        //加载通义千问模型
         AppConstant.tongyiqianwenModel = ((Map<String, Object>) ((Map<String, Object>) yamlConfig.get("robot")).get("tongyiqianwen")).get("model").toString();
-        //赋值通义千问最大上下文数量（双方合计）
+        //加载通义千问最大上下文数量（双方合计）
         AppConstant.tongyiqianwenMaxContextCount = Integer.parseInt(((Map<String, Object>) ((Map<String, Object>) yamlConfig.get("robot")).get("tongyiqianwen")).get("maxContextCount").toString());
     }
 }

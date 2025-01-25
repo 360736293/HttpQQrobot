@@ -53,4 +53,7 @@ public class AppConstant {
 
     //谷歌搜索引擎ID
     public static String googleSearchEngineID;
+
+    //微信服务号token
+    public static String wechatServiceToken;
 }

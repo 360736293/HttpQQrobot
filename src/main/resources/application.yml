@@ -29,6 +29,8 @@ tongyiqianwen:
 googleSearch:
   apikey: xxxx
   searchEngineID: xxxx
+wechatService:
+  token: xxxx
 xxl:
   job:
     admin:
