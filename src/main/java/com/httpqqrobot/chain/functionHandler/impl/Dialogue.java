@@ -26,6 +26,9 @@ public class Dialogue implements FunctionHandler {
     public void act(JSONObject json) {
         try {
             String message = json.getString("message");
+            if (ObjectUtil.isEmpty(message)) {
+                return;
+            }
             String[] messageSplit = message.split(" ");
             //不是艾特不回复，messageSplit，0是艾特，1是指令或内容，2是内容
             if (ObjectUtil.notEqual(messageSplit[0], "[CQ:at,qq=" + AppConstant.robotQQ + "]")) {
