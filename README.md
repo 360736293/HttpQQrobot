@@ -91,8 +91,8 @@ HttpQQrobot/
 - JDK 8+
 - MySQL 8.0+
 - Maven 3.6+
-- Nacos 2.0+（可选）
-- XXL-JOB 2.4+（可选）
+- Nacos 2.0+
+- XXL-JOB 2.4+
 
 ### 安装步骤
 
@@ -191,7 +191,7 @@ HttpQQrobot/
 
 ### Nacos配置中心
 
-如果使用Nacos进行配置管理，可以在Nacos中配置以下内容：
+可以在Nacos中配置以下内容：
 
 1. **排除词配置**（excludeWords-dev）：设置AI回复需要过滤的词汇
 2. **提示词配置**（promptWords-dev）：自定义AI的系统提示词
