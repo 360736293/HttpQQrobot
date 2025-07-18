@@ -13,11 +13,14 @@ import java.util.Map;
 
 public class CodeGeneratorUtil {
 
-    static String ip = "xxxx";
-    static String username = "xxxx";
-    static String password = "xxxx";
+    static String databaseUrl = "xxxx";
+    static String databaseDriver = "com.mysql.jdbc.Driver";
+    static String databaseUsername = "xxxx";
+    static String databasePassword = "xxxx";
     static String author = "xxxx";
     static String tableName = "xxxx";
+    static String packageName = "com.httpqqrobot";
+    static String packagePath = "/com/httpqqrobot";
 
     public static void main(String[] args) {
         //获取代码生成器的对象
@@ -25,10 +28,10 @@ public class CodeGeneratorUtil {
 
         //设置数据库相关配置
         DataSourceConfig dataSource = new DataSourceConfig();
-        dataSource.setDriverName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://" + ip + ":3306/httpqqrobot?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true");
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
+        dataSource.setDriverName(databaseDriver);
+        dataSource.setUrl(databaseUrl);
+        dataSource.setUsername(databaseUsername);
+        dataSource.setPassword(databasePassword);
         //赋值数据库相关配置
         autoGenerator.setDataSource(dataSource);
 
@@ -49,19 +52,19 @@ public class CodeGeneratorUtil {
         PackageConfig packageConfig = new PackageConfig();
         Map<String, String> pathInfo = new HashMap<>();
         //设置生成的包名
-        packageConfig.setParent("com.httpqqrobot");
+        packageConfig.setParent(packageName);
         //设置controller的包生成位置
-//        pathInfo.put("controller_path", System.getProperty("user.dir") + "/src/main/java/com/httpqqrobot/controller");
+//        pathInfo.put("controller_path", System.getProperty("user.dir") + "/src/main/java" + packagePath + "/controller");
         //设置service的包生成位置
-        pathInfo.put("service_path", System.getProperty("user.dir") + "/src/main/java/com/httpqqrobot/service");
+        pathInfo.put("service_path", System.getProperty("user.dir") + "/src/main/java" + packagePath + "/service");
         //设置service.impl的包生成位置
-        pathInfo.put("service_impl_path", System.getProperty("user.dir") + "/src/main/java/com/httpqqrobot/service/impl");
+        pathInfo.put("service_impl_path", System.getProperty("user.dir") + "/src/main/java" + packagePath + "/service/impl");
         //设置mapper的包生成位置
-        pathInfo.put("mapper_path", System.getProperty("user.dir") + "/src/main/java/com/httpqqrobot/mapper");
+        pathInfo.put("mapper_path", System.getProperty("user.dir") + "/src/main/java" + packagePath + "/mapper");
         //设置mapper.xml的包生成位置
         pathInfo.put("xml_path", System.getProperty("user.dir") + "/src/main/resources/mapper");
         //设置entity的包生成位置
-        pathInfo.put("entity_path", System.getProperty("user.dir") + "/src/main/java/com/httpqqrobot/entity");
+        pathInfo.put("entity_path", System.getProperty("user.dir") + "/src/main/java" + packagePath + "/entity");
         //赋值包名相关配置
         packageConfig.setPathInfo(pathInfo);
         autoGenerator.setPackageInfo(packageConfig);
